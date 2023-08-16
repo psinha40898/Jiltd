@@ -21,23 +21,22 @@ const LoginScreen = () => {
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
-            const user = userCredential.user;
-            console.log(user.email, "is registered");
+            console.log(userCredential.user.email, "is registered");
         })
         .catch(error => alert(error.message))
     }
-    const handleLogin= (e) =>
-    {
+    const handleLogin= (e) =>{
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password).then((auth) =>
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) =>
         {
-            console.log(auth)
-            if (auth)
+            console.log(userCredential.user.email, "is logged in")
+            if (userCredential)
             {
                 navigation.navigate("Home")
             }
         }).catch(error => alert(error.message));
-    };
+    }
     return (
       <KeyboardAvoidingView
             style={styles.container}
@@ -45,7 +44,7 @@ const LoginScreen = () => {
       >
         <View style = {styles.inputContainer}>
             <TextInput
-                placeholder = "enter ussername"
+                placeholder = "enter username"
                 placeholderTextColor = "white"
                 value = {email}
                 onChangeText ={text => setEmail(text)}
