@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View } from 'react-native';
-import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged} from '../firebase';
+import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
 
 
 const LoginScreen = () => {
+    /*
+    Data required to process registration and login to application
+    string: email
+    string: password
+    prop: navigation
+    */
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigation = useNavigation()
 
+    // Legacy code
     // useEffect(() => {
     //     const unsubscribe = auth.onAuthStateChanged(user => {
     //         if (user) {
@@ -18,6 +25,17 @@ const LoginScreen = () => {
     //     return unsubscribe
     // }, [])
 
+
+    // Eventually will have to rewrite login logic such that create profile presents a screen for user to enter details and upload images
+
+    /*
+    Registers a user to the database    
+    @param None
+    @returns None
+    Attaches to an eventhandler and intializes a promise which:
+    creates a user in the database if promise is fulfilled
+    displays an error if promise is rejected
+     */
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
@@ -25,12 +43,21 @@ const LoginScreen = () => {
         })
         .catch(error => alert(error.message))
     }
+    /*
+    Logs an existing user into the application
+    @param None
+    @returns None
+    Attaches to an eventhandler and initializes a promise which:
+    navigates to the main user interface if promise is fulfilled
+    displays an error if promise is rejected
+     
+    */
     const handleLogin= (e) =>{
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) =>
         {
-            console.log(userCredential.user.email, "is logged in")
+            console.log(userCredential.user.email, "is logged in");
             if (userCredential)
             {
                 navigation.navigate("Home")
@@ -38,6 +65,7 @@ const LoginScreen = () => {
         }).catch(error => alert(error.message));
     }
     return (
+        //May have to wrap everything in scrollview or write android specific code
       <KeyboardAvoidingView
             style={styles.container}
             behavior="padding"
