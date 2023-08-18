@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { storage, ref, uploadBytes, getDownloadURL } from '../firebase'; // Adjust the path to match your file structure
 
 const HomeScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -16,6 +17,21 @@ const HomeScreen = () => {
     if (!result.canceled && result.assets.length > 0) {
       const selectedImageUri = result.assets[0].uri;
       setSelectedImage(selectedImageUri);
+
+      const response = await fetch(selectedImageUri);
+      const blob = await response.blob();
+
+      const imageName = `${Date.now()}.jpg`;
+
+      // Get a reference to the storage bucket
+      const storageRef = ref(storage, imageName);
+
+      // Upload the image blob to Firebase Cloud Storage
+      await uploadBytes(storageRef, blob);
+
+      const downloadURL = await getDownloadURL(storageRef);
+
+      console.log("Image uploaded to Firebase:", downloadURL);
     }
   };
 
