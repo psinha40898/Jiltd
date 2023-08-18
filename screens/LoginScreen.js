@@ -70,6 +70,11 @@ const LoginScreen = () => {
             style={styles.container}
             behavior="padding"
       >
+        <View style = {styles.headerContainer}>
+            <Text style = {styles.headerText}>
+                Jiltd
+            </Text>
+        </View>
         <View style = {styles.inputContainer}>
             <TextInput
                 placeholder = "enter username"
@@ -164,4 +169,9 @@ buttonOutlineText: {
     fontWeight: '700',
 
 },
+headerText:{
+    fontSize: 32,
+    color: 'rgba(58, 23, 114,1)',
+    fontWeight: '800',
+}
 })
