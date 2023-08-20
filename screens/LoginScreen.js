@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View } from 'react-native';
-import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
+import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform  } from 'react-native';
+import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
 
 
 const LoginScreen = () => {
@@ -14,6 +14,9 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigation = useNavigation()
+    const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
+    const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
+
 
     // Legacy code
     // useEffect(() => {
@@ -64,8 +67,10 @@ const LoginScreen = () => {
             }
         }).catch(error => alert(error.message));
     }
+    
     return (
         //May have to wrap everything in scrollview or write android specific code
+        
       <KeyboardAvoidingView
             style={styles.container}
             behavior="padding"
@@ -75,7 +80,7 @@ const LoginScreen = () => {
                 Jiltd
             </Text>
         </View>
-        <View style = {styles.inputContainer}>
+        <View style = {[styles.inputContainer, {width: inputContainerWidth}]}>
             <TextInput
                 placeholder = "enter username"
                 placeholderTextColor = "white"
@@ -93,7 +98,7 @@ const LoginScreen = () => {
             />           
         </View>
 
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
             <TouchableOpacity
             onPress={handleLogin}
             style={styles.button}

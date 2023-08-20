@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 import { Text, View, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { storage, ref, uploadBytes, getDownloadURL } from '../firebase'; // Adjust the path to match your file structure
+import {db,doc, setDoc, auth, storage, ref, uploadBytes, getDownloadURL } from '../firebase'; 
 
 const HomeScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const userID = auth.currentUser.uid;
+ 
+//DUMMY DATA TO TEST DATABASE
+//TODO: MOVE THIS AFTER IMAGE UPLOAD, CORRESPOND THE DATA TO IMAGE METADATA.
   const pickImage = async () => {
+    const userData = {
+      name: 'John Doe',
+      email: 'johndoe@example.com'
+    };
+    const userDocumentRef = doc(db, 'users', userID);
+    await setDoc(userDocumentRef, userData);
+//END OF DUMMY DATA TO TEST DATABASE
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -20,8 +30,8 @@ const HomeScreen = () => {
 
       const response = await fetch(selectedImageUri);
       const blob = await response.blob();
-
-      const imageName = `${Date.now()}.jpg`;
+      const imageName =  `users/${userID}/images/${Date.now()}.jpg`
+      // const imageName = `${Date.now()}.jpg`
 
       // Get a reference to the storage bucket
       const storageRef = ref(storage, imageName);
