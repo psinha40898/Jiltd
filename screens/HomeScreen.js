@@ -10,6 +10,7 @@ const HomeScreen = () => {
 //DUMMY DATA TO TEST DATABASE
 //TODO: MOVE THIS AFTER IMAGE UPLOAD, CORRESPOND THE DATA TO IMAGE METADATA.
   const pickImage = async () => {
+    // maybe something like filename: type
     const userData = {
       name: 'John Doe',
       email: 'johndoe@example.com'

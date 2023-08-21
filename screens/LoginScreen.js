@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform  } from 'react-native';
+import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback } from 'react-native';
 import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
 
 const LoginScreen = () => {
+
     /*
     Data required to process registration and login to application
     string: email
@@ -71,10 +73,8 @@ const LoginScreen = () => {
     return (
         //May have to wrap everything in scrollview or write android specific code
         
-      <KeyboardAvoidingView
-            style={styles.container}
-            behavior="padding"
-      >
+        <CustomKeyboardWrapper>
+       
         <View style = {styles.headerContainer}>
             <Text style = {styles.headerText}>
                 Jiltd
@@ -115,7 +115,7 @@ const LoginScreen = () => {
             </TouchableOpacity>
 
         </View>
-      </KeyboardAvoidingView>
+      </CustomKeyboardWrapper>
     )
   }
 
