@@ -1,2 +1,2 @@
 # Jiltd
-## Built with React Native, to help people
+### A social network to help
