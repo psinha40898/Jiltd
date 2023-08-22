@@ -1,2 +1,2 @@
 # Jiltd
-### A social network to help
+### A social network that helps
