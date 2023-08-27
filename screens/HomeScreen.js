@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, Button, StyleSheet } from 'react-native';
+import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {db,doc, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection } from '../firebase'; 
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
@@ -71,30 +71,35 @@ const HomeScreen = () => {
   };
 
   return (
-    <CustomKeyboardWrapper>
-
-       
-       <View style = {styles.headerContainer}>
-       <View>
-      <Text>Home Screen</Text>
-      <Button title="Iterate" onPress={iterateUsers}/>
-      <Button title="Upload Image" onPress={pickImage} /> 
-      {selectedImage && <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />}
-      {user2id !== "" ? <ChatroomComponent user1Id={userID} user2Id={user2id} /> : null}
-
-    </View>
-    </View>
-           
-    </CustomKeyboardWrapper>
-  )
-}
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Jiltd</Text>
+      </View>
+      
+      <View style={styles.buttonContainer}>
+        <Button title="Iterate" onPress={iterateUsers} />
+        <Button title="Upload Image" onPress={pickImage} />
+      </View>
+      
+      {selectedImage && (
+        <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />
+      )}
+      
+      <View style={styles.chatroomContainer}>
+        {user2id !== "" && (
+          <ChatroomComponent user1Id={userID} user2Id={user2id} />
+        )}
+      </View>
+    </SafeAreaView>
+  );
+};
 export default HomeScreen
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: '#D3EED6',
-      justifyContent: 'center',
-      alignItems: 'center',
+    flex: 1,
+    backgroundColor: '#D3EED6',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
       
   inputContainer: {
@@ -111,11 +116,13 @@ const styles = StyleSheet.create({
   
   },
   buttonContainer: {
-      width: '40%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 25,
-  
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  chatroomContainer: {
+    flex: 1,
+    width: '100%',
   },
   button: {
       width: '100%',
@@ -148,4 +155,3 @@ const styles = StyleSheet.create({
       fontWeight: '800',
   }
   })
-
