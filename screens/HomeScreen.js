@@ -1,19 +1,43 @@
 import React, { useState } from 'react';
-import { Text, View, Image, Button } from 'react-native';
+import { Text, View, Image, Button, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import {db,doc, setDoc, auth, storage, ref, uploadBytes, getDownloadURL } from '../firebase'; 
+import {db,doc, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection } from '../firebase'; 
+import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
+import ChatroomComponent from '../essentialComponents/ChatroomComponent';
+
 
 const HomeScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [user2id, setUser2] = useState("");
   const userID = auth.currentUser.uid;
- 
+  
+  const iterateUsers = () => {
+    const usersCollection = collection(db, "users");
+
+    getDocs(usersCollection)
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log("Document ID:", doc.id);
+          if (doc.id !== userID){ //todo: check if the user is online
+            setUser2(doc.id)
+            console.log("MATCH:", user2id)
+          }
+          // You can access the document data using doc.data()
+        });
+      })
+      .catch((error) => {
+        console.error("Error getting documents:", error);
+      });
+  }
 //DUMMY DATA TO TEST DATABASE
 //TODO: MOVE THIS AFTER IMAGE UPLOAD, CORRESPOND THE DATA TO IMAGE METADATA.
   const pickImage = async () => {
     // maybe something like filename: type
+    //real email + most recent platform
+    //use setDoc during registration
+    //use updateDoc during profile edits
     const userData = {
-      name: 'John Doe',
-      email: 'johndoe@example.com'
+      email: auth.currentUser.email
     };
     const userDocumentRef = doc(db, 'users', userID);
     await setDoc(userDocumentRef, userData);
@@ -47,12 +71,81 @@ const HomeScreen = () => {
   };
 
   return (
-    <View>
-      <Text>Home Screen</Text>
-      <Button title="Upload Image" onPress={pickImage} />
-      {selectedImage && <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />}
-    </View>
-  );
-};
+    <CustomKeyboardWrapper>
 
-export default HomeScreen;
+       
+       <View style = {styles.headerContainer}>
+       <View>
+      <Text>Home Screen</Text>
+      <Button title="Iterate" onPress={iterateUsers}/>
+      <Button title="Upload Image" onPress={pickImage} /> 
+      {selectedImage && <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />}
+      {user2id !== "" ? <ChatroomComponent user1Id={userID} user2Id={user2id} /> : null}
+
+    </View>
+    </View>
+           
+    </CustomKeyboardWrapper>
+  )
+}
+export default HomeScreen
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      backgroundColor: '#D3EED6',
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+      
+  inputContainer: {
+      width: '60%',
+  
+  },
+  input: {
+      backgroundColor: 'rgba(58, 23, 114,1)',
+      color: 'white',
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      borderRadius: 5,
+      marginTop: 10,
+  
+  },
+  buttonContainer: {
+      width: '40%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 25,
+  
+  },
+  button: {
+      width: '100%',
+      alignItems: 'center',
+      backgroundColor: 'rgba(58, 23, 114,1)',
+      paddingHorizontal: 20,
+      paddingVertical: 20,
+      borderRadius: 25,
+      marginTop: 10,
+  
+  },
+  buttonText: {
+      color: 'white',
+      fontWeight: '700',
+  
+  },
+  buttonOutline: {
+      backgroundColor: 'rgba(58, 23, 114,1)',
+      
+  
+  },
+  buttonOutlineText: {
+      color: 'white',
+      fontWeight: '700',
+  
+  },
+  headerText:{
+      fontSize: 32,
+      color: 'rgba(58, 23, 114,1)',
+      fontWeight: '800',
+  }
+  })
+
