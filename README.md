@@ -1,7 +1,7 @@
 # Jiltd
 ### A social network that helps
 # 8/27
-## GiftedChat
+# + GiftedChat
 ## **Pros**
 + Velocity for development
 + _Technically_ Cross Compatible
