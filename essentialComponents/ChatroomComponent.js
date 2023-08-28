@@ -1,8 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import React, { useState, useEffect, } from 'react';
+import { Platform, View, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, onKeyDown, TouchableOpacity, Text } from 'react-native';
+import { GiftedChat, InputToolbar, Send  } from 'react-native-gifted-chat';
 import { doc, db, collection, onSnapshot, addDoc, Timestamp, getDoc, setDoc } from '../firebase';
+import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+
+
 
 const ChatroomComponent = ({ user1Id, user2Id }) => {
   const [messages, setMessages] = useState([]);
@@ -12,6 +17,9 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
 
   const chatroomDocRef = doc(db, 'chatrooms', `${smallerUserId}_${largerUserId}`);
   const messagesRef = collection(chatroomDocRef, 'messages');
+  const handleLongPress = () => {
+    Keyboard.dismiss(); // Dismiss the keyboard when long press occurs
+  };
 
   useEffect(() => {
     async function initializeChatroom() {
@@ -62,21 +70,48 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
 
     await addDoc(messagesRef, messageData);
   };
+ 
+  const renderKeyboardComponent = () => {
+    if (Platform.OS === 'android') {
+      return (
+        <KeyboardAvoidingView
+        keyboardVerticalOffset={-150}
+        style={styles.container}
+        behavior="padding"
+      >
+        <TouchableOpacity onPress={handleLongPress}>
+        <Text> X  </Text>
 
+        </TouchableOpacity>
+          <GiftedChat
+            messages={messages}
+            onSend={onSend}
+            user={{ _id: user1Id }}
+          />
+         </KeyboardAvoidingView>
+        
+      );
+    } else {
+      return (
+        
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={-150}
+          style={styles.container}
+          behavior="padding"
+        >
+          <GiftedChat
+            messages={messages}
+            onSend={onSend}
+            user={{ _id: user1Id }}
+          />
+        </KeyboardAvoidingView>
+      );
+    }
+  };
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <KeyboardAvoidingView
-    keyboardVerticalOffset={-150}
-    style={styles.container}
-    behavior="padding"
-  >
-      <GiftedChat
-        messages={messages}
-        onSend={onSend}
-        user={{ _id: user1Id }}
-      />
-    </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+    <View style={styles.container}>
+    {renderKeyboardComponent()}
+  </View>
   );
 };
 
@@ -84,6 +119,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#D3EED6',
+    
   },
 });
 
