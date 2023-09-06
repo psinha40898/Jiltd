@@ -1,4 +1,4 @@
-# log
+# recent log (older notes stored locally only)
 ## 8/27 GiftedChat
 ### Pros
 - Velocity for development
