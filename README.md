@@ -1,4 +1,4 @@
-# Jiltd - A Social Network
+# log
 ## 8/27 GiftedChat
 ### Pros
 - Velocity for development
@@ -14,3 +14,11 @@
 - I would rather have a UI discrepancy, even though it's very unideal, than have a VirtualizedList nested inside ScrollView (Scrolling Keyboard probably uses a scrollview)
 - Continuing development with GiftedChat until I have a workable demo. 
 - After that, I'll create a chat component from the ground up; ideally working on every platform.
+
+## 9/5/2023 GiftedChat pt 2
+####
+- Android keyboard, by default, has a keyboard dismiss button (ref to 8/27)
+- I will eventually create my own React Native chat component
+- Until then, I forked GiftedChat and made my own changes to my fork
+- Exploring GiftedChat source code should also help me make my own component later down the road
+

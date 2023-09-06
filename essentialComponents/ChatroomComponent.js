@@ -74,37 +74,25 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
   const renderKeyboardComponent = () => {
     if (Platform.OS === 'android') {
       return (
-        <KeyboardAvoidingView
-        keyboardVerticalOffset={-150}
-        style={styles.container}
-        behavior="padding"
-      >
-        <TouchableOpacity onPress={handleLongPress}>
-        <Text> X  </Text>
 
-        </TouchableOpacity>
           <GiftedChat
             messages={messages}
             onSend={onSend}
             user={{ _id: user1Id }}
           />
-         </KeyboardAvoidingView>
+       
         
       );
     } else {
       return (
         
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={-150}
-          style={styles.container}
-          behavior="padding"
-        >
+    
           <GiftedChat
             messages={messages}
             onSend={onSend}
             user={{ _id: user1Id }}
           />
-        </KeyboardAvoidingView>
+     
       );
     }
   };
