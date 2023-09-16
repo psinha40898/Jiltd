@@ -2,6 +2,7 @@
 import React, { useState, useEffect, } from 'react';
 import { Platform, View, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, onKeyDown, TouchableOpacity, Text } from 'react-native';
 import { GiftedChat, InputToolbar, Send  } from 'react-native-gifted-chat';
+//send.js from giftedchat is modified
 import { doc, db, collection, onSnapshot, addDoc, Timestamp, getDoc, setDoc } from '../firebase';
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

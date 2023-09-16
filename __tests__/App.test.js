@@ -1,24 +1,34 @@
-import firebase from '../firebase.js'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../firebase.js';
-// import { query, db, where, collection, getDocs } from '../firebase.js';
-// import { mockFirebase } from 'firestore-jest-mock';
-// import { mockCollection, mockWhere } from 'firestore-jest-mock/mocks/firestore.js';
-// async function getEmails(email) {
-//     const matchingUsers = []
-//     const q = query(collection(db,'users'), where('email', '==', email));
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.forEach((doc) =>
-//       {
-//           matchingUsers.push(doc.data());
-//       })
-//     return matchingUsers
-// }
+import { getAuth, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../firebase.js';
 
-describe('createUserWithEmailAndPassword', () => {
+import {
+    assertFails,
+    assertSucceeds,
+    initializeTestEnvironment,
+    RulesTestEnvironment,
+    cleanup,
+  } from "@firebase/rules-unit-testing"
+  // (1)
+  const projectId = 'your-project-id';
+
+  let testEnv;
+  // npx kill-port 9099 5001 8080 9000 5000 8085 9199 9299 4000
+  beforeEach(async () => {
+    testEnv = await initializeTestEnvironment({ projectId, database: { host: 'localhost', port: 9000 }, });
+  });
+  
+  afterEach(async () => {
+    // Clean up the test environment after all tests have completed.
+    await testEnv.cleanup();
+  });
+  
+  describe('Firebase Security Rules Tests', () => {
+    beforeEach(async () => {
+      // Clear the Realtime Database before each test.
+      await testEnv.clearDatabase();
+    })
     test("should be a function", () => {
-        expect(typeof createUserWithEmailAndPassword).toBe("function");
+        expect(typeof signInWithEmailAndPassword).toBe("function");
     });
-
 
 });
 
@@ -29,31 +39,3 @@ describe('signInWithEmailAndPassword', () => {
 
 
 });
-
-// describe('we can query', () => {
-//     mockFirebase({
-//       database: {
-//         users: [
-//           {
-//             email: 'admin@email.com',
-//             name: 'Homer Simpson',
-//             state: 'connecticut',
-//           },
-//           {
-//             email: 'admin@mail.com',
-//             name: 'Lisa Simpson',
-//             state: 'alabama',
-//           },
-//         ],
-//       },
-//     });
-  
-//     test('query with email', async () => {
-//       await getEmails('admin@email.com');
-  
-//       // Assert that we call the correct Firestore methods
-//       expect(mockCollection).toHaveBeenCalledWith('users');
-//       expect(mockWhere).toHaveBeenCalledWith('email', '==', 'admin@email.com');
-//     });
-  
-//   });
