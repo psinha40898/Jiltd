@@ -1,5 +1,5 @@
 import { getAuth, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../firebase.js';
-
+//insertion test
 import {
     assertFails,
     assertSucceeds,
