@@ -1,0 +1,36 @@
+diff --git a/node_modules/react-native-gifted-chat/lib/Send.js b/node_modules/react-native-gifted-chat/lib/Send.js
+index c97e44e..028410a 100644
+--- a/node_modules/react-native-gifted-chat/lib/Send.js
++++ b/node_modules/react-native-gifted-chat/lib/Send.js
+@@ -1,6 +1,6 @@
+ import * as React from 'react';
+ import PropTypes from 'prop-types';
+-import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
++import { StyleSheet, Text, TouchableOpacity, View, Platform} from 'react-native';
+ import { useCallbackOne, useMemoOne } from 'use-memo-one';
+ import Color from './Color';
+ import { StylePropType } from './utils';
+@@ -26,6 +26,23 @@ export const Send = ({ text = '', containerStyle, children, textStyle, label = '
+             onSend({ text: text.trim() }, true);
+         }
+     }, [text, onSend]);
++    /* INSERTING */
++    if (Platform.OS === 'web') {
++      const handleKeyPress = React.useCallback((event) => {
++        if (event.key === 'Enter') {
++          handleOnPress();
++        }
++      }, [handleOnPress]);
++  
++      React.useEffect(() => {
++        window.addEventListener('keypress', handleKeyPress);
++  
++        return () => {
++          window.removeEventListener('keypress', handleKeyPress);
++        };
++      }, [handleKeyPress]);
++    }
++    /*INSERT END */
+     const showSend = useMemoOne(() => alwaysShowSend || (text && text.trim().length > 0), [alwaysShowSend, text]);
+     if (!showSend) {
+         return null;
