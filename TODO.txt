@@ -1,0 +1,17 @@
+atomized transaction, matchmaking pseudocode:
+if user curMatch field is not "":
+  set the looking flag to 0
+  join the matched chat (set matcheduser to the curMatch)
+else
+  set looking flag to 1
+  iterate through list of users
+    if find user2 with looking == 1 and appropriate conditions:
+      set user2 curMatch to user.ID
+      set user curMatch to user2.ID
+      proceed with match if no reason to retry (set matcheduser to the user we found here set looking flags to 0)
+    if reason to retry:
+      retry and the conflicting user's looking flag is no longer 1 in this attempt
+
+(...)
+
+render ChatroomComponent(user.id, matcheduser)
