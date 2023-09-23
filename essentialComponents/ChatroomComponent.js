@@ -71,7 +71,7 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
 
     await addDoc(messagesRef, messageData);
   };
- 
+ //this will change lol
   const renderKeyboardComponent = () => {
     if (Platform.OS === 'android') {
       return (
