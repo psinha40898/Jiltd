@@ -15,3 +15,10 @@ else
 (...)
 
 render ChatroomComponent(user.id, matcheduser)
+
+
+If a user joins the q and nobody else is in the q yet, but someone joins the q after:
+The transaction will read all the 0 looking flags
+The transaction will write a failure
+The sanity check will show that there are some looking flags set to 1 now
+The transaction will re start.
