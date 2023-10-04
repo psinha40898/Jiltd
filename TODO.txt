@@ -1,24 +1,86 @@
-atomized transaction, matchmaking pseudocode:
-if user curMatch field is not "":
-  set the looking flag to 0
-  join the matched chat (set matcheduser to the curMatch)
-else
-  set looking flag to 1
-  iterate through list of users
-    if find user2 with looking == 1 and appropriate conditions:
-      set user2 curMatch to user.ID
-      set user curMatch to user2.ID
-      proceed with match if no reason to retry (set matcheduser to the user we found here set looking flags to 0)
-    if reason to retry:
-      retry and the conflicting user's looking flag is no longer 1 in this attempt
-
-(...)
-
+import {runTransaction} from Firestore
+//https://firebase.google.com/docs/reference/js/firestore_.md#runtransaction
+//https://firebase.google.com/docs/reference/js/firestore_.transaction
+//https://firebase.google.com/docs/firestore/manage-data/transactions
+runTransaction(firestore, updateFunction)
+Executes the given updateFunction and then attempts to commit the changes applied within the transaction. 
+If any document read within the transaction has changed, the updateFunction will be retried. 
 render ChatroomComponent(user.id, matcheduser)
 
+When the match button is clicked or pressed:
+- A first transaction occurs
+- If the user's matchedID blank (nobody matched with them), set their looking flag to 1
+- Else, pass the data to match and set looking flag to 0
 
-If a user joins the q and nobody else is in the q yet, but someone joins the q after:
-The transaction will read all the 0 looking flags
-The transaction will write a failure
-The sanity check will show that there are some looking flags set to 1 now
-The transaction will re start.
+The first transaction sets the user's looking flag to 1
+
+- A second transaction occurs
+- If the user's looking flag is 1 and their matchedID is blank (if the user has not been matched),
+  then iterate through list of users for a match
+  pass data for client side matching after transaction ends
+  exit loop
+- else
+  pass data for client side matching after transaction ends
+
+onFindMatch():
+    await runTransaction(db, async updateFunction => {
+
+        if transactions.Read.me.MatchValue() == "":
+            transactions.Set.me.LookingFlag(1)
+        else (someone has written their ID to you):
+            pass data for client side matching after transaction ends
+            transactions.Set.me.LookingFlag(0)
+    })
+
+    await runTransaction(db, async updateFunction => {
+
+        if transaction.Read.me.MatchValue() == "":
+            iterate through set of users: //can be a subset based on sharding
+                if user.LookingFlag() == 1 and user.MatchValue() == "" and whatever other matchmaking conditions:
+                    transations.Set.user.MatchValue(me.matchValue())
+                    //do we set their looking flag to Zero?
+                    pass data for client side matching after transaction ends
+                    exit loop
+        else (someone has written their ID to you):
+            pass data for client side matching after transaction ends
+    })
+
+
+
+Potential Test Cases:
+
+A = {id = A, MatchValue = "", LookingFlag = 0}
+B = {id = B, MatchValue = "", LookingFlag = 0}
+C = {id = C, MatchValue = "", LookingFlag = 0}
+D = {id = D, MatchValue = "", LookingFlag = 0}
+
+Case 1: A joins Q alone, B joins Q later, B's transactions close before A restarts
+
+A clicks on Find Match at t = 0 with no valid users avaliable
+B clicks on Find Match at t = 2 after A is in the middle of a transaction and A will not find any users.
+
+
+t = 0 | A clicks onFindMatch
+t = 1 |Transaction 1:
+    Looking flag is set to 1 and transaction closes
+t = 2 |Transaction 2:
+    *B clicks onFindMatch at this time
+    Iterates through all users and exits (can pass data to signify this)
+    *But wait, B's looking flag was set to 0, and now it's set to 1! This restarts the transaction
+    *So this transaction restarts
+    *make this transaction occur 5 times or until a valid return?
+
+t = 2 | B clicks onFindMatch
+Transaction 1:
+    B's Looking flag is set to 1*
+Transaction 2:
+    Iterates through users and matches with A
+    Writes to A*
+t = 3 | Transaction ends and B is matched with A 
+
+t = 3 |A's second transaction is restarted:
+    A's matchmevalue is not blank if B's transactions closed succesfuly
+    Transaction ends and A is matched with B
+
+Case 2: A joins Q alone, B joins Q later, B's transactions do not close before A restarts
+
