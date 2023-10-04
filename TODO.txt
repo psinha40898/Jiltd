@@ -5,6 +5,11 @@ import {runTransaction} from Firestore
 runTransaction(firestore, updateFunction)
 Executes the given updateFunction and then attempts to commit the changes applied within the transaction. 
 If any document read within the transaction has changed, the updateFunction will be retried. 
+
+//main concerns
+//Do I need a looking flag or is a MatchValue sufficient?
+//Will there be empty logs (fake matches?)? I think I need cloud functions to clean those?
+//Specifics of iterating through a collection while in a transaction.
 render ChatroomComponent(user.id, matcheduser)
 
 When the match button is clicked or pressed:
@@ -39,6 +44,8 @@ onFindMatch():
                 if user.LookingFlag() == 1 and user.MatchValue() == "" and whatever other matchmaking conditions:
                     transations.Set.user.MatchValue(me.matchValue())
                     //do we set their looking flag to Zero?
+                    //is their MatchValue the only thing we write to?
+                    //Do we write to our own MatchValue?
                     pass data for client side matching after transaction ends
                     exit loop
         else (someone has written their ID to you):
