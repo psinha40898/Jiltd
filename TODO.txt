@@ -61,9 +61,9 @@ B clicks on Find Match at t = 2 after A is in the middle of a transaction and A 
 
 
 t = 0 | A clicks onFindMatch
-t = 1 |Transaction 1:
+t = 1 |A-Transaction 1:
     Looking flag is set to 1 and transaction closes
-t = 2 |Transaction 2:
+t = 2 |A-Transaction 2:
     *B clicks onFindMatch at this time
     Iterates through all users and exits (can pass data to signify this)
     *But wait, B's looking flag was set to 0, and now it's set to 1! This restarts the transaction
@@ -71,16 +71,31 @@ t = 2 |Transaction 2:
     *make this transaction occur 5 times or until a valid return?
 
 t = 2 | B clicks onFindMatch
-Transaction 1:
+B-Transaction 1:
     B's Looking flag is set to 1*
-Transaction 2:
+B-Transaction 2:
     Iterates through users and matches with A
     Writes to A*
 t = 3 | Transaction ends and B is matched with A 
 
 t = 3 |A's second transaction is restarted:
-    A's matchmevalue is not blank if B's transactions closed succesfuly
+    A's matchmevalue is not blank if B's 2nd transaction closed succesfuly
     Transaction ends and A is matched with B
 
-Case 2: A joins Q alone, B joins Q later, B's transactions do not close before A restarts
+Case 2: A joins Q alone, B joins Q later, B's transactions do not close before A returns:
 
+t = 2 |A-Transaction 2:
+    *B clicks onFindMatch at this time
+    Iterates through all users and exits (can pass data to signify this)
+t = 3 |A-Transaction 2 manual retry:
+    Since the transaction exited without finding a match, appropriate data is returned client-side
+    This creates a client-side instigated retry a finite amount of times before displaying a prompt to the user
+    If B's transaction 2 is complete before this transaction starts:
+        A's transaction 2 jumps to else clause and passes appropriate data
+    If B's transaction 2 is not complete before this transaction starts, but their transaction 1 is complete:
+        A's transaction 2 goes through the if clause
+        Whichever user completes their transaction first dictates what occurs next
+        If A's transaction 2 finishes first, then B's will restart and catch up to A who is already matched with B
+        If B's transaction 2 finishes first, then A's will restart and catch up to B who is already matched with A
+
+In other words, the transaction that finishes later will restart and then instantly be matched with whoever signed them.
