@@ -7,6 +7,7 @@ Executes the given updateFunction and then attempts to commit the changes applie
 If any document read within the transaction has changed, the updateFunction will be retried. 
 
 //main concerns
+//ALL READS MUST BE COMPLETED BEFORE WRITES -- But it should not be hard to alter this procedure to achieve that.
 //Do I need a looking flag or is a MatchValue sufficient?
 //Will there be empty logs (fake matches?)? I think I need cloud functions to clean those?
 //Specifics of iterating through a collection while in a transaction.
