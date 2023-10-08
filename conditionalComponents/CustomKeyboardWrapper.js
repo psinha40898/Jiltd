@@ -39,7 +39,7 @@ export default CustomKeyboardWrapper;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D3EED6',
+    backgroundColor: '#19180A',
     justifyContent: 'center',
     alignItems: 'center',
   },

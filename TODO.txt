@@ -52,6 +52,34 @@ onFindMatch():
             pass data for client side matching after transaction ends
     })
 
+Actual JS code (incomplete):
+ 
+  //This test function works in iterating through users
+  //All reads must complete before writes
+  //Should not modify application state (finalWrite)
+  const iterateUsers = async () => {
+    var finalWrite;
+    try {
+      await runTransaction(db, async (transaction) => {
+        const usersCollection = collection(db, "users");
+        const querySnapshot = await getDocs(usersCollection);
+  
+        for (const doc of querySnapshot.docs) {
+          const curDoc = await transaction.get(doc.ref);
+          if (!curDoc.exists) {
+            throw "Document does not exist!";
+          }
+          console.log(doc.id);
+          finalWrite = doc
+        }
+        const newEmail = "write";
+        transaction.update(finalWrite.ref, { email: newEmail });
+
+      });
+    } catch (e) {
+      console.log("Failed", e);
+    }
+  };
 
 
 Potential Test Cases:

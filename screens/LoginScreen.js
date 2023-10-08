@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback, Image} from 'react-native';
 import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
@@ -41,6 +41,7 @@ const LoginScreen = () => {
     creates a user in the database if promise is fulfilled
     displays an error if promise is rejected
      */
+    // todo: Make it redirect to a register screen
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
@@ -79,17 +80,19 @@ const LoginScreen = () => {
             <Text style = {styles.headerText}>
                 Jiltd
             </Text>
+            <Image source={{uri: 'https://i.imgur.com/6pxYtPw.png'}}
+       style={{width: 100, height: 100}} />
         </View>
         <View style = {[styles.inputContainer, {width: inputContainerWidth}]}>
             <TextInput
-                placeholder = "enter username"
+                placeholder = "email"
                 placeholderTextColor = "white"
                 value = {email}
                 onChangeText ={text => setEmail(text)}
                 style={styles.input}
             />
             <TextInput
-                placeholder = "enter password"
+                placeholder = "password"
                 placeholderTextColor = "white"
                 value = {password}
                 onChangeText ={text => setPassword(text)}
@@ -103,14 +106,14 @@ const LoginScreen = () => {
             onPress={handleLogin}
             style={styles.button}
             >
-                <Text style = {styles.buttonText}> enter  </Text>
+                <Text style = {styles.buttonText}> Log in  </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
             onPress={handleSignUp}
             style={[styles.button, styles.buttonOutline]}
             >
-                <Text style = {styles.buttonOutlineText}> create profile </Text>
+                <Text style = {styles.buttonOutlineText}> Create User </Text>
 
             </TouchableOpacity>
 
@@ -124,7 +127,7 @@ export default LoginScreen
 const styles = StyleSheet.create({
 container: {
     flex: 1,
-    backgroundColor: '#D3EED6',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
 },
@@ -133,9 +136,14 @@ inputContainer: {
     width: '60%',
 
 },
+headerContainer: {
+    flexDirection: 'row', // Make children (Text and Image) display in a row
+    alignItems: 'center', // Vertically center-align the children
+},
 input: {
-    backgroundColor: 'rgba(58, 23, 114,1)',
+    backgroundColor: 'rgba(183, 13, 1, .5)',
     color: 'white',
+    fontWeight: '100',
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: 5,
@@ -146,37 +154,39 @@ buttonContainer: {
     width: '40%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 20,
 
 },
 button: {
     width: '100%',
+    height: 50,
     alignItems: 'center',
-    backgroundColor: 'rgba(58, 23, 114,1)',
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    borderRadius: 25,
-    marginTop: 10,
+    backgroundColor: 'rgba(183, 13, 1, .7)',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 5,
 
 },
 buttonText: {
     color: 'white',
-    fontWeight: '700',
+    fontWeight: '900',
 
 },
 buttonOutline: {
-    backgroundColor: 'rgba(58, 23, 114,1)',
+    backgroundColor: 'transparent'
     
 
 },
 buttonOutlineText: {
     color: 'white',
-    fontWeight: '700',
+    fontWeight: '900',
+
 
 },
 headerText:{
-    fontSize: 32,
-    color: 'rgba(58, 23, 114,1)',
-    fontWeight: '800',
+    fontSize: 64,
+    color: 'rgba(183, 13, 1, .7)',
+    fontWeight: '100',
 }
 })
