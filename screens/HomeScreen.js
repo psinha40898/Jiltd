@@ -24,11 +24,18 @@ const HomeScreen = () => {
     //return false condition (procceed to join queue)
     //else return true condition
     //the tranasaction itself returns the matchedID (proceed to match with who wrote to you)
+
+    //1)
+    //Checks if anyone has written to the client user's matchedID
+    //If not: set looking flag to true
+    //return matchedID
+    //if return is None, proceed with match
+    //Otherwise attempt matching with return value
     const docRef = doc(db,'users',userID);
     try
     {
      const joinOrMatch = await runTransaction(db, async (transaction) => {
-      const docSnapshot = (await transaction.get(docRef));
+      const docSnapshot = await transaction.get(docRef);
       if (!docSnapshot.exists()) {
         throw "Document does not exist!";
       }
@@ -50,7 +57,11 @@ const HomeScreen = () => {
     }
 
     //depending on value of joinOrMatch we return or continue onto the next transaction
-
+    //2)
+    //Currently, iterates through every document
+    //Writes to the last one in the iteration
+    //-->
+    //Make it iterate and write to the matched one
 
     var finalWrite;
     try {
@@ -64,9 +75,9 @@ const HomeScreen = () => {
             throw "Document does not exist!";
           }
           console.log(doc.id);
-          finalWrite = doc
+          finalWrite = doc //should be in if match clause
         }
-        const newEmail = finalWrite.data().email + "write";
+        const newEmail = finalWrite.data().email + "write"; //currently pointing at the last doc iteration
         transaction.update(finalWrite.ref, { email: newEmail });
 
       });
@@ -101,6 +112,7 @@ const HomeScreen = () => {
     const userData = {
       email: auth.currentUser.email,
       matchedID: "None",
+      rating : 1500,
       looking: false
     };
     const userDocumentRef = doc(db, 'users', userID); //creates a reference to a document where the ID is userID path users/userID
