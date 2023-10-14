@@ -73,7 +73,6 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
   };
  //this will change lol
   const renderKeyboardComponent = () => {
-    if (Platform.OS === 'android') {
       return (
 
           <GiftedChat
@@ -81,21 +80,8 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
             onSend={onSend}
             user={{ _id: user1Id }}
           />
-       
-        
-      );
-    } else {
-      return (
-        
-    
-          <GiftedChat
-            messages={messages}
-            onSend={onSend}
-            user={{ _id: user1Id }}
-          />
-     
-      );
-    }
+       );
+
   };
   return (
     <View style={styles.container}>
