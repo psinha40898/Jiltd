@@ -73,9 +73,7 @@ const LoginScreen = () => {
     
     return (
         //May have to wrap everything in scrollview or write android specific code
-        
         <CustomKeyboardWrapper>
-       
         <View style = {styles.headerContainer}>
             <Text style = {styles.headerText}>
                 Jiltd
@@ -114,9 +112,7 @@ const LoginScreen = () => {
             style={[styles.button, styles.buttonOutline]}
             >
                 <Text style = {styles.buttonOutlineText}> Create User </Text>
-
             </TouchableOpacity>
-
         </View>
       </CustomKeyboardWrapper>
     )
@@ -163,9 +159,9 @@ button: {
     alignItems: 'center',
     backgroundColor: 'rgba(183, 13, 1, .7)',
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 12.5,
     borderRadius: 5,
-    marginTop: 5,
+
 
 },
 buttonText: {

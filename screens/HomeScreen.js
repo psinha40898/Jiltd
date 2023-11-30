@@ -15,6 +15,7 @@ const HomeScreen = () => {
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
   const iterateUsers = async () => {
+    let returnVal = ""
     //First transaction
     //Check matchedID and set looking flag to True if it is None
     //otherwise pass it as data to match later
@@ -65,7 +66,7 @@ const HomeScreen = () => {
 
     var finalWrite;
     try {
-      await runTransaction(db, async (transaction) => {
+      returnVal = await runTransaction(db, async (transaction) => {
         const usersCollection = collection(db, "users");
         const querySnapshot = await getDocs(usersCollection);
   
@@ -74,16 +75,20 @@ const HomeScreen = () => {
           if (!curDoc.exists) {
             throw "Document does not exist!";
           }
-          console.log(doc.id);
-          finalWrite = doc //should be in if match clause
+          finalWrite = doc
+           //should be in if match clause and create a break
         }
         const newEmail = finalWrite.data().email + "write"; //currently pointing at the last doc iteration
         transaction.update(finalWrite.ref, { email: newEmail });
+        const temp = finalWrite.id
+        console.log(temp);
+        return temp;
 
       });
     } catch (e) {
       console.log("Failed", e);
     }
+    setUser2(returnVal);
   };
   //   const usersCollection = collection(db, "users");
 
