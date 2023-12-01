@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import {db,doc, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction } from '../firebase'; 
+import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
 import ChatroomComponent from '../essentialComponents/ChatroomComponent';
 import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
@@ -10,7 +11,23 @@ import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
 const HomeScreen = () => {
   const [user2id, setUser2] = useState("");
   const userID = auth.currentUser.uid;
+  const navigation = useNavigation()
+  const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
+  const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
+
+  const endButton = async () => {
+    setUser2("");
+
+  }
   
+  const handleLogout= (e) =>{
+    e.preventDefault();
+    signOut(auth)
+    .then(() =>
+    {
+      navigation.navigate("Login");
+    }).catch(error => alert(error.message));
+}
   //This test function works in iterating through users
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
@@ -75,6 +92,7 @@ const HomeScreen = () => {
           if (!curDoc.exists) {
             throw "Document does not exist!";
           }
+          // if match conditions, then finalWrite = doc and break
           finalWrite = doc
            //should be in if match clause and create a break
         }
@@ -114,14 +132,42 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Jiltd</Text>
+      <Image source={{uri: 'https://i.imgur.com/6pxYtPw.png'}}
+       style={{width: 100, height: 100}} />
+        
       </View>
       
-      <View style={styles.buttonContainer}>
-        <Button title="Iterate" onPress={iterateUsers} />
+      <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
+      <TouchableOpacity
+            onPress={endButton}
+            style={styles.button}
+            >
+            <Text style = {styles.buttonText}> Jilt </Text>
+
+          </TouchableOpacity>
+
+          
+      <TouchableOpacity
+            onPress={iterateUsers}
+            style={styles.button}
+            >
+            <Text style = {styles.buttonText}> Talk </Text>
+            
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleLogout}
+            style={styles.button}
+            >
+            <Text style = {styles.buttonText}> LOG OUT </Text>
+
+          </TouchableOpacity>
+      </View>
+      
+      {/* <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
         <ImageCloudUpload auth = {auth} userID={ userID}></ImageCloudUpload>
 
-      </View>
+      </View> */}
       <View style={styles.chatroomContainer}>
       {/* <ChatroomComponent user1Id={userID} user2Id="kiKA7MciO7Y3mdyIxvqZ1T6dXxa2" /> */}
         {user2id !== "" && (
@@ -135,7 +181,7 @@ export default HomeScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#19180A',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -146,7 +192,7 @@ const styles = StyleSheet.create({
   },
   input: {
       backgroundColor: 'rgba(58, 23, 114,1)',
-      color: 'white',
+      color: 'rgba(183, 13, 1, .5)',
       paddingHorizontal: 20,
       paddingVertical: 15,
       borderRadius: 5,
@@ -154,24 +200,29 @@ const styles = StyleSheet.create({
   
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    width: '40%',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
-  },
+
+},
+button: {
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    backgroundColor: 'rgba(183, 13, 1, .7)',
+    paddingHorizontal: 10,
+    paddingVertical: 12.5,
+    borderRadius: 5,
+    marginTop: 25
+
+
+},
   chatroomContainer: {
     flex: 1,
     width: '100%',
   },
-  button: {
-      width: '100%',
-      alignItems: 'center',
-      backgroundColor: 'rgba(58, 23, 114,1)',
-      paddingHorizontal: 20,
-      paddingVertical: 20,
-      borderRadius: 25,
-      marginTop: 10,
-  
-  },
+
   buttonText: {
       color: 'white',
       fontWeight: '700',
@@ -188,8 +239,8 @@ const styles = StyleSheet.create({
   
   },
   headerText:{
-      fontSize: 32,
-      color: 'rgba(58, 23, 114,1)',
-      fontWeight: '800',
-  }
+    fontSize: 64,
+    color: 'rgba(183, 13, 1, .7)',
+    fontWeight: '100',
+}
   })
