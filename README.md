@@ -33,9 +33,8 @@ High Level Design
 
 </h2>
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/HiLev.png">
-</p>
+  <img align = "center" src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/HiLev.png">
+
 
 <h2>
 Crux of Matchmaking
@@ -46,8 +45,10 @@ Crux of Matchmaking
 An atomic transaction handles concurrency by treating a set of reads and writes as one unified operation. The operation does not proceed if data read in the transaction is modified outside of the transaction. In that case, the transaction restarts. This handles race conditions that would otherwise occur if reads and writes were not unified.
 </p>
 
-<h4>PSEUDOCODE for the first transaction which verifies and ensures that the user's data is ready for matchmaking.</h4>
+<h4>PSEUDOCODE for the first transaction </h4>
+<p> <i> verifies and ensures that the user's data is ready for matchmaking </i> </p>
   <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T1.PNG">
-<h4>PSEUDOCODE for the second transaction which performs a set of reads to establish the state of matchmaking. It performs a set of writes on the client user and their prospective partner upon a succesful match. These writes determine whether a user is matched, ready for a match, or simply not looking. </h4>
+<h4>PSEUDOCODE for the second transaction </h4>
+<p>  <i> performs a set of reads to establish the state of matchmaking. It performs a set of writes on the client user and their prospective partner upon a succesful match. These writes determine whether a user is matched, ready for a match, or simply not looking </i> </p>
 
-  <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T2.PNG">
+  <img align = "center" src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T2.PNG">
