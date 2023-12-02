@@ -12,6 +12,9 @@ const MatchScreen = () => {
     const navigation = useNavigation()
     matched = route.params?.match
     self = route.params?.user
+    const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
+    const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
+  
     const back = async () => {
         navigation.navigate("Home")
 
@@ -24,6 +27,7 @@ const MatchScreen = () => {
     
     return (
         <SafeAreaView style={styles.container}>
+               <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
             <TouchableOpacity
             onPress={back}
             style={styles.button}
@@ -31,6 +35,7 @@ const MatchScreen = () => {
             <Text style = {styles.buttonText}> back </Text>
 
           </TouchableOpacity>
+          </View>
 
             <Text>{matched}</Text>
             <Text>{self}</Text>
