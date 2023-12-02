@@ -1,3 +1,3 @@
 <p align="center">
-![Alt Text](/Header.PNG)
+![Alt Text](Header.PNG)
 </p>
