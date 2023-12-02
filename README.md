@@ -1,6 +1,8 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/Header.PNG">
 </p>
+<h2> About</h2>
+<p> Jiltd facilitates healthy and anonymous discussion between people. Users are matched with each other and can leave feedback on the impact of their conversations. Those who receive positive feedback attain recognition and gamified rewards. Anonymity is enforced in an attempt to foster a community that values listening and helping others irrespective of their identity.</p>
 
 <h1 align = "center"> 
 Design Documentation
