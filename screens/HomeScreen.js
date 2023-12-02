@@ -83,26 +83,28 @@ const HomeScreen = () => {
     //Make it iterate and write to the matched one
 
     if (joinVal === "None"){
-    var finalWrite;
+    var finalWrite = "" 
     try {
       returnVal = await runTransaction(db, async (transaction) => {
         const usersCollection = collection(db, "users");
         const querySnapshot = await getDocs(usersCollection);
+        const docSnapshot = await transaction.get(docRef);
   
         for (const doc of querySnapshot.docs) {
-          const curDoc = await transaction.get(doc.ref);
+          const curDoc = await transaction.get(doc.ref); //read
           if (!curDoc.exists) {
             throw "Document does not exist!";
           }
-          console.log(doc.id)
+          console.log(curDoc.id)
           // if match conditions, then finalWrite = doc and break
-          if (doc.id !== userID) { //make it a transaction read
+          // if user matchmevalue is blank proceed to matchmake, otherwise return that val
+          if (curDoc.id !== userID) { // + && user matchmevalue is blank
             finalWrite = doc
             break;
           }
            //should be in if match clause and create a break
         }
-        const docSnapshot = await transaction.get(docRef);
+       
         const local_matchedID = docSnapshot.data().matchedID;
         //const newEmail = finalWrite.data().matchedID + "write"; //currently pointing at the last doc iteration
         const newID = userID;
