@@ -28,9 +28,6 @@ High Level Design
 </h2>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/HiLev1.png">
+  <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/HiLev.png">
 </p>
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/HiLev2.png">
-</p>
