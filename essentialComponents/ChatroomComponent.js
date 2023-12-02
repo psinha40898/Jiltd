@@ -93,7 +93,12 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D3EED6',
+    backgroundColor: '#19180A',
+    borderTopWidth: 10,        // Top border width
+    borderTopColor: 'rgba(183, 13, 1, .7)',  // Top border color
+    borderRadius: 15,       // Top border radius (optional, for rounded top corners)
+    padding: 15,
+    marginTop: 25,            // Padding (optional)
     
   },
 });

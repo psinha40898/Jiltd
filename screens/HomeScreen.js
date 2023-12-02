@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity} from 'react-native';
+import { useNavigation, useRoute  } from '@react-navigation/native';
+import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
@@ -92,8 +92,12 @@ const HomeScreen = () => {
           if (!curDoc.exists) {
             throw "Document does not exist!";
           }
+          console.log(doc.id)
           // if match conditions, then finalWrite = doc and break
-          finalWrite = doc
+          if (doc.id !== userID) {
+            finalWrite = doc
+            break;
+          }
            //should be in if match clause and create a break
         }
         const newEmail = finalWrite.data().email + "write"; //currently pointing at the last doc iteration
@@ -106,7 +110,10 @@ const HomeScreen = () => {
     } catch (e) {
       console.log("Failed", e);
     }
-    setUser2(returnVal);
+    // setUser2(returnVal);
+    if (returnVal !== ""){
+      navigation.navigate("MatchScreen", { match: returnVal, user: userID})
+    }
   };
   //   const usersCollection = collection(db, "users");
 
@@ -203,7 +210,7 @@ const styles = StyleSheet.create({
     width: '40%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
 
 },
 button: {
@@ -214,7 +221,7 @@ button: {
     paddingHorizontal: 10,
     paddingVertical: 12.5,
     borderRadius: 5,
-    marginTop: 25
+    marginTop: 10
 
 
 },
