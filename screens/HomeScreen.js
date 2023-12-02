@@ -96,7 +96,7 @@ const HomeScreen = () => {
           }
           console.log(doc.id)
           // if match conditions, then finalWrite = doc and break
-          if (doc.id !== userID) {
+          if (doc.id !== userID) { //make it a transaction read
             finalWrite = doc
             break;
           }
@@ -106,7 +106,7 @@ const HomeScreen = () => {
         const local_matchedID = docSnapshot.data().matchedID;
         //const newEmail = finalWrite.data().matchedID + "write"; //currently pointing at the last doc iteration
         const newID = userID;
-        transaction.update(finalWrite.ref, { matchedID: newID });
+        transaction.update(finalWrite.ref, { matchedID: newID, looking: false});
         const temp = finalWrite.id
         if (local_matchedID === "None")
         {
