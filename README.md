@@ -53,3 +53,13 @@ An atomic transaction handles concurrency by treating a set of reads and writes 
 <p> <i> These writes determine whether a user is matched, ready for a match, or simply not looking </i> </p>
 
   <img align = "center" src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T2.PNG">
+
+  <h2> References and Supplementary Reading </h2>
+  <ul>
+  <li> <a href = "https://firebase.google.com/docs/reference/js"> Firebase BaaS </a> </li>
+  <li> <a href = "https://www.youtube.com/watch?v=dOVSr0OsAoU"> Transactions by Google </a> </li>
+  <li> <a href = "https://reactnative.dev/"> React Native </a>  </li>
+  <li> <a href = "https://web.mit.edu/6.005/www/fa14/classes/17-concurrency/#:~:text=Concurrency%20means%20multiple%20computations%20are,cores%20on%20a%20single%20chip)"> Concurrency </a> </li>
+
+  </ul>
+
