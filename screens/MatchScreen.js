@@ -10,8 +10,8 @@ import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
 const MatchScreen = () => {
     const route = useRoute()
     const navigation = useNavigation()
-    matched = route.params?.match
-    self = route.params?.user
+    const matched = route.params?.match
+    const self = route.params?.user
     const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
   
@@ -27,6 +27,7 @@ const MatchScreen = () => {
     
     return (
         <SafeAreaView style={styles.container}>
+
                <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
             <TouchableOpacity
             onPress={back}

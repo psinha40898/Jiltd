@@ -10,6 +10,7 @@ import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
 
 const HomeScreen = () => {
   const [user2id, setUser2] = useState("");
+  const [joinVal, setJoin] = useState("None")
   const userID = auth.currentUser.uid;
   const navigation = useNavigation()
   const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
@@ -58,7 +59,6 @@ const HomeScreen = () => {
         throw "Document does not exist!";
       }
       const local_matchedID = docSnapshot.data().matchedID;
-      console.log("TEST");
       if (local_matchedID === "None")
       {
         transaction.update(docRef, {looking: true});
@@ -68,6 +68,7 @@ const HomeScreen = () => {
 
       })
       console.log(joinOrMatch);
+      setJoin(joinOrMatch)
 
     }
     catch (e) {
@@ -81,6 +82,7 @@ const HomeScreen = () => {
     //-->
     //Make it iterate and write to the matched one
 
+    if (joinVal === "None"){
     var finalWrite;
     try {
       returnVal = await runTransaction(db, async (transaction) => {
@@ -100,9 +102,16 @@ const HomeScreen = () => {
           }
            //should be in if match clause and create a break
         }
-        const newEmail = finalWrite.data().email + "write"; //currently pointing at the last doc iteration
-        transaction.update(finalWrite.ref, { email: newEmail });
+        const docSnapshot = await transaction.get(docRef);
+        const local_matchedID = docSnapshot.data().matchedID;
+        //const newEmail = finalWrite.data().matchedID + "write"; //currently pointing at the last doc iteration
+        const newID = userID;
+        transaction.update(finalWrite.ref, { matchedID: newID });
         const temp = finalWrite.id
+        if (local_matchedID === "None")
+        {
+          transaction.update(docRef, {looking: false});
+        }
         console.log(temp);
         return temp;
 
@@ -114,6 +123,11 @@ const HomeScreen = () => {
     if (returnVal !== ""){
       navigation.navigate("MatchScreen", { match: returnVal, user: userID})
     }
+  }
+  else
+  {
+    navigation.navigate("MatchScreen", {match: joinVal, user: userID})
+  }
   };
   //   const usersCollection = collection(db, "users");
 
@@ -171,10 +185,10 @@ const HomeScreen = () => {
           </TouchableOpacity>
       </View>
       
-      {/* <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
+      <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
         <ImageCloudUpload auth = {auth} userID={ userID}></ImageCloudUpload>
 
-      </View> */}
+      </View> 
       <View style={styles.chatroomContainer}>
       {/* <ChatroomComponent user1Id={userID} user2Id="kiKA7MciO7Y3mdyIxvqZ1T6dXxa2" /> */}
         {user2id !== "" && (
