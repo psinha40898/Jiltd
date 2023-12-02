@@ -41,8 +41,25 @@ High Level Design
 Crux of Matchmaking
 </h2>
 
-<h3>Matchmaking is offered through reliance on two types of database transactions</h3>
+<h3>Matchmaking is offered through reliance on two core database transactions</h3>
+<p>
+An atomic transaction handles concurrency by treating a set of reads and writes as one unified operation. The operation does not proceed if data read in the transaction is modified outside of the transaction. In that case, the transaction restarts. This handles race conditions that would otherwise occur if reads and writes were not unified.
+</p>
 
-<h4>The first transaction verifies and ensures that the user's data is ready for matchmaking</h4>
+<h4>The first transaction verifies and ensures that the user's data is ready for matchmaking.</h4>
+<p>
+if the user has been selected for a valid match, proceed with that match
+if the user has no valid match, proceed with matchmaking
+</p>
 <h4>The second transaction performs a set of reads to establish the state of matchmaking. It performs a set of writes on the client user and their prospective partner upon a succesful match. These writes determine whether a user is matched, ready for a match, or simply not looking. </h4>
+<p>
+perform reads on self
+perform matchmaking reads
+perform writes on a valid match
+a succesful transaction proceed with a valid match
+a transaction can fail if the initial reads on self and matchmaking are altered before the writes are performed
+either the client user has been matched by someone else, or their prospective match was matched by someone else
+in either case, the transaction re starts with fresh data that increases chances of consequeunt success
+
+</p>
 
