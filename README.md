@@ -13,4 +13,11 @@ Goals:
 <li>
 Function as a social network app that encourages healthy anonymous discussions
 </li>
+<li>
+The engagement loop is driven by performant matchmaking which uses Firebase BaaS
+(backend as a service) to handles race conditions
+</li>
+<li>
+The BaaS also provides a database that is used for gamificiation of users
+</li>
 </ul>
