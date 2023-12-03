@@ -39,7 +39,7 @@ High Level Design
 <h4> The user interacts with the client</h4>
 <h4> The client communicates with the BaaS</h4>
 <h4> The BaaS uses atomic transactions to perform read/writes</h4>
-<h4> The BaaS passes data back to the client /h4>
+<h4> The BaaS passes data back to the client </h4>
 <h4> The client conditionally renders output for the user </h4>
 <h4> The user interacts with the up to date client and the cycle repeats</h4>
 
