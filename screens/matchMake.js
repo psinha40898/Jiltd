@@ -3,6 +3,7 @@ import { useNavigation, useRoute  } from '@react-navigation/native';
 import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
 export async function matchMake (){
+    //todo: REFACTOR THE ITERATE FUNCTION HERE!
 const navigation = useNavigation(userID)
 let returnVal = ""
 //First transaction
