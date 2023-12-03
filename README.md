@@ -35,7 +35,10 @@ High Level Design
 
 </h2>
 
-  <img align = "center" src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/HiLev.png">
+<h3>The application operates in the following loop</h3> 
+<h4> The user interacts with the client</h4>
+<h4> The client communicates with the BaaS</h4>
+<h4> The BaaS uses atomic transactions to perform read/writes</h4>
 
 
 <h2>
