@@ -50,6 +50,7 @@ const HomeScreen = () => {
     //return matchedID
     //if return is None, proceed with match
     //Otherwise attempt matching with return value
+    //todo: factor out this function into matchMake.js
     const docRef = doc(db,'users',userID);
     try
     {

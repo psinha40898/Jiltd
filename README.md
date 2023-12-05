@@ -56,7 +56,7 @@ An atomic transaction handles concurrency by treating a set of reads and writes 
 <p> <i> verifies and ensures that the user's data is ready for matchmaking </i> </p>
   <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T1.PNG">
 <h4>PSEUDOCODE for the second transaction </h4>
-<p>  <i> performs a set of reads to establish the state of matchmaking, performs a set of writes on the client user and their prospective partner upon a succesful match. These writes determine whether a user is matched, ready for a match, or simply not looking </i> </p>
+<p>  <i> performs a set of reads to establish the state of matchmaking, performs a set of writes on the client user and their prospective partner upon a succesful match. </i> </p>
 <p> <i> These writes determine whether a user is matched, ready for a match, or simply not looking </i> </p>
 
   <img align = "center" src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T2.PNG">
