@@ -34,7 +34,7 @@ const HomeScreen = () => {
   //This test function works in iterating through users
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
-  const iterateUsers = async () => {
+  const talkButton = async () => {
     await matchMake(userID, setJoin, joinVal, navigation);
   };
 
@@ -57,7 +57,7 @@ const HomeScreen = () => {
 
           
       <TouchableOpacity
-            onPress={iterateUsers}
+            onPress={talkButton}
             style={styles.button}
             >
             <Text style = {styles.buttonText}> Talk </Text>
