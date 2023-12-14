@@ -54,7 +54,7 @@ catch (e) {
 //-->
 //Make it iterate and write to the matched one
 
-if (joinVal === "None"){
+if (joinVal === "None"){ //Can apply inversion to reduce from 4 deep to 3 deep nesting.
 var finalWrite = "" 
 try {
   returnVal = await runTransaction(db, async (transaction) => {
