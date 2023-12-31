@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import MatchScreen from './screens/MatchScreen';
 
 /*Creates Stack object from React Stack Navigator*/
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

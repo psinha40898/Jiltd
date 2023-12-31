@@ -1,4 +1,3 @@
-}
 //This test function works in iterating through users
 //All reads must complete before writes
 //Should not modify application state (finalWrite)

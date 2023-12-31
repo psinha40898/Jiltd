@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigation, useRoute  } from '@react-navigation/native';
-import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
-import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
+import {db,doc, getDocs, collection, runTransaction} from '../firebase'; 
 export const matchMake = async (userID, setJoin, joinVal, navigation) => {
     //todo: REFACTOR THE ITERATE FUNCTION HERE!
 
-let returnVal = ""
+
 //First transaction
 //Check matchedID and set looking flag to True if it is None
 //otherwise pass it as data to match later
@@ -53,8 +50,13 @@ catch (e) {
 //Writes to the last one in the iteration
 //-->
 //Make it iterate and write to the matched one
-
-if (joinVal === "None"){ //Can apply inversion to reduce from 4 deep to 3 deep nesting.
+var returnVal = ""
+if (joinVal != "None")
+{
+  navigation.navigate("MatchScreen", {match: joinVal, user: userID})
+  return
+}
+//Can apply inversion to reduce from 4 deep to 3 deep nesting.
 var finalWrite = "" 
 try {
   returnVal = await runTransaction(db, async (transaction) => {
@@ -96,10 +98,5 @@ try {
 // setUser2(returnVal);
 if (returnVal !== ""){
   navigation.navigate("MatchScreen", { match: returnVal, user: userID})
-}
-}
-else
-{
-navigation.navigate("MatchScreen", {match: joinVal, user: userID})
 }
 }
