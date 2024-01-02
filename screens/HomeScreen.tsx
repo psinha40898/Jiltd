@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { matchMake } from './matchMake';
+import type { RootStackParamList } from '../App';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation, useRoute  } from '@react-navigation/native';
 import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -13,7 +15,7 @@ const HomeScreen = () => {
   const [user2id, setUser2] = useState("");
   const [joinVal, setJoin] = useState("None");
   const userID = auth.currentUser.uid;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
   const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
 
@@ -151,5 +153,10 @@ button: {
     fontSize: 64,
     color: 'rgba(183, 13, 1, .7)',
     fontWeight: '100',
-}
+},
+
+headerContainer: {
+  flexDirection: 'row', // Make children (Text and Image) display in a row
+  alignItems: 'center', // Vertically center-align the children
+},
   })

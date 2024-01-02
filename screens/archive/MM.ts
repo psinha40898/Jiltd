@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { CollectionReference, QuerySnapshot } from 'firebase/firestore';
 import {DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, Transaction, db,doc, getDocs, collection, runTransaction} from '../../firebase';
 import type {RootStackParamList} from '../nav.ts';

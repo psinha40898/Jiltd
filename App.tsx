@@ -8,12 +8,16 @@ import LoginScreen from './screens/LoginScreen';
 import MatchScreen from './screens/MatchScreen';
 
 /*Creates Stack object from React Stack Navigator*/
-
+export type RootStackParamList = {
+  Home: undefined;
+  Login: undefined;
+  MatchScreen: {param1: string; param2: string}
+};
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer testID="app-component">
+    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false}} name ="Login" component={LoginScreen}/>
         <Stack.Screen options={{ headerShown: false}} name="Home" component={HomeScreen} />
