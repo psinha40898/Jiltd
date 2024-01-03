@@ -13,7 +13,7 @@ import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
 
 const HomeScreen = () => {
   const [user2id, setUser2] = useState("");
-  const [joinVal, setJoin] = useState("None");
+  const [matchedID_state, setMatch] = useState("None");
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
@@ -37,7 +37,7 @@ const HomeScreen = () => {
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
   const talkButton = async () => {
-    await matchMake(userID, setJoin, joinVal, navigation);
+    await matchMake(userID, navigation);
   };
 
   return (
@@ -79,12 +79,7 @@ const HomeScreen = () => {
         <ImageCloudUpload auth = {auth} userID={ userID}></ImageCloudUpload>
 
       </View> 
-      <View style={styles.chatroomContainer}>
-      {/* <ChatroomComponent user1Id={userID} user2Id="kiKA7MciO7Y3mdyIxvqZ1T6dXxa2" /> */}
-        {user2id !== "" && (
-          <ChatroomComponent user1Id={userID} user2Id={user2id} />
-        )}
-      </View>
+      
     </SafeAreaView>
   );
 };

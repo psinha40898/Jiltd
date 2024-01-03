@@ -1,6 +1,6 @@
 import { deleteDoc } from 'firebase/firestore';
-import {setDoc, getDoc, CollectionReference, QuerySnapshot, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, db,doc, getDocs, collection, runTransaction} from '../../firebase';
-import type {RootStackParamList} from './nav.ts';
+import {setDoc, getDoc, CollectionReference, QuerySnapshot, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, db,doc, getDocs, collection, runTransaction} from '../firebase';
+import type {RootStackParamList} from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export const matchMake = async (
