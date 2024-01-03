@@ -1,5 +1,4 @@
-import { deleteDoc } from 'firebase/firestore';
-import {setDoc, getDoc, CollectionReference, QuerySnapshot, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, db,doc, getDocs, collection, runTransaction} from '../firebase';
+import {deleteDoc, setDoc, getDoc, CollectionReference, QuerySnapshot, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, db,doc, getDocs, collection, runTransaction} from '../firebase';
 import type {RootStackParamList} from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -53,10 +52,12 @@ navigation: NativeStackNavigationProp<RootStackParamList>
   {
     console.log("Failed", e);
   }
-
-  if (clientUserDocSnap.exists())
+  const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
+  const clientUserDocSnapCheck: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRefCheck);
+  if (clientUserDocSnapCheck.exists())
   {
-    await deleteDoc(clientUserDocRef)
+    await deleteDoc(clientUserDocRef);
+    console.log("DELETE");
   }
 
   if (finalMatchID !== "")
