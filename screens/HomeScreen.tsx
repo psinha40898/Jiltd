@@ -3,7 +3,7 @@ import { matchMake } from './matchMake';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation, useRoute  } from '@react-navigation/native';
-import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
+import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform, Alert, Modal, Pressable,} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
@@ -13,6 +13,7 @@ import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
 
 const HomeScreen = () => {
   const [user2id, setUser2] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);;
   const [matchedID_state, setMatch] = useState("None");
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -36,9 +37,18 @@ const HomeScreen = () => {
   //This test function works in iterating through users
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
+
+  //1_4_2024
+  //set the state
   const talkButton = async () => {
     console.log("THIS IS THE USER ID", userID);
+    setModalVisible(true);
+    //start loading screen
+    //state = true
     await matchMake(userID, navigation);
+    setModalVisible(false);
+    //end loading screen
+    //state = false
   };
 
   return (
@@ -58,7 +68,20 @@ const HomeScreen = () => {
 
           </TouchableOpacity>
 
-          
+          <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Searching...</Text>
+          </View>
+        </View>
+      </Modal>
       <TouchableOpacity
             onPress={talkButton}
             style={styles.button}
@@ -92,10 +115,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-      
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   inputContainer: {
       width: '60%',
   
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
   },
   input: {
       backgroundColor: 'rgba(58, 23, 114,1)',

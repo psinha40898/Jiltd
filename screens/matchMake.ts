@@ -92,5 +92,12 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       console.log(e);
     }
   }
+  const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
+  const clientUserDocSnapCheck: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRefCheck);
+  if (clientUserDocSnapCheck.exists())
+  {
+    await deleteDoc(clientUserDocRefCheck);
+    console.log("LEFT QUEUE");
+  }
   }
 
