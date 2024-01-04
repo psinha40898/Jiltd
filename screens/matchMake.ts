@@ -7,7 +7,7 @@ clientUserID: string,
 navigation: NativeStackNavigationProp<RootStackParamList>
 ) => {
   let inQueue = true;
-  let finalMatchID: string = "" 
+  let finalMatchID: string = "MATCH" 
   let start = Date.now();
   while (inQueue){
     let delta = Date.now() - start;
@@ -63,7 +63,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       } 
     catch (e) 
     {
-      console.log("Failed", e);
+      console.log(e);
     }
 
     try
@@ -72,9 +72,9 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       {
         throw "Undefined!";
       }
-      if (finalMatchID === "")
+      if (finalMatchID === "MATCH")
       {
-        throw "Blank!";
+        throw "Can't find a single valid match!";
       }
       inQueue = false;
       const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
@@ -82,7 +82,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       if (clientUserDocSnapCheck.exists())
       {
         await deleteDoc(clientUserDocRefCheck);
-        console.log("DELETE");
+        console.log("LEFT QUEUE");
       }
       console.log(finalMatchID, clientUserID)
       navigation.navigate("MatchScreen", { match: finalMatchID, self: clientUserID})
