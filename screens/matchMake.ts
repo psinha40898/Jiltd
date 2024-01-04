@@ -6,6 +6,14 @@ export const matchMake = async (
 clientUserID: string,
 navigation: NativeStackNavigationProp<RootStackParamList>
 ) => {
+  let inQueue = true;
+  let finalMatchID: string = "" 
+  let start = Date.now();
+  while (inQueue){
+    let delta = Date.now() - start;
+    if (delta > 12000){
+      break;
+    }
   const clientUserDocRef: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
   const clientUserDocSnap: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRef);
   if (!clientUserDocSnap.exists()){
@@ -13,8 +21,8 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       matchedID: "Open"
     })
   }
+ 
   
-  let finalMatchID: string = "" 
   let matchedUser: QueryDocumentSnapshot<DocumentData, DocumentData>; 
   try 
   {
@@ -24,22 +32,30 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       const clientUserDocSnap = await transaction.get(clientUserDocRef);
       const clientUserMatchedID = clientUserDocSnap.data()?.matchedID ?? "Open";
       if (clientUserMatchedID !== "Open"){
+        inQueue = false;
         return clientUserMatchedID;
       }
 
       for (const doc of matchMakingPoolSnap.docs) 
       {
         const curUser = await transaction.get(doc.ref); 
-        if (!curUser.exists) 
+        if (!curUser.exists()) 
         {
           throw "Document does not exist!";
         }
         console.log(curUser.id)
-        if (curUser.id !== clientUserID) 
+        if (curUser.id !== clientUserID && curUser.exists()) 
         { 
           matchedUser = doc
-          break;
+          if (matchedUser.id !== "emptyQ"){
+            break;
+          }
         }
+      }
+      if (matchedUser.id === "emptyQ")
+      {
+        inQueue = true;
+        throw "Queue is empty! Nobody's home."
       }
 
       const writetoMatch = clientUserID;
@@ -52,16 +68,34 @@ navigation: NativeStackNavigationProp<RootStackParamList>
   {
     console.log("Failed", e);
   }
-  const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
-  const clientUserDocSnapCheck: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRefCheck);
-  if (clientUserDocSnapCheck.exists())
-  {
-    await deleteDoc(clientUserDocRef);
-    console.log("DELETE");
-  }
 
-  if (finalMatchID !== "")
-  {
+  try{
+    if (typeof finalMatchID === 'undefined')
+    {
+      throw "queue again";
+    }
+    if (finalMatchID === "")
+    {
+
+      throw "empty Q";
+    }
+    inQueue = false;
+    const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
+    const clientUserDocSnapCheck: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRefCheck);
+    if (clientUserDocSnapCheck.exists())
+    {
+      await deleteDoc(clientUserDocRefCheck);
+      console.log("DELETE");
+    }
+    console.log(finalMatchID, clientUserID)
     navigation.navigate("MatchScreen", { match: finalMatchID, self: clientUserID})
   }
+  catch(e)
+  {
+    console.log(e);
   }
+
+  const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
+  }
+  }
+

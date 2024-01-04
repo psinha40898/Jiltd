@@ -11,7 +11,7 @@ const MatchScreen = () => {
     const route = useRoute()
     const navigation = useNavigation()
     const matched = route.params?.match
-    const self = route.params?.user
+    const me = route.params?.self
     const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
   
@@ -38,11 +38,11 @@ const MatchScreen = () => {
           </TouchableOpacity>
           </View>
 
-            <Text>{matched}</Text>
-            <Text>{self}</Text>
+            <Text>{matched}TEST</Text>
+            <Text>{me}TESTE</Text>
             <View style={styles.chatroomContainer}>
 
-          <ChatroomComponent user1Id={self} user2Id={matched} />
+          <ChatroomComponent user1Id={me} user2Id={matched} />
         
       </View>
 

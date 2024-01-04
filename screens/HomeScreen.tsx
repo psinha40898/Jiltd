@@ -37,6 +37,7 @@ const HomeScreen = () => {
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
   const talkButton = async () => {
+    console.log("THIS IS THE USER ID", userID);
     await matchMake(userID, navigation);
   };
 

@@ -11,7 +11,7 @@ import MatchScreen from './screens/MatchScreen';
 export type RootStackParamList = {
   Home: undefined;
   Login: undefined;
-  MatchScreen: {match: string; self: string}
+  MatchScreen: {match: string; self: string;}
 };
 const Stack = createNativeStackNavigator();
 
