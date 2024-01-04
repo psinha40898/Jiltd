@@ -2,7 +2,7 @@
 
 # dependencies
 node_modules/
-screens/archive
+screens/archive/
 
 # Expo
 .expo/
