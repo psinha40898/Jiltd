@@ -47,15 +47,13 @@ High Level Design
 Crux of Matchmaking
 </h2>
 
-<h3>Matchmaking is offered through reliance on two core database transactions</h3>
+<h3>Matchmaking is offered through reliance on a core database transaction</h3>
 <p>
 An atomic transaction handles concurrency by treating a set of reads and writes as one unified operation. The operation does not proceed if data read in the transaction is modified outside of the transaction. In that case, the transaction restarts. This handles race conditions that would otherwise occur if reads and writes were not unified.
 </p>
 
-<h4>PSEUDOCODE for the first transaction </h4>
-<p> <i> verifies and ensures that the user's data is ready for matchmaking </i> </p>
-  <img src="https://raw.githubusercontent.com/psinha40898/Jiltd/master/images/T1.PNG">
-<h4>PSEUDOCODE for the second transaction </h4>
+
+<h4>High Level PSEUDOCODE for the  transaction </h4>
 <p>  <i> performs a set of reads to establish the state of matchmaking, performs a set of writes on the client user and their prospective partner upon a succesful match. </i> </p>
 <p> <i> These writes determine whether a user is matched, ready for a match, or simply not looking </i> </p>
 
