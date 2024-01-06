@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
 import styles from '../essentialComponents/Style';
-import { useNavigation, useRoute  } from '@react-navigation/native';
-import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
-import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
-import ChatroomComponent from '../essentialComponents/ChatroomComponent';
-import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
+import type { RootStackParamList } from '../App';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ParamListBase, RouteProp, useNavigation, useRoute  } from '@react-navigation/native';
+import { Text, View,  SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 
-const MatchScreen = () => {
-    const route = useRoute()
-    const navigation = useNavigation()
-    const matched = route.params?.match
-    const me = route.params?.self
-    const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
+import ChatroomComponent from '../essentialComponents/ChatroomComponent';
+
+type MatchScreenRouteProp = RouteProp<RootStackParamList, "MatchScreen">
+interface Props{
+  route?: MatchScreenRouteProp;
+}
+
+const MatchScreen: React.FC<Props> = (props) => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const matched = props.route.params.match;
+    const me = props.route.params.self;
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
   
     const back = async () => {
@@ -27,7 +28,7 @@ const MatchScreen = () => {
     
     
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.matchContainer}>
 
                <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
             <TouchableOpacity

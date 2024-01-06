@@ -85,7 +85,7 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
 
   };
   return (
-    <View style={styles.container}>
+    <View style={styles.chatroomContainer}>
     {renderKeyboardComponent()}
   </View>
   );

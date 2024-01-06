@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    matchContainer: {
+        flex: 1,
+        backgroundColor: '#070707',
+        
+    },
     chatroomContainer: {
         flex: 1,
         width: '100%',
