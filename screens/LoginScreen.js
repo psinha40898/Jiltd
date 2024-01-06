@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import FlashButton from '../essentialComponents/FlashButton';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback, Image} from 'react-native';
+import { TouchableHighlight, Animated ,Pressable, TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback, Image} from 'react-native';
 import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
 
 const LoginScreen = () => {
+    
 
     /*
     Data required to process registration and login to application
@@ -18,6 +20,28 @@ const LoginScreen = () => {
     const navigation = useNavigation()
     const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
+    //factor this out
+    const [animation] = useState(new Animated.Value(1));
+
+    const handlePressIn = () => {
+      Animated.spring(animation, {
+        toValue: 0.8,
+        useNativeDriver: false,
+      }).start();
+    };
+  
+    const handlePressOut = () => {
+      Animated.spring(animation, {
+        toValue: 1,
+        friction: 3,
+        tension: 40,
+        useNativeDriver: false,
+      }).start();
+    };
+  
+    const animatedStyle = {
+      transform: [{ scale: animation }],
+    };
 
 
     // Legacy code
@@ -99,20 +123,12 @@ const LoginScreen = () => {
             />           
         </View>
 
-        <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
-            <TouchableOpacity
-            onPress={handleLogin}
-            style={styles.button}
-            >
-                <Text style = {styles.buttonText}> Log in  </Text>
-            </TouchableOpacity>
+        <View>
+        
+            <FlashButton pressFunc = {handleLogin} text={"CONTINUE"} ></FlashButton>
+    
+            <FlashButton pressFunc = {handleSignUp} text={"REGISTER"} ></FlashButton>
 
-            <TouchableOpacity
-            onPress={handleSignUp}
-            style={[styles.button, styles.buttonOutline]}
-            >
-                <Text style = {styles.buttonOutlineText}> Create User </Text>
-            </TouchableOpacity>
         </View>
       </CustomKeyboardWrapper>
     )
@@ -170,8 +186,8 @@ buttonText: {
 
 },
 buttonOutline: {
-    backgroundColor: 'transparent'
-    
+    backgroundColor: '#423e0d',
+    marginTop: 20
 
 },
 buttonOutlineText: {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import FlashButton from '../essentialComponents/FlashButton';
 import { matchMake } from './matchMake';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -59,14 +60,7 @@ const HomeScreen = () => {
         
       </View>
       
-      <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
-      <TouchableOpacity
-            onPress={endButton}
-            style={styles.button}
-            >
-            <Text style = {styles.buttonText}> Jilt </Text>
-
-          </TouchableOpacity>
+      <View>
 
           <Modal
         animationType="slide"
@@ -82,27 +76,11 @@ const HomeScreen = () => {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-            onPress={talkButton}
-            style={styles.button}
-            >
-            <Text style = {styles.buttonText}> Talk </Text>
-            
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleLogout}
-            style={styles.button}
-            >
-            <Text style = {styles.buttonText}> LOG OUT </Text>
-
-          </TouchableOpacity>
+      <FlashButton pressFunc={talkButton} text={"Talk"}></FlashButton>
+      <FlashButton pressFunc={handleLogout} text={"Log out"}></FlashButton>
       </View>
       
-      <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
-        <ImageCloudUpload auth = {auth} userID={ userID}></ImageCloudUpload>
 
-      </View> 
       
     </SafeAreaView>
   );

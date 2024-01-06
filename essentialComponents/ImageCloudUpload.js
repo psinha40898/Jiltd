@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {db,doc, setDoc, auth, storage, ref, uploadBytes, getDownloadURL } from '../firebase'; 
+{/* Calling a button 
+<View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
+<ImageCloudUpload auth = {auth} userID={ userID}></ImageCloudUpload>
 
+</View>  */}
 const ImageCloudUpload = ({ auth, userID }) => {
     const [selectedImage, setSelectedImage] = useState(null);
 
