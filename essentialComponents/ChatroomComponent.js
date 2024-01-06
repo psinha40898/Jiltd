@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, } from 'react';
+import styles from './Style';
 import { Platform, View, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, onKeyDown, TouchableOpacity, Text } from 'react-native';
 import { GiftedChat, InputToolbar, Send  } from 'react-native-gifted-chat';
 //send.js from giftedchat is modified
@@ -89,18 +90,5 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
   </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#19180A',
-    borderTopWidth: 10,        // Top border width
-    borderTopColor: 'rgba(183, 13, 1, .7)',  // Top border color
-    borderRadius: 15,       // Top border radius (optional, for rounded top corners)
-    padding: 15,
-    marginTop: 25,            // Padding (optional)
-    
-  },
-});
 
 export default ChatroomComponent;

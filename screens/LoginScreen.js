@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
+import styles from '../essentialComponents/Style';
 import FlashButton from '../essentialComponents/FlashButton';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableHighlight, Animated ,Pressable, TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback, Image} from 'react-native';
+import { TouchableHighlight, Animated ,Pressable, TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback, Image, ImageBackground} from 'react-native';
 import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
@@ -97,7 +98,9 @@ const LoginScreen = () => {
     
     return (
         //May have to wrap everything in scrollview or write android specific code
+
         <CustomKeyboardWrapper>
+
         <View style = {styles.headerContainer}>
             <Text style = {styles.headerText}>
                 Jiltd
@@ -124,81 +127,16 @@ const LoginScreen = () => {
         </View>
 
         <View>
-        
+
             <FlashButton pressFunc = {handleLogin} text={"CONTINUE"} ></FlashButton>
     
             <FlashButton pressFunc = {handleSignUp} text={"REGISTER"} ></FlashButton>
 
         </View>
       </CustomKeyboardWrapper>
+
+
     )
   }
 
 export default LoginScreen
-
-const styles = StyleSheet.create({
-container: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-},
-    
-inputContainer: {
-    width: '60%',
-
-},
-headerContainer: {
-    flexDirection: 'row', // Make children (Text and Image) display in a row
-    alignItems: 'center', // Vertically center-align the children
-},
-input: {
-    backgroundColor: 'rgba(183, 13, 1, .5)',
-    color: 'white',
-    fontWeight: '100',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginTop: 10,
-
-},
-buttonContainer: {
-    width: '40%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-
-},
-button: {
-    width: '100%',
-    height: 50,
-    alignItems: 'center',
-    backgroundColor: 'rgba(183, 13, 1, .7)',
-    paddingHorizontal: 10,
-    paddingVertical: 12.5,
-    borderRadius: 5,
-
-
-},
-buttonText: {
-    color: 'white',
-    fontWeight: '900',
-
-},
-buttonOutline: {
-    backgroundColor: '#423e0d',
-    marginTop: 20
-
-},
-buttonOutlineText: {
-    color: 'white',
-    fontWeight: '900',
-
-
-},
-headerText:{
-    fontSize: 64,
-    color: 'rgba(183, 13, 1, .7)',
-    fontWeight: '100',
-}
-})

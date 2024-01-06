@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../essentialComponents/Style';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -35,12 +36,3 @@ const CustomKeyboardWrapper = ({ children }) => {
 };
 
 export default CustomKeyboardWrapper;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#19180A',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

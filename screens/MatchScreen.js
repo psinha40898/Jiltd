@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../essentialComponents/Style';
 import { useNavigation, useRoute  } from '@react-navigation/native';
 import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -53,70 +54,3 @@ const MatchScreen = () => {
     )
 };
 export default MatchScreen
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#19180A',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-        
-    inputContainer: {
-        width: '60%',
-    
-    },
-    input: {
-        backgroundColor: 'rgba(58, 23, 114,1)',
-        color: 'rgba(183, 13, 1, .5)',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        borderRadius: 5,
-        marginTop: 10,
-    
-    },
-    buttonContainer: {
-      width: '40%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
-  
-  },
-  button: {
-      width: '100%',
-      height: 50,
-      alignItems: 'center',
-      backgroundColor: 'rgba(183, 13, 1, .7)',
-      paddingHorizontal: 10,
-      paddingVertical: 12.5,
-      borderRadius: 5,
-      marginTop: 10
-  
-  
-  },
-    chatroomContainer: {
-      flex: 1,
-      width: '100%',
-    },
-  
-    buttonText: {
-        color: 'white',
-        fontWeight: '700',
-    
-    },
-    buttonOutline: {
-        backgroundColor: 'rgba(58, 23, 114,1)',
-        
-    
-    },
-    buttonOutlineText: {
-        color: 'white',
-        fontWeight: '700',
-    
-    },
-    headerText:{
-      fontSize: 64,
-      color: 'rgba(183, 13, 1, .7)',
-      fontWeight: '100',
-  }
-    })
-  
