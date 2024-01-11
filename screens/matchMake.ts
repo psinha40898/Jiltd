@@ -90,14 +90,18 @@ navigation: NativeStackNavigationProp<RootStackParamList>
     catch(e)
     {
       console.log(e);
+      if (e.code === 'failed-precondition')
+      {
+        console.log("mismatch")
+      }
     }
   }
   const clientUserDocRefCheck: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
   const clientUserDocSnapCheck: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRefCheck);
   if (clientUserDocSnapCheck.exists())
   {
-    await deleteDoc(clientUserDocRefCheck);
-    console.log("LEFT QUEUE");
+    await deleteDoc(clientUserDocRefCheck); //deleting from the queue works -- but it throws a warning (not erorr) when a prospective match deletes
+    console.log("LEFT QUEUE");              //can fix by leaving people in queue -- making that the "online pool" and seperating by fields? less efficient.
   }
   }
 

@@ -23,8 +23,8 @@ const HomeScreen = () => {
   const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
 
   //TODO: reset both peoples' matchedID?
-  const endButton = async () => {
-    setUser2("");
+  const userButton = async () => {
+    navigation.navigate("ProfileScreen", {param:auth})
 
   }
   
@@ -79,6 +79,7 @@ const HomeScreen = () => {
       </Modal>
       <FlashButton pressFunc={talkButton} text={"Talk"}></FlashButton>
       <FlashButton pressFunc={handleLogout} text={"Log out"}></FlashButton>
+      <FlashButton pressFunc={userButton} text={"My Profile"}></FlashButton>
       </View>
       
 
