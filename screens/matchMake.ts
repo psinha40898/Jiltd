@@ -1,4 +1,4 @@
-import {deleteDoc, setDoc, getDoc, CollectionReference, QuerySnapshot, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, db,doc, getDocs, collection, runTransaction} from '../firebase';
+import {deleteDoc, updateDoc, setDoc, getDoc, CollectionReference, QuerySnapshot, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, db,doc, getDocs, collection, runTransaction} from '../firebase';
 import type {RootStackParamList} from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -6,6 +6,10 @@ export const matchMake = async (
 clientUserID: string,
 navigation: NativeStackNavigationProp<RootStackParamList>
 ) => {
+  const clientUserDocRefMain: DocumentReference<DocumentData, DocumentData> = doc(db,'users',clientUserID);
+  const clientUserDocRef: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
+  const clientUserDocSnap: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRef);
+  await updateDoc(clientUserDocRefMain, {jilt: false})
   let inQueue = true;
   let finalMatchID: string = "MATCH" 
   let start = Date.now();
@@ -14,8 +18,6 @@ navigation: NativeStackNavigationProp<RootStackParamList>
     if (delta > 12000){
       break;
     }
-    const clientUserDocRef: DocumentReference<DocumentData, DocumentData> = doc(db,'queue',clientUserID);
-    const clientUserDocSnap: DocumentSnapshot<DocumentData, DocumentData> = await getDoc(clientUserDocRef);
     if (!clientUserDocSnap.exists()){
       await setDoc(clientUserDocRef, {
         matchedID: "Open"
@@ -32,6 +34,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
         const clientUserDocSnap = await transaction.get(clientUserDocRef);
         const clientUserMatchedID = clientUserDocSnap.data()?.matchedID ?? "Open";
         if (clientUserMatchedID !== "Open"){
+          console.log("Chosen by someone")
           inQueue = false;
           return clientUserMatchedID;
         }
@@ -63,7 +66,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       } 
     catch (e) 
     {
-      console.log(e);
+      console.log("ERROR", e);
     }
 
     try
