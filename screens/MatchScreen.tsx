@@ -26,15 +26,16 @@ const MatchScreen: React.FC<Props> = (props) => {
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
     const clientUserDocRef = doc(db,'users', me);
     const matchUserDocRef = doc(db,'users', matched);
-    //matchUserRef
+
     const unsubscribe = onSnapshot(clientUserDocRef, (doc) => {
       console.log(doc.data())
-      //if jilt value = true
-      //unsubscribe
-      //navigate somewhere
-
+      if (doc.data().jilt === true)
+      {
+        unsubscribe();
+        navigation.navigate("RatingScreen", {ratee: matched })  
+      }
     });
-    const back = async () => {
+    const handleJilt = async () => {
       try
       {
         await runTransaction(db, async (transaction) => {
@@ -42,7 +43,6 @@ const MatchScreen: React.FC<Props> = (props) => {
           //const theirDoc = await transaction.get(matchUserDocRef)
           transaction.update(matchUserDocRef, {jilt:true})
           transaction.update(clientUserDocRef, {jilt:true})
-          //navigate somewhere
           unsubscribe();
 
 
@@ -50,16 +50,13 @@ const MatchScreen: React.FC<Props> = (props) => {
         catch (e) {
           console.log("Failed!", e);
         }
-      //set chat to false for your doc
-      //set chat to false for their doc
-      //Technically it should be in a transaction because both people can press it at the same time
-      //Although it shouldn't matter ?
-        navigation.navigate("Home")    
+        //navigate to the rating page
+        navigation.navigate("RatingScreen", {ratee: matched })    
       }
     return (
         <SafeAreaView style={styles.matchContainer}>
           <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
-                <FlashButton pressFunc={back} text={"JILT"} ></FlashButton>
+                <FlashButton pressFunc={handleJilt} text={"JILT"} ></FlashButton>
           </View>
             <Text>{matched}TEST</Text>
             <Text>{me}TESTE</Text>

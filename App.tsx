@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import MatchScreen from './screens/MatchScreen';
 import UserProfile from './screens/UserProfile';
+import RatingScreen from './screens/RatingScreen';
 import { Auth } from 'firebase/auth'; // modulize this later
 
 /*Creates Stack object from React Stack Navigator*/
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   Login: undefined;
   MatchScreen: {match: string; self: string;}
   ProfileScreen: {param: Auth}
+  RatingScreen: {ratee: string}
 };
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +28,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false}} name="Home" component={HomeScreen} />
         <Stack.Screen options={{ headerShown: false}} name="MatchScreen" component={MatchScreen} />
         <Stack.Screen options={{ headerShown: false}} name="ProfileScreen" component={UserProfile} />
+        <Stack.Screen options={{ headerShown: false}} name="RatingScreen" component={RatingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
