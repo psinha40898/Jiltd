@@ -13,6 +13,7 @@ import ChatroomComponent from '../essentialComponents/ChatroomComponent';
 import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
 
 
+
 const HomeScreen = () => {
   const [user2id, setUser2] = useState("");
   const [modalVisible, setModalVisible] = useState(false);;
@@ -35,6 +36,10 @@ const HomeScreen = () => {
     {
       navigation.navigate("Login");
     }).catch(error => alert(error.message));
+}
+
+const testScreen = () => {
+  navigation.navigate("Test");
 }
   //This test function works in iterating through users
   //All reads must complete before writes
@@ -80,6 +85,8 @@ const HomeScreen = () => {
       <FlashButton pressFunc={talkButton} text={"Talk"}></FlashButton>
       <FlashButton pressFunc={handleLogout} text={"Log out"}></FlashButton>
       <FlashButton pressFunc={userButton} text={"My Profile"}></FlashButton>
+      <FlashButton pressFunc={testScreen} text={"TEST"}></FlashButton>
+
       </View>
       
 

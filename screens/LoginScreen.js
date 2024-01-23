@@ -6,6 +6,8 @@ import { TouchableHighlight, Animated ,Pressable, TouchableOpacity, KeyboardAvoi
 import {auth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from '../firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
+import IconButton from '../essentialComponents/Icon';
+import { Icon } from 'react-native-paper';
 
 const LoginScreen = () => {
     
@@ -100,7 +102,6 @@ const LoginScreen = () => {
         //May have to wrap everything in scrollview or write android specific code
 
         <CustomKeyboardWrapper>
-
         <View style = {styles.headerContainer}>
             <Text style = {styles.headerText}>
                 Jiltd
@@ -131,7 +132,7 @@ const LoginScreen = () => {
             <FlashButton pressFunc = {handleLogin} text={"CONTINUE"} ></FlashButton>
     
             <FlashButton pressFunc = {handleSignUp} text={"REGISTER"} ></FlashButton>
-
+           
         </View>
       </CustomKeyboardWrapper>
 

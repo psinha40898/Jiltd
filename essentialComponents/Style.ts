@@ -97,6 +97,77 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
       },
-    
+
+
+
+    /**Sizes*/
+    size1:
+    {
+        fontSize: 128
+    },
+    size2:
+    {
+        fontSize: 64
+    },
+    size3:
+    {
+        fontSize: 32
+    },
+    size4:{
+        fontSize: 16
+    },
+    size5:{
+        fontSize: 8
+    },
+    size6:
+    {
+        fontSize: 4
+    },
+    size7:
+    {
+        fontSize: 2
+    },
+    /** Text Colors */
+    primaryBlack:
+    {
+        color: '#070707',
+    },
+
+    primaryRed:{
+    color: 'rgba(204, 41, 54, 1)',
+    },
+/** Text Weights */
+superHeavy:{
+
+},
+heavy:{
+
+},
+medium:{
+
+},
+normal:{}
+,
+light:{}
+,
+frail:{}
+,
+
+    secondaryWhite:{
+        color :'white'
+    },
+    /**BG colors */
+    primaryBGBlack:{
+        backgroundColor: '#070707'
+    },
+    primaryBGoffBlack:{
+        backgroundColor: '#1c1c1c'
+    },
+    primaryBGRed:{
+        backgroundColor: 'rgba(204, 41, 54, 1)',
+    },
+    secondaryBGoffBlack:{
+        backgroundColor: 'rgba(28, 28, 28, .65)'
+    }
     })
     export default styles

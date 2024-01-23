@@ -52,7 +52,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
             break;
           }
         }
-        if (!matchedUser)
+        if (!matchedUser) //bad code using falsy-ness
         {
           inQueue = true;
           throw "Queue is empty! Nobody's home."
@@ -89,6 +89,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       }
       console.log(finalMatchID, clientUserID)
       navigation.navigate("MatchScreen", { match: finalMatchID, self: clientUserID})
+      break;
     }
     catch(e)
     {
