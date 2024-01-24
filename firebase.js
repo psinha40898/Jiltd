@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, connectAuthEmulator } from "firebase/auth";
 import {updateDoc, deleteDoc, getFirestore, doc, setDoc, collection, getDocs, onSnapshot, addDoc, Timestamp, getDoc, orderBy, query, where, connectFirestoreEmulator, runTransaction, 
-  DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, Transaction, CollectionReference, QuerySnapshot } from "firebase/firestore";
+  DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, Transaction, CollectionReference, QuerySnapshot, increment } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";  // Import the storage instance
 // import { getAnalytics } from "firebase/analytics";
 
@@ -31,5 +31,5 @@ const db = getFirestore(app);
 export { deleteDoc, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
          storage, ref, uploadBytes, getDownloadURL, db, doc, setDoc, collection, getDocs,
          onSnapshot, addDoc, Timestamp, getDoc, orderBy, query, where, runTransaction, 
-        getAuth, connectAuthEmulator, updateDoc, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, Transaction, CollectionReference, QuerySnapshot 
+        getAuth, connectAuthEmulator, updateDoc, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, Transaction, CollectionReference, QuerySnapshot, increment
         }

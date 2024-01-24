@@ -4,6 +4,8 @@
 <h2 align = "center" > About</h2>
 <p> Jiltd facilitates healthy and anonymous discussion between people. Users are matched with each other and can leave feedback on the impact of their conversations. Those who receive positive feedback attain recognition and gamified rewards. Anonymity is enforced in an attempt to foster a community that values listening and helping others irrespective of their identity.</p>
 
+<p>Slated to release on Google Play in February of 2024, and to the Apple App store shortly thereafter</p>
+
 <h1 align = "center"> 
 Design Documentation
 </h1>

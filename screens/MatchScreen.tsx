@@ -1,11 +1,12 @@
 import styles from '../essentialComponents/Style';
 import type { RootStackParamList } from '../App';
-import {doc, db, runTransaction, onSnapshot } from '../firebase'
+import {doc, db, runTransaction, onSnapshot, updateDoc, increment, deleteDoc } from '../firebase'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase, RouteProp, useNavigation, useRoute  } from '@react-navigation/native';
 import { Text, View,  SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 import ChatroomComponent from '../essentialComponents/ChatroomComponent';
 import FlashButton from '../essentialComponents/FlashButton';
+import { useEffect } from 'react';
 //add a listener that listens to clientusersdoc
 //unsubscribes and navigates to the Jilt screen if
 
@@ -13,6 +14,10 @@ import FlashButton from '../essentialComponents/FlashButton';
 //writes to the person you matched with
 //turns their chat to ofalse
 //does the same for you too
+
+//add a listenr that listens to the chatroom itself
+//Each player increments the joinfield
+//as soon as its 2, we remove client from the queue and unsubscribe!
 
 type MatchScreenRouteProp = RouteProp<RootStackParamList, "MatchScreen">
 interface Props{
@@ -23,9 +28,32 @@ const MatchScreen: React.FC<Props> = (props) => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const matched = props.route.params.match;
     const me = props.route.params.self;
+    // const smallerUserId = me < matched ? me : matched;
+    // const largerUserId = me < matched ? matched : me;
+    // const chatroomDocRef = doc(db, 'chatrooms', `${smallerUserId}_${largerUserId}`);
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
     const clientUserDocRef = doc(db,'users', me);
     const matchUserDocRef = doc(db,'users', matched);
+
+    //update client doc in users collection matchedID by matched
+  // const joinedChat = async () => {await updateDoc(chatroomDocRef, {inside: increment(1)}) }
+  //create listener for match doc
+  //if their inside 1, delete our doc and unsubscribe
+  const deleteDoc = async () => {
+    await deleteDoc(clientUserDocRef); 
+  }
+  const leaveQueue = 
+    onSnapshot(matchUserDocRef, (doc) => {
+      if (doc.data().matchedID === me){
+        leaveQueue();
+        
+      }
+
+    });
+
+  
+
+
 
     const unsubscribe = onSnapshot(clientUserDocRef, (doc) => {
       console.log(doc.data())
@@ -62,6 +90,7 @@ const MatchScreen: React.FC<Props> = (props) => {
             <Text>{me}TESTE</Text>
             <View style={styles.chatroomContainer}>
               <ChatroomComponent user1Id={me} user2Id={matched} />
+              
             </View>
           </SafeAreaView>
 

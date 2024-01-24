@@ -4,7 +4,7 @@ import styles from './Style';
 import { Platform, View, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, onKeyDown, TouchableOpacity, Text } from 'react-native';
 import { GiftedChat, InputToolbar, Send  } from 'react-native-gifted-chat';
 //send.js from giftedchat is modified
-import { doc, db, collection, onSnapshot, addDoc, Timestamp, getDoc, setDoc } from '../firebase';
+import { doc, db, collection, onSnapshot, addDoc, Timestamp, getDoc, setDoc, updateDoc } from '../firebase';
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper'; // Use relative path to the CustomKeyboardWrapper.js file
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -28,7 +28,7 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
       const chatroomDocSnapshot = await getDoc(chatroomDocRef);
 
       if (!chatroomDocSnapshot.exists()) {
-        await setDoc(chatroomDocRef, {});
+        await setDoc(chatroomDocRef);
 
         const messagesCollectionRef = collection(chatroomDocRef, 'messages');
         await addDoc(messagesCollectionRef, {
@@ -37,7 +37,6 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
           senderId: 'system',
         });
       }
-
       const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
         const messageData = snapshot.docs.map((doc) => ({
           _id: doc.id,
