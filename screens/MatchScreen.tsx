@@ -7,18 +7,6 @@ import { Text, View,  SafeAreaView, TouchableOpacity, Platform} from 'react-nati
 import ChatroomComponent from '../essentialComponents/ChatroomComponent';
 import FlashButton from '../essentialComponents/FlashButton';
 import { useEffect } from 'react';
-//add a listener that listens to clientusersdoc
-//unsubscribes and navigates to the Jilt screen if
-
-//back
-//writes to the person you matched with
-//turns their chat to ofalse
-//does the same for you too
-
-//add a listenr that listens to the chatroom itself
-//Each player increments the joinfield
-//as soon as its 2, we remove client from the queue and unsubscribe!
-
 type MatchScreenRouteProp = RouteProp<RootStackParamList, "MatchScreen">
 interface Props{
   route?: MatchScreenRouteProp;
@@ -35,25 +23,24 @@ const MatchScreen: React.FC<Props> = (props) => {
     const clientUserDocRef = doc(db,'users', me);
     const matchUserDocRef = doc(db,'users', matched);
     const clientUserQueueDoc = doc(db,'queue', me);
-    //update client doc in users collection matchedID by matched
   // const joinedChat = async () => {await updateDoc(chatroomDocRef, {inside: increment(1)}) }
-  //create listener for match doc
-  //if their inside 1, delete our doc and unsubscribe
   const removeDoc = async () => {
     await deleteDoc(clientUserQueueDoc); 
   }
-
-  //I WRITE TO THEM
   const confirmMatch = async () => {
-    await updateDoc(matchUserDocRef, {matchedID: me})
+    await updateDoc(matchUserDocRef, {matchedID: me});
   }
-  //check if THEY WROTE TO ME
+  const cleanUp = async () => {
+    await updateDoc(clientUserDocRef, {matchedID: "None"});
+  }
+
   const leaveQueue = 
     onSnapshot(clientUserDocRef, (doc) => {
       if (doc.data().matchedID === matched){
-        console.log( "dELETING DOC", "MYID:", me, "What is written:", doc.data().matchedID)
+        console.log( "dELETING DOC", "MYID:", me, "What is written:", doc.data().matchedID);
         removeDoc();
         leaveQueue();
+        cleanUp();
         
       }});
     // if the matched user presses the button
