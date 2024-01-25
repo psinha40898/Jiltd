@@ -34,35 +34,38 @@ const MatchScreen: React.FC<Props> = (props) => {
     const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
     const clientUserDocRef = doc(db,'users', me);
     const matchUserDocRef = doc(db,'users', matched);
-
+    const clientUserQueueDoc = doc(db,'queue', me);
     //update client doc in users collection matchedID by matched
   // const joinedChat = async () => {await updateDoc(chatroomDocRef, {inside: increment(1)}) }
   //create listener for match doc
   //if their inside 1, delete our doc and unsubscribe
-  const deleteDoc = async () => {
-    await deleteDoc(clientUserDocRef); 
+  const removeDoc = async () => {
+    await deleteDoc(clientUserQueueDoc); 
   }
+
+  //I WRITE TO THEM
+  const confirmMatch = async () => {
+    await updateDoc(matchUserDocRef, {matchedID: me})
+  }
+  //check if THEY WROTE TO ME
   const leaveQueue = 
-    onSnapshot(matchUserDocRef, (doc) => {
-      if (doc.data().matchedID === me){
+    onSnapshot(clientUserDocRef, (doc) => {
+      if (doc.data().matchedID === matched){
+        console.log( "dELETING DOC", "MYID:", me, "What is written:", doc.data().matchedID)
+        removeDoc();
         leaveQueue();
         
-      }
-
-    });
-
-  
-
-
-
-    const unsubscribe = onSnapshot(clientUserDocRef, (doc) => {
+      }});
+    // if the matched user presses the button
+    const leaveChat = onSnapshot(clientUserDocRef, (doc) => {
       console.log(doc.data())
       if (doc.data().jilt === true)
       {
-        unsubscribe();
+        leaveChat();
         navigation.navigate("RatingScreen", {ratee: matched })  
       }
     });
+    //if the client presses the button
     const handleJilt = async () => {
       try
       {
@@ -71,7 +74,7 @@ const MatchScreen: React.FC<Props> = (props) => {
           //const theirDoc = await transaction.get(matchUserDocRef)
           transaction.update(matchUserDocRef, {jilt:true})
           transaction.update(clientUserDocRef, {jilt:true})
-          unsubscribe();
+          leaveChat();
 
 
         }) }
@@ -81,6 +84,10 @@ const MatchScreen: React.FC<Props> = (props) => {
         //navigate to the rating page
         navigation.navigate("RatingScreen", {ratee: matched })    
       }
+
+      useEffect(()=>{
+        confirmMatch();
+      }, []);
     return (
         <SafeAreaView style={styles.matchContainer}>
           <View style={[styles.buttonContainer, {width: buttonContainerWidth}]}>
