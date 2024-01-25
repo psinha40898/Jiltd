@@ -8,6 +8,8 @@ import {
     cleanup,
   } from "@firebase/rules-unit-testing"
   // (1)
+  // https://firebase.google.com/docs/firestore/security/test-rules-emulato
+  // https://www.npmjs.com/package/@firebase/rules-unit-testing
   const projectId = 'your-project-id';
 
   let testEnv;
