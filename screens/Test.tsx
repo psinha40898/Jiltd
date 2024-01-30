@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View,  ScrollView,Image, Modal, Alert} from 'react-native';
-import { useNavigation, useRoute  } from '@react-navigation/native';
+import {Text, StyleSheet, View, Image, Modal, Alert} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../essentialComponents/Style';
@@ -8,7 +8,7 @@ import FlashButton from '../essentialComponents/FlashButton';
 import IconButton from '../essentialComponents/Icon';
 import LoopAnimation from '../essentialComponents/LoopAnimation';
 import { matchMake } from './matchMake';
-import { auth, ref, storage, getDownloadURL} from '../firebase';
+import { auth, ref, storage, getDownloadURL, doc, getDoc, db} from '../firebase';
 import SelectDropdown from 'react-native-select-dropdown'
 
 // syntax
@@ -19,6 +19,7 @@ const Test = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [displayImage, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [countries, setInventory] = useState([]);
   //need to load this array from the database
   //this should load from users/userid.data().inventory
   //either all the keys or the keys of 1 or more count
@@ -28,13 +29,13 @@ const Test = () => {
     //TESTING retrieving an array of maps
   //reference to userDoc
 
-  const countries = [
-    {name: "fetch1", path: "items/starters/starterA.png"}, 
-    {name: "fetch2", path: "items/starters/starterB.png"},
-    {name: "fetch3", path: "items/starters/starterB.png"},
+//   const countries = [
+//     {name: "fetch1", path: "items/starters/starterA.png"}, 
+//     {name: "fetch2", path: "items/starters/starterB.png"},
+//     {name: "fetch3", path: "items/starters/starterB.png"},
 
 
-];
+// ];
 const loadImage = async (path) => {
   try {
     const storageRef = ref(storage, path);
@@ -49,12 +50,22 @@ const loadImage = async (path) => {
 }
 
 useEffect(()=> {
+  //replace with loadImage(current)
   const fetchImage = async () => {
     try {
+      //starter dummy
       const storageRef = ref(storage, "items/starters/starterA.png");
       const URL = await getDownloadURL(storageRef);
       setImage(URL);
       console.log("done");
+      const clientUserDocRefMain = doc(db,'users', userID);
+      const clientSnap = await getDoc(clientUserDocRefMain);
+      setInventory(clientSnap.data().inventory);
+      console.log(countries);
+
+      
+
+
 
     }
     catch(e)
@@ -94,9 +105,11 @@ useEffect(()=> {
 <View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
   <Text style={[styles.primaryRed, styles.size2]}>hi.</Text></View>
 <View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 10}, styles.secondaryBGoffBlack]}>
-  <View style = {{flexDirection: 'column'}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>fetch name</Text><Text style ={[styles.size4, styles.primaryRed]}>level 1</Text><Text style ={[styles.size4, styles.primaryRed]}>5 reps</Text><Text style ={[styles.size4, styles.primaryRed]}>5 negs</Text><Text style ={[styles.size4, styles.primaryRed]}>avatarName</Text>
+  <View style = {{flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>fetch name</Text><Text style ={[styles.size4, styles.primaryRed]}>level 1</Text><Text style ={[styles.size4, styles.primaryRed]}>5 reps</Text><Text style ={[styles.size4, styles.primaryRed]}>5 negs</Text><Text style ={[styles.size4, styles.primaryRed]}>avatarName</Text></View>
+  <View style = {{flex: 0.25}} >
   <SelectDropdown
 	data={countries}
+  buttonStyle={{width: '100%'}}
   defaultButtonText='change icon'
 	onSelect={(selectedItem, index) => {
 		console.log(selectedItem, index)
@@ -113,6 +126,7 @@ useEffect(()=> {
 		return item.name;
 	}}
 />
+</View>
   </View>
   <LoopAnimation
   onPress={() => console.log("Sorry")}
