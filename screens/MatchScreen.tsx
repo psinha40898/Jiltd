@@ -37,7 +37,6 @@ const MatchScreen: React.FC<Props> = (props) => {
   const leaveQueue = 
     onSnapshot(clientUserDocRef, (doc) => {
       if (doc.data().matchedID === matched){
-        console.log( "dELETING DOC", "MYID:", me, "What is written:", doc.data().matchedID);
         removeDoc();
         leaveQueue();
         cleanUp();

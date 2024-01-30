@@ -96,10 +96,6 @@ navigation: NativeStackNavigationProp<RootStackParamList>
       //it's all about the signatures at this point and loop control.
       if (clientUserDocSnapCheck.data().matchedID === finalMatchID && matchUserDocSnapCheck.data().matchedID === clientUserID)
       {
-        const smallerUserId = clientUserID < finalMatchID ? clientUserID : finalMatchID;
-        const largerUserId = clientUserID < finalMatchID ? finalMatchID : clientUserID;
-        const chatroomDocRef = doc(db, 'chatrooms', `${smallerUserId}_${largerUserId}`);
-        await setDoc(chatroomDocRef, {inside:0});
         navigation.navigate("MatchScreen", { match: finalMatchID, self: clientUserID})
         //have a field in chatroom doc
         //increment it

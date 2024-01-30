@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, StyleSheet, View,  ScrollView,Image, Modal, Alert} from 'react-native';
 import { useNavigation, useRoute  } from '@react-navigation/native';
 import type { RootStackParamList } from '../App';
@@ -8,21 +8,70 @@ import FlashButton from '../essentialComponents/FlashButton';
 import IconButton from '../essentialComponents/Icon';
 import LoopAnimation from '../essentialComponents/LoopAnimation';
 import { matchMake } from './matchMake';
-import { auth } from '../firebase';
+import { auth, ref, storage, getDownloadURL} from '../firebase';
 import SelectDropdown from 'react-native-select-dropdown'
 
+// syntax
+// <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />
 
 const Test = () => {
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [displayImage, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   //need to load this array from the database
   //this should load from users/userid.data().inventory
   //either all the keys or the keys of 1 or more count
   //parse the keys that have 1 or more into an array! **
   //key(count), starterA(1), heartStopper(5)
-  const countries = ["fetch1", "fetch2", "fetch3"];
-  
+
+    //TESTING retrieving an array of maps
+  //reference to userDoc
+
+  const countries = [
+    {name: "fetch1", path: "items/starters/starterA.png"}, 
+    {name: "fetch2", path: "items/starters/starterB.png"},
+    {name: "fetch3", path: "items/starters/starterB.png"},
+
+
+];
+const loadImage = async (path) => {
+  try {
+    const storageRef = ref(storage, path);
+    const URL = await getDownloadURL(storageRef);
+    setImage(URL);
+    console.log("do1ne");
+
+  }
+  catch(e){
+    console.log(e);
+  }
+}
+
+useEffect(()=> {
+  const fetchImage = async () => {
+    try {
+      const storageRef = ref(storage, "items/starters/starterA.png");
+      const URL = await getDownloadURL(storageRef);
+      setImage(URL);
+      console.log("done");
+
+    }
+    catch(e)
+    {
+      console.log(e);
+    }
+  }
+  fetchImage();
+  //set displayImage to default starter
+
+  //make ref to starterA
+
+
+
+},[])
+
+
   const talkButton = async () => {
     console.log("THIS IS THE USER ID", userID);
     setModalVisible(true);
@@ -51,22 +100,23 @@ const Test = () => {
   defaultButtonText='change icon'
 	onSelect={(selectedItem, index) => {
 		console.log(selectedItem, index)
+    loadImage(selectedItem.path);
 	}}
 	buttonTextAfterSelection={(selectedItem, index) => {
 		// text represented after item is selected
 		// if data array is an array of objects then return selectedItem.property to render after item is selected
-		return selectedItem
+		return selectedItem.name;
 	}}
 	rowTextForSelection={(item, index) => {
 		// text represented for each item in dropdown
 		// if data array is an array of objects then return item.property to represent item in dropdown
-		return item
+		return item.name;
 	}}
 />
   </View>
   <LoopAnimation
   onPress={() => console.log("Sorry")}
-  imageComponent={<Image source={require('../images/heart-face-flatline.png')} style={{ width: 150, height: 150 }} />}
+  imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
 /></View>
 <View style = {[{flex:0.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>          
 <Modal  animationType="slide"

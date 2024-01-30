@@ -23,6 +23,7 @@ const HomeScreen = () => {
   const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
   const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
 
+
   //TODO: reset both peoples' matchedID?
   const userButton = async () => {
     navigation.navigate("ProfileScreen", {param:auth})
@@ -65,7 +66,6 @@ const testScreen = () => {
        style={{width: 100, height: 100}} />
         
       </View>
-      
       <View>
 
           <Modal
