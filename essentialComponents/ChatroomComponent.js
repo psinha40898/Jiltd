@@ -17,18 +17,19 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
   const smallerUserId = user1Id < user2Id ? user1Id : user2Id;
   const largerUserId = user1Id < user2Id ? user2Id : user1Id;
 
-  const chatroomDocRef = doc(db, 'chatrooms', `${smallerUserId}_${largerUserId}`);
-  const messagesRef = collection(chatroomDocRef, 'messages');
+
   const handleLongPress = () => {
     Keyboard.dismiss(); // Dismiss the keyboard when long press occurs
   };
+  const chatroomDocRef = doc(db, 'chatrooms', `${smallerUserId}_${largerUserId}`);
+  const messagesRef = collection(chatroomDocRef, 'messages');
 
   useEffect(() => {
     async function initializeChatroom() {
+      await setDoc(chatroomDocRef, {active: true});
       const chatroomDocSnapshot = await getDoc(chatroomDocRef);
 
       if (!chatroomDocSnapshot.exists()) {
-        await setDoc(chatroomDocRef);
 
         const messagesCollectionRef = collection(chatroomDocRef, 'messages');
         await addDoc(messagesCollectionRef, {

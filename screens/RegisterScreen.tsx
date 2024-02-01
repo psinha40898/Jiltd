@@ -1,6 +1,13 @@
 import { createUserWithEmailAndPassword, auth, doc, db, setDoc, getDoc } from "../firebase"
+import FlashButton from "../essentialComponents/FlashButton";
+import styles from "../essentialComponents/Style";
+import { useState } from "react";
+import { View, TextInput } from "react-native";
 
 const RegisterScreen = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    
     const JiltedRegister = (email, password) => {
         return new Promise((resolve, reject) => {
             createUserWithEmailAndPassword(auth, email, password)
@@ -14,13 +21,17 @@ const RegisterScreen = () => {
     }
     
     const handleRegister = async (email, password) => {
+        console.log("Being calledHR")
         try {
             const userCreds = await JiltedRegister(email, password);
-            await setDoc(userCreds[1], { test: 1, test2: 2 });
+            console.log("registered with default stats")
+            await setDoc(userCreds[1], {email: email, test: 1, test2: 2 });
         } catch (error) {
             alert(error.message);
         }
     }
+
+
     
     
     
@@ -30,7 +41,24 @@ const RegisterScreen = () => {
     
     
     
-    return (<div></div>);
+    return (        <View>
+        <TextInput
+            placeholder = "email"
+            placeholderTextColor = "white"
+            value = {email}
+            onChangeText ={text => setEmail(text)}
+            style={styles.input}
+        />
+        <TextInput
+            placeholder = "password"
+            placeholderTextColor = "white"
+            value = {password}
+            onChangeText ={text => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+        />  
+        <FlashButton pressFunc={()=>handleRegister(email, password) } text={"Register"} ></FlashButton>        
+    </View>)
 }
 export default RegisterScreen
 

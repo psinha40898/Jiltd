@@ -132,6 +132,7 @@ const LoginScreen = () => {
             <FlashButton pressFunc = {handleLogin} text={"CONTINUE"} ></FlashButton>
     
             <FlashButton pressFunc = {handleSignUp} text={"REGISTER"} ></FlashButton>
+            <FlashButton pressFunc = {()=>navigation.navigate("RegisterScreen")} text={"Reg. Page"} ></FlashButton>
            
         </View>
       </CustomKeyboardWrapper>
