@@ -39,12 +39,16 @@ const ChatroomComponent = ({ user1Id, user2Id }) => {
         });
       }
       const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
-        const messageData = snapshot.docs.map((doc) => ({
+        //this should use docChanges
+        const messageData = snapshot.docs.map((doc) => {
+          console.log("Bad");
+          return{
           _id: doc.id,
           text: doc.data().text,
           createdAt: doc.data().timestamp.toMillis(),
           user: { _id: doc.data().senderId },
-        }));
+          }
+        });
         const sortedMessages = messageData.slice().sort((a, b) => a.createdAt - b.createdAt);
         const reversedMessages = sortedMessages.reverse();
 

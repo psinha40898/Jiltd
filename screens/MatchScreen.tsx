@@ -34,6 +34,10 @@ const MatchScreen: React.FC<Props> = (props) => {
     await updateDoc(clientUserDocRef, {matchedID: "None"});
   }
 
+  // listeners should be defined inside useEffect
+
+// - Call those cleanup fucntions in the parts of the code where I want users to still be in the app but no longer listening to data
+// - and also call it as a return of useeffect just to ENSURE that they are unsubscribed when the component is no longer mounted
   const leaveQueue = 
     onSnapshot(clientUserDocRef, (doc) => {
       if (doc.data().matchedID === matched){
@@ -73,6 +77,7 @@ const MatchScreen: React.FC<Props> = (props) => {
 
       useEffect(()=>{
         confirmMatch();
+        //then place listeners
       }, []);
     return (
         <SafeAreaView style={styles.matchContainer}>
