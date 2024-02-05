@@ -42,6 +42,9 @@ const HomeScreen = () => {
 const testScreen = () => {
   navigation.navigate("Test");
 }
+const testMatch = () => {
+  navigation.navigate("TestMatch");
+}
   //This test function works in iterating through users
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
@@ -86,6 +89,7 @@ const testScreen = () => {
       <FlashButton pressFunc={handleLogout} text={"Log out"}></FlashButton>
       <FlashButton pressFunc={userButton} text={"My Profile"}></FlashButton>
       <FlashButton pressFunc={testScreen} text={"TEST"}></FlashButton>
+      <FlashButton pressFunc={testMatch} text={"GO"} ></FlashButton>
 
       </View>
       

@@ -9,6 +9,7 @@ import MatchScreen from './screens/MatchScreen';
 import UserProfile from './screens/UserProfile';
 import RatingScreen from './screens/RatingScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import TestMatch from './screens/TestMatch';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Test from './screens/Test';
 import { Auth } from 'firebase/auth'; // modulize this later
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   RatingScreen: {ratee: string}
   Test: undefined;
   RegisterScreen: undefined;
+  TestMatch: undefined;
 };
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +39,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false}} name="Test" component={Test} />
         <Stack.Screen options={{ headerShown: false}} name="RatingScreen" component={RatingScreen} />
         <Stack.Screen options={{ headerShown: false}} name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen options={{ headerShown: false}} name="TestMatch" component={TestMatch} />
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>
