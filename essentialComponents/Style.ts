@@ -99,6 +99,41 @@ const styles = StyleSheet.create({
       },
 
 
+/**Chatbox */
+
+leftBubble:{
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
+    backgroundColor: '#666666',
+    borderRadius: 20,
+    maxWidth: '70%',
+    padding: 15,
+    margin: 5,
+    
+},
+rightBubble:{
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+    backgroundColor: '#666666',
+    borderRadius: 20,
+    padding: 15,
+    margin: 5,
+    maxWidth: '70%'
+    
+
+
+},
+leftText:{
+    textAlign: 'left'
+
+
+},
+rightText:{
+    textAlign: 'right'
+
+},
+
+
 
     /**Sizes*/
     size1:

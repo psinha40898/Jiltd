@@ -20,21 +20,37 @@ const JiltdChat = ({ client_ID, match_ID }) => {
     const [messages, setMessages] = useState([]);
     const sampleData = [{message: "Hey", sender : true, key: "unique1"}, {message: "Hey back", sender: false, key: "unique2"}]
     const sendMessage = async () => {
+      const tsObject = Timestamp.now();
       await addDoc(messagesRef, {
         text: 'beezlebub',
-        timestamp: Timestamp.now(),
+        timestamp: tsObject,
         senderId: 'system',
-        millisecond: Timestamp.now().toMillis()
+        millisecond: tsObject.toMillis(),
+        realTime: tsObject.toDate()
       });
 
     }
     const testInput = async () => {
+      const tsObject = Timestamp.now();
 
       await addDoc(messagesRef, {
         text: sampleSend,
-        timestamp: Timestamp.now(),
-        senderId: 'system',
-        millisecond: Timestamp.now().toMillis()
+        timestamp: tsObject,
+        senderId: client_ID,
+        millisecond: tsObject.toMillis(),
+        realTime: tsObject.toDate()
+      });
+
+    }
+    const clientTest = async () => {
+      const tsObject = Timestamp.now();
+
+      await addDoc(messagesRef, {
+        text: sampleSend,
+        timestamp: tsObject,
+        senderId: match_ID,
+        millisecond: tsObject.toMillis(),
+        realTime: tsObject.toDate()
       });
 
     }
@@ -89,9 +105,15 @@ const JiltdChat = ({ client_ID, match_ID }) => {
   >
   <View style = {{flex:1, flexDirection: "column"}}>
     <View style = {{flex: .25}}><FlashButton pressFunc={sendMessage} text={"x"} ></FlashButton>
-    <FlashButton pressFunc={sendMessage} text={"x"} ></FlashButton></View>
+</View>
 
-<View style = {[{ flex: 1}]}><FlatList data = {messages} inverted = {true} renderItem={({item}) => (<View style = {{justifyContent:"flex-end"}} key={item.key}><Text style = {{textAlign: "right", color:"black"}}> {item.millisecond}{item.text} </Text></View>)}/></View>
+<View style = {[{ flex: 1}]}>
+  <FlatList data = {messages} inverted = {true}  renderItem={({item}) => 
+(<View style = {[item.senderId === client_ID ? styles.rightBubble : styles.leftBubble]} key={item.key}>
+  <Text style = {[item.senderId === client_ID ? styles.rightText : styles.leftText]}> {item.millisecond}{item.text}{item.realTime.toDate().toLocaleDateString()} {item.realTime.toDate().toLocaleTimeString()} </Text></View>)}
+  />
+  
+  </View>
 
 <View style = {{flex: .40}}>
 <TextInput
@@ -102,7 +124,9 @@ const JiltdChat = ({ client_ID, match_ID }) => {
                 style={styles.input}
             />
   
-  <FlashButton pressFunc={testInput} text={"x"} ></FlashButton>
+  <FlashButton pressFunc={testInput} text={"s"} ></FlashButton>
+  <FlashButton pressFunc={clientTest} text={"r"} ></FlashButton>
+
 
 </View>
 
