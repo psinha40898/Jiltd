@@ -3,11 +3,16 @@ import {doc, collection, db, getDoc, query, onSnapshot, orderBy, addDoc, Timesta
 import { useState, useEffect} from "react";
 import FlashButton from "./FlashButton";
 import styles from "./Style";
-import CustomKeyboardWrapper from "../conditionalComponents/CustomKeyboardWrapper";
-// <View style={item.sender ? styles.left : styles.right}>
-// item.sender === CONSTANT_STRING ? styles.left : styles.right or item.ID
-//system or match_ID is on left and an offshade of the background black
-//client is on right and jiltd red
+
+/**
+ * JiltdChat.tsx
+ * An inverted flatlist that renders an array of message objects
+ * message.senderID decides if the message is on the left or right, and its color
+ * message.text contains the message
+ * message.timestamp contains a timestamp object
+ * 
+ */
+
 const JiltdChat = ({ client_ID, match_ID }) => {
   //var updatedMessages = []
   var updatedMessages = []
