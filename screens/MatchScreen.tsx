@@ -5,6 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase, RouteProp, useNavigation, useRoute  } from '@react-navigation/native';
 import { Text, View,  SafeAreaView, TouchableOpacity, Platform} from 'react-native';
 import ChatroomComponent from '../essentialComponents/ChatroomComponent';
+import JiltdChat from '../essentialComponents/JiltdChat';
 import FlashButton from '../essentialComponents/FlashButton';
 import { useEffect } from 'react';
 type MatchScreenRouteProp = RouteProp<RootStackParamList, "MatchScreen">
@@ -86,10 +87,11 @@ const MatchScreen: React.FC<Props> = (props) => {
           </View>
             <Text>{matched}TEST</Text>
             <Text>{me}TESTE</Text>
-            <View style={styles.chatroomContainer}>
-              <ChatroomComponent user1Id={me} user2Id={matched} />
+            
+              <JiltdChat client_ID={me} match_ID={matched} />
               
-            </View>
+              
+            
           </SafeAreaView>
 
     )

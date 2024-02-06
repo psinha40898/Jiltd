@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { TouchableHighlight, Animated ,Pressable, TouchableOpacity, KeyboardAvoidingView, StyleSheet, TextInput, Text, View, Platform, TouchableWithoutFeedback, Image} from 'react-native';
+import React, { useState } from 'react';
+import { TouchableHighlight, Animated ,StyleSheet, Text,} from 'react-native';
+/**
+ * FlashButton.tsx
+ * React.Animation
+ * An animated view wrapped inside a touchable opacity; button animates on press
+ */
 const FlashButton = ({pressFunc, text}) => {
     const [animation] = useState(new Animated.Value(1));
 

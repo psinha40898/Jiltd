@@ -1,6 +1,6 @@
-import {View, FlatList, Text, TextInput, KeyboardAvoidingView } from "react-native"
+import {View, FlatList, Text, TextInput, KeyboardAvoidingView, Image } from "react-native"
 import {doc, collection, db, getDoc, query, onSnapshot, orderBy, addDoc, Timestamp, setDoc} from '../firebase'
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import FlashButton from "./FlashButton";
 import styles from "./Style";
 
@@ -17,6 +17,7 @@ const JiltdChat = ({ client_ID, match_ID }) => {
   //var updatedMessages = []
   var updatedMessages = []
   const [sampleSend, setSample] = useState('');
+  const textInputRef = useRef(null);
   const smallerUserId = client_ID < match_ID ? client_ID : match_ID;
   const largerUserId = client_ID < match_ID ? match_ID : client_ID;
   const chatroomDocRef = doc(db, 'chatrooms', `${smallerUserId}_${largerUserId}`);
@@ -37,14 +38,19 @@ const JiltdChat = ({ client_ID, match_ID }) => {
     }
     const testInput = async () => {
       const tsObject = Timestamp.now();
+      if (sampleSend !== '') {
+        textInputRef.current.clear();
+        await addDoc(messagesRef, {
+          text: sampleSend,
+          timestamp: tsObject,
+          senderId: client_ID,
+          millisecond: tsObject.toMillis(),
+          realTime: tsObject.toDate()
+        });
+        setSample('');
+        
+      }
 
-      await addDoc(messagesRef, {
-        text: sampleSend,
-        timestamp: tsObject,
-        senderId: client_ID,
-        millisecond: tsObject.toMillis(),
-        realTime: tsObject.toDate()
-      });
 
     }
     const clientTest = async () => {
@@ -105,12 +111,11 @@ const JiltdChat = ({ client_ID, match_ID }) => {
   // return (<FlatList></FlatList>)
   return (
     <KeyboardAvoidingView
-    style={{flex:1, backgroundColor:"#1c1c1c"}}
+    style={[{flex:1}, styles.primaryBGoffBlack]}
     behavior="padding"
   >
   <View style = {{flex:1, flexDirection: "column"}}>
-    <View style = {{flex: .25}}><FlashButton pressFunc={sendMessage} text={"x"} ></FlashButton>
-</View>
+
 
 <View style = {[{ flex: 1}]}>
   <FlatList data = {messages} inverted = {true}  renderItem={({item}) => 
@@ -127,18 +132,23 @@ const JiltdChat = ({ client_ID, match_ID }) => {
   
   </View>
 
-<View style = {{flex: .40}}>
-<TextInput
+<View style = {[{flex:0.4 , backgroundColor: 'rgba(7, 7, 7, .2)'} ]}>
+<View style={[{flexDirection:'row', flex:1, padding: 15}, { justifyContent: 'space-between', alignItems: 'center'}]}>
+
+<TextInput      ref={textInputRef}
                 placeholder = "say something"
                 placeholderTextColor = "white"
                 value = {sampleSend}
                 onChangeText ={text => setSample(text)}
-                style={styles.input}
+                style={[styles.input, {flex:.60, borderRadius: 30}]}
             />
-  
+
+  <View style = {{flex:.2}}>
   <FlashButton pressFunc={testInput} text={"s"} ></FlashButton>
   <FlashButton pressFunc={clientTest} text={"r"} ></FlashButton>
+  </View>
 
+</View>
 
 </View>
 

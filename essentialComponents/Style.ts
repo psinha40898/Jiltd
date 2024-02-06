@@ -102,14 +102,14 @@ const styles = StyleSheet.create({
 /**Chatbox */
 chatTextR:{
     borderRadius: 25,
-    padding: 15,
+    padding: 10,
     margin: 5,
     maxWidth: '70%',
     backgroundColor: 'rgba(204, 41, 54, 1)',
 },
 chatTextL:{
     borderRadius: 25,
-    padding: 15,
+    padding: 10,
     margin: 5,
     maxWidth: '70%',
     backgroundColor:"#666666",
@@ -133,12 +133,12 @@ rightBubble:{
 
 },
 leftText:{
-    textAlign: 'center'
+    textAlign: 'justify'
 
 
 },
 rightText:{
-    textAlign: 'center'
+    textAlign: 'justify'
 
 },
 
@@ -174,7 +174,7 @@ rightText:{
     /** Text Colors */
     primaryBlack:
     {
-        color: '#070707',
+        color: 'rgba(7, 7, 7, 1)',
     },
 
     primaryRed:{
@@ -202,7 +202,7 @@ frail:{}
     },
     /**BG colors */
     primaryBGBlack:{
-        backgroundColor: '#070707'
+        backgroundColor: 'rgba(7, 7, 7, 1)'
     },
     primaryBGoffBlack:{
         backgroundColor: '#1c1c1c'
