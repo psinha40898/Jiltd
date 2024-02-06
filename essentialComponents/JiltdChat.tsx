@@ -100,7 +100,7 @@ const JiltdChat = ({ client_ID, match_ID }) => {
   // return (<FlatList></FlatList>)
   return (
     <KeyboardAvoidingView
-    style={{flex:1}}
+    style={{flex:1, backgroundColor:"#1c1c1c"}}
     behavior="padding"
   >
   <View style = {{flex:1, flexDirection: "column"}}>
@@ -110,7 +110,14 @@ const JiltdChat = ({ client_ID, match_ID }) => {
 <View style = {[{ flex: 1}]}>
   <FlatList data = {messages} inverted = {true}  renderItem={({item}) => 
 (<View style = {[item.senderId === client_ID ? styles.rightBubble : styles.leftBubble]} key={item.key}>
-  <Text style = {[item.senderId === client_ID ? styles.rightText : styles.leftText]}> {item.millisecond}{item.text}{item.realTime.toDate().toLocaleDateString()} {item.realTime.toDate().toLocaleTimeString()} </Text></View>)}
+  <View style = {[item.senderId === client_ID ?styles.chatTextR : styles.chatTextL]}> 
+  <Text style = {[item.senderId === client_ID ? styles.rightText : styles.leftText, {fontWeight: '600', color: 'white'}]}> 
+  {item.text}</Text></View>
+  <Text style = {[styles.size5, {textAlign: 'center', fontWeight: '800', color:'white'}]}> 
+  {item.realTime.toDate().toLocaleDateString()}
+{"   "} 
+  {item.realTime.toDate().toLocaleTimeString()}</Text>
+  </View>)}
   />
   
   </View>
