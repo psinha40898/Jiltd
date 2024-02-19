@@ -22,12 +22,16 @@ const HomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const inputContainerWidth = Platform.OS === 'web' ? '25%' : '60%';
   const buttonContainerWidth = Platform.OS === 'web' ? '15%' : '40%';
+  const clientUserDocRefMain = doc(db,'users',userID);
 
 
   //TODO: reset both peoples' matchedID?
   const userButton = async () => {
     navigation.navigate("ProfileScreen", {param:auth})
 
+  }
+  const configButton = async () => {
+    await setDoc(clientUserDocRefMain, {email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [{count:1, name: "starterA", path: "items/starters/starterA.png"}]}, {merge: true})
   }
   
   const handleLogout= (e) =>{
@@ -90,6 +94,7 @@ const testMatch = () => {
       <FlashButton pressFunc={userButton} text={"My Profile"}></FlashButton>
       <FlashButton pressFunc={testScreen} text={"TEST"}></FlashButton>
       <FlashButton pressFunc={testMatch} text={"GO"} ></FlashButton>
+      <FlashButton pressFunc={configButton} text={"RESET"} ></FlashButton>
 
       </View>
       

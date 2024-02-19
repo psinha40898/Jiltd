@@ -124,9 +124,9 @@ const JiltdChat = ({ client_ID, match_ID }) => {
   <Text style = {[item.senderId === client_ID ? styles.rightText : styles.leftText, {fontWeight: '600', color: 'white'}]}> 
   {item.text}</Text></View>
   <Text style = {[styles.size5, {textAlign: 'center', fontWeight: '800', color:'white'}]}> 
-  {item.realTime.toDate().toLocaleDateString()}
+  {item.timestamp.toDate().toLocaleDateString()}
 {"   "} 
-  {item.realTime.toDate().toLocaleTimeString()}</Text>
+  {item.timestamp.toDate().toLocaleTimeString()}</Text>
   </View>)}
   />
   
