@@ -25,7 +25,7 @@ const RegisterScreen = () => {
         try {
             const userCreds = await JiltedRegister(email, password);
             console.log("registered with default stats")
-            await setDoc(userCreds[1], {email: email, test: 1, test2: 2 });
+            await setDoc(userCreds[1], {email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [{count:1, name: "starterA", path: "items/starters/starterA.png"}]}, {merge: true})
         } catch (error) {
             alert(error.message);
         }

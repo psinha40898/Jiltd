@@ -1,8 +1,9 @@
-import {View, FlatList, Text, TextInput, KeyboardAvoidingView, Image } from "react-native"
+import {View, FlatList, Text, TextInput, KeyboardAvoidingView, Image, TouchableWithoutFeedback, Modal } from "react-native"
 import {doc, collection, db, getDoc, query, onSnapshot, orderBy, addDoc, Timestamp, setDoc} from '../firebase'
 import { useState, useEffect, useRef} from "react";
 import FlashButton from "./FlashButton";
 import styles from "./Style";
+import ContextMenu from "./msgContextMenu";
 
 /**
  * JiltdChat.tsx
@@ -14,6 +15,26 @@ import styles from "./Style";
  */
 
 const JiltdChat = ({ client_ID, match_ID }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+
+  const handleLongPress = (event) => {
+    const { pageX, pageY } = event.nativeEvent;
+    setMenuPosition({ x: pageX, y: pageY });
+    setIsVisible(true);
+    console.log("T")
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  const handleOverlayPress = () => {
+    setIsVisible(false);
+    console.log("F")
+  };
+
+
   //var updatedMessages = []
   var updatedMessages = []
   const [sampleSend, setSample] = useState('');
@@ -110,6 +131,7 @@ const JiltdChat = ({ client_ID, match_ID }) => {
 
   // return (<FlatList></FlatList>)
   return (
+
     <KeyboardAvoidingView
     style={[{flex:1}, styles.primaryBGoffBlack]}
     behavior="padding"
@@ -118,17 +140,46 @@ const JiltdChat = ({ client_ID, match_ID }) => {
 
 
 <View style = {[{ flex: 1}]}>
+
   <FlatList data = {messages} inverted = {true}  renderItem={({item}) => 
-(<View style = {[item.senderId === client_ID ? styles.rightBubble : styles.leftBubble]} key={item.key}>
+
+
+(
+<View style = {[item.senderId === client_ID ? styles.rightBubble : styles.leftBubble]} key={item.key}>
+<TouchableWithoutFeedback onLongPress={handleLongPress}>
   <View style = {[item.senderId === client_ID ?styles.chatTextR : styles.chatTextL]}> 
   <Text style = {[item.senderId === client_ID ? styles.rightText : styles.leftText, {fontWeight: '600', color: 'white'}]}> 
   {item.text}</Text></View>
+  </TouchableWithoutFeedback>
+  <Modal
+        visible={isVisible}
+        transparent={true}
+        onRequestClose={handleClose}
+      >
+       
+          <View>
+            <View style={[{ top: menuPosition.y, left: menuPosition.x }]}>
+              <View>
+              <Text> gift </Text>
+              <TouchableWithoutFeedback onPress={handleOverlayPress}> 
+              <Text> X </Text>
+              </TouchableWithoutFeedback>
+             
+              </View>
+            </View>
+          </View>
+        
+      </Modal>
   <Text style = {[styles.size5, {textAlign: 'center', fontWeight: '800', color:'white'}]}> 
   {item.timestamp.toDate().toLocaleDateString()}
 {"   "} 
   {item.timestamp.toDate().toLocaleTimeString()}</Text>
-  </View>)}
+  </View>)
+  
+
+}
   />
+
   
   </View>
 
@@ -153,6 +204,7 @@ const JiltdChat = ({ client_ID, match_ID }) => {
 </View>
 
   </View>
-  </KeyboardAvoidingView>)
+  </KeyboardAvoidingView>
+)
 }
 export default JiltdChat

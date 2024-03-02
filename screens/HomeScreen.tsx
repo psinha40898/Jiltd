@@ -49,6 +49,9 @@ const testScreen = () => {
 const testMatch = () => {
   navigation.navigate("TestMatch");
 }
+const cMentest = () => {
+  navigation.navigate("Cmen");
+}
   //This test function works in iterating through users
   //All reads must complete before writes
   //Should not modify application state (finalWrite)
@@ -95,6 +98,7 @@ const testMatch = () => {
       <FlashButton pressFunc={testScreen} text={"TEST"}></FlashButton>
       <FlashButton pressFunc={testMatch} text={"GO"} ></FlashButton>
       <FlashButton pressFunc={configButton} text={"RESET"} ></FlashButton>
+      <FlashButton pressFunc={cMentest} text={"CMEN"} ></FlashButton>
 
       </View>
       

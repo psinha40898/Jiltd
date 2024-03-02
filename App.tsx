@@ -10,8 +10,8 @@ import UserProfile from './screens/UserProfile';
 import RatingScreen from './screens/RatingScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import TestMatch from './screens/TestMatch';
-import { Provider as PaperProvider } from 'react-native-paper';
 import Test from './screens/Test';
+import Cmen from './screens/Cmen';
 import { Auth } from 'firebase/auth'; // modulize this later
 
 /*Creates Stack object from React Stack Navigator*/
@@ -24,12 +24,19 @@ export type RootStackParamList = {
   Test: undefined;
   RegisterScreen: undefined;
   TestMatch: undefined;
+  Cmen: undefined;
 };
 const Stack = createNativeStackNavigator();
+const safeAreaInsets = {
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+};
 
 export default function App() {
   return (
-    <PaperProvider>
+   
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false}} name ="Login" component={LoginScreen}/>
@@ -40,9 +47,10 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false}} name="RatingScreen" component={RatingScreen} />
         <Stack.Screen options={{ headerShown: false}} name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false}} name="TestMatch" component={TestMatch} />
+        <Stack.Screen options={{ headerShown: false}} name="Cmen" component={Cmen} />
       </Stack.Navigator>
     </NavigationContainer>
-    </PaperProvider>
+  
   );
 }
 
