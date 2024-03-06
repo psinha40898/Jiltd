@@ -6,6 +6,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    dropDown:{
+        width: '100%',
+        height: '75%',
+        backgroundColor: 'rgba(204, 41, 54, .85)',
+        borderRadius: 5,
+
+    },
+    dropDownRow:{ 
+        backgroundColor: 'rgba(204, 41, 54, .85)',
+        padding : 5,
+        borderRadius: 5,
+        
+        
+    },
+    dropDownText:{
+        fontSize: 8
+    },
     matchContainer: {
         flex: 1,
         backgroundColor: '#070707',

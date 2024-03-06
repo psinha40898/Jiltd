@@ -1,4 +1,4 @@
-import {View, FlatList, Text, TextInput, KeyboardAvoidingView, Image, TouchableWithoutFeedback, Modal } from "react-native"
+import {View, FlatList, Text, TextInput, KeyboardAvoidingView, Image, TouchableWithoutFeedback, Modal, Button } from "react-native"
 import {doc, collection, db, getDoc, query, onSnapshot, orderBy, addDoc, Timestamp, setDoc} from '../firebase'
 import { useState, useEffect, useRef} from "react";
 import FlashButton from "./FlashButton";
@@ -146,11 +146,19 @@ const JiltdChat = ({ client_ID, match_ID }) => {
 
 (
 <View style = {[item.senderId === client_ID ? styles.rightBubble : styles.leftBubble]} key={item.key}>
-<TouchableWithoutFeedback onLongPress={handleLongPress}>
+
   <View style = {[item.senderId === client_ID ?styles.chatTextR : styles.chatTextL]}> 
   <Text style = {[item.senderId === client_ID ? styles.rightText : styles.leftText, {fontWeight: '600', color: 'white'}]}> 
-  {item.text}</Text></View>
-  </TouchableWithoutFeedback>
+  {item.text}</Text>
+  {item.senderId !== client_ID && (
+        <Button
+          title="g"
+          onPress={handleLongPress}
+        />
+      )}
+  
+  </View>
+
   <Modal
         visible={isVisible}
         transparent={true}
@@ -160,7 +168,8 @@ const JiltdChat = ({ client_ID, match_ID }) => {
           <View>
             <View style={[{ top: menuPosition.y, left: menuPosition.x }]}>
               <View>
-              <Text> gift </Text>
+              <Text> inventory for  </Text>
+              <Text> {item.text}</Text>
               <TouchableWithoutFeedback onPress={handleOverlayPress}> 
               <Text> X </Text>
               </TouchableWithoutFeedback>

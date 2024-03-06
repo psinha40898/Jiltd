@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View, Image, Modal, Alert} from 'react-native';
+import {Text, Button, StyleSheet, View, Image, Modal, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -62,11 +62,6 @@ useEffect(()=> {
       const clientSnap = await getDoc(clientUserDocRefMain);
       setInventory(clientSnap.data().inventory);
       console.log(countries);
-
-      
-
-
-
     }
     catch(e)
     {
@@ -77,9 +72,6 @@ useEffect(()=> {
   //set displayImage to default starter
 
   //make ref to starterA
-
-
-
 },[])
 
 
@@ -102,15 +94,25 @@ useEffect(()=> {
           },
 
 ]}>
-<View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
-  <Text style={[styles.primaryRed, styles.size2]}>hi.</Text></View>
-<View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 10}, styles.secondaryBGoffBlack]}>
-  <View style = {{flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>fetch name</Text><Text style ={[styles.size4, styles.primaryRed]}>level 1</Text><Text style ={[styles.size4, styles.primaryRed]}>5 reps</Text><Text style ={[styles.size4, styles.primaryRed]}>5 negs</Text><Text style ={[styles.size4, styles.primaryRed]}>avatarName</Text></View>
-  <View style = {{flex: 0.25}} >
+<View style={[{flex:1, flexDirection: 'column', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
+
+  <Text style={[styles.primaryRed, styles.size2]}>[name]</Text>
+  <Text style = {[styles.size4, styles.primaryRed]}>player metadata</Text>
+  <Text style = {[styles.size5, styles.primaryRed]}>fetched once</Text>
+  
+  </View>
+<View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20}, styles.secondaryBGoffBlack]}>
+  <View style = {{flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>item metadata</Text><Text style ={[styles.size5, styles.primaryRed, {fontWeight:'200'}]}>dropdown triggers fetch</Text></View>
+  <View style = {{flex: 0.35}} >
   <SelectDropdown
 	data={countries}
-  buttonStyle={{width: '100%'}}
-  defaultButtonText='change icon'
+  defaultValueByIndex={1}
+  buttonStyle={styles.dropDown}
+  buttonTextStyle={styles.dropDownText}
+  rowTextStyle={styles.dropDownText}
+  dropdownStyle={styles.dropDownRow}
+
+  defaultButtonText='view item'
 	onSelect={(selectedItem, index) => {
 		console.log(selectedItem, index)
     loadImage(selectedItem.path);
@@ -145,7 +147,9 @@ useEffect(()=> {
             <Text style={styles.modalText}>Searching...</Text>
           </View>
         </View>
-      </Modal><FlashButton pressFunc = {talkButton} text={"Play"} ></FlashButton></View>
+      </Modal>
+      <FlashButton pressFunc = {talkButton} text={"Play"} ></FlashButton>
+      </View>
 <View style={[{flex:1}, styles.primaryBGoffBlack, {alignItems: 'center', justifyContent: 'center', alignContent: 'center'}]}><Text style ={[styles.primaryRed, styles.size4]}>fetch note </Text></View>
 <View style={[{flex:1}, {backgroundColor: "#1c1c1c", borderBottomLeftRadius: 50, borderBottomRightRadius: 50} ]}><Text style ={[styles.primaryRed, styles.size4]}>test. </Text>
 </View>
