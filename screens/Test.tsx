@@ -9,6 +9,7 @@ import IconButton from '../essentialComponents/Icon';
 import LoopAnimation from '../essentialComponents/LoopAnimation';
 import { matchMake } from './matchMake';
 import { auth, ref, storage, getDownloadURL, doc, getDoc, db} from '../firebase';
+import Dropdown from 'react-native-input-select';
 import SelectDropdown from 'react-native-select-dropdown'
 
 // syntax
@@ -18,6 +19,7 @@ const Test = () => {
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [displayImage, setImage] = useState(null);
+  const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [countries, setInventory] = useState([]);
   //need to load this array from the database
@@ -37,16 +39,48 @@ const Test = () => {
 
 // ];
 const loadImage = async (path) => {
+  var local = ""
+  console.log(path)
+  if(!path){
+    if (curPath === countries[0].path){
+    console.log("f2")
+    
+    setPath(countries[1].path);
+    local = countries[1].path
+    }
+    else
+    {
+      setPath(countries[0].path);
+      local = countries[0].path
+    }
+    try {
+      const storageRef = ref(storage, local);
+      const URL = await getDownloadURL(storageRef);
+      setImage(URL);
+      console.log("image set");
+  
+    }
+    catch(e){
+      console.log(e);
+    }
+
+  }
+
+  else{
+
+  console.log("load image")
+  setPath(path)
   try {
     const storageRef = ref(storage, path);
     const URL = await getDownloadURL(storageRef);
     setImage(URL);
-    console.log("do1ne");
+    console.log("image set");
 
   }
   catch(e){
     console.log(e);
   }
+}
 }
 
 useEffect(()=> {
@@ -54,7 +88,7 @@ useEffect(()=> {
   const fetchImage = async () => {
     try {
       //starter dummy
-      const storageRef = ref(storage, "items/starters/starterA.png");
+      const storageRef = ref(storage, "items/starters/starterB.png");
       const URL = await getDownloadURL(storageRef);
       setImage(URL);
       console.log("done");
@@ -102,34 +136,23 @@ useEffect(()=> {
   
   </View>
 <View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20}, styles.secondaryBGoffBlack]}>
-  <View style = {{flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>item metadata</Text><Text style ={[styles.size5, styles.primaryRed, {fontWeight:'200'}]}>dropdown triggers fetch</Text></View>
-  <View style = {{flex: 0.35}} >
-  <SelectDropdown
-	data={countries}
-  defaultValueByIndex={1}
-  buttonStyle={styles.dropDown}
-  buttonTextStyle={styles.dropDownText}
-  rowTextStyle={styles.dropDownText}
-  dropdownStyle={styles.dropDownRow}
+  <View style = {{flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>item metadata</Text><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'400'}]}>dropdown triggers fetch</Text></View>
+  {/* have a default image for no selection
+  dont allow people to click play with no selection
+  solved. */}
+  <Dropdown
+      
+      placeholder="view item"
+      options={countries}
+      optionLabel={'name'}
+      optionValue={'path'}
+      selectedValue={curPath}
+      onValueChange={(value) => loadImage(value)}
+      primaryColor={'green'}
+      
+    />
 
-  defaultButtonText='view item'
-	onSelect={(selectedItem, index) => {
-		console.log(selectedItem, index)
-    loadImage(selectedItem.path);
-	}}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		// text represented after item is selected
-		// if data array is an array of objects then return selectedItem.property to render after item is selected
-		return selectedItem.name;
-	}}
-	rowTextForSelection={(item, index) => {
-		// text represented for each item in dropdown
-		// if data array is an array of objects then return item.property to represent item in dropdown
-		return item.name;
-	}}
-/>
 </View>
-  </View>
   <LoopAnimation
   onPress={() => console.log("Sorry")}
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
