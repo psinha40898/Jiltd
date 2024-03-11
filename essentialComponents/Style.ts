@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(204, 41, 54, .85)',
         borderRadius: 5,
         
+        
+        
+        
     },
     dropDownRow:{ 
         backgroundColor: 'rgba(204, 41, 54, .85)',

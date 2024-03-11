@@ -8,87 +8,51 @@ import FlashButton from '../essentialComponents/FlashButton';
 import IconButton from '../essentialComponents/Icon';
 import LoopAnimation from '../essentialComponents/LoopAnimation';
 import { matchMake } from './matchMake';
-import { auth, ref, storage, getDownloadURL, doc, getDoc, db} from '../firebase';
-import Dropdown from 'react-native-input-select';
+import { auth, ref, storage, getDownloadURL, doc, getDoc, db, Timestamp} from '../firebase';
+// import Dropdown from 'react-native-input-select';
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import SelectDropdown from 'react-native-select-dropdown'
 
 // syntax
 // <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />
-
+interface MetaData {
+  author: string;
+  date: Timestamp; // Assuming it's a Firestore Timestamp object
+  note: string;
+}
 const Test = () => {
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [itemMeta, setImeta] = useState("");
+  const [metaData, setData] = useState<MetaData>({ author: '', date: Timestamp.now(), note: '' });
   const [displayImage, setImage] = useState(null);
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [countries, setInventory] = useState([]);
-  //need to load this array from the database
-  //this should load from users/userid.data().inventory
-  //either all the keys or the keys of 1 or more count
-  //parse the keys that have 1 or more into an array! **
-  //key(count), starterA(1), heartStopper(5)
 
-    //TESTING retrieving an array of maps
-  //reference to userDoc
-
-//   const countries = [
-//     {name: "fetch1", path: "items/starters/starterA.png"}, 
-//     {name: "fetch2", path: "items/starters/starterB.png"},
-//     {name: "fetch3", path: "items/starters/starterB.png"},
-
-
-// ];
-const loadImage = async (path) => {
-  var local = ""
-  console.log(path)
-  if(!path){
-    if (curPath === countries[0].path){
-    console.log("f2")
-    
-    setPath(countries[1].path);
-    local = countries[1].path
-    }
-    else
-    {
-      setPath(countries[0].path);
-      local = countries[0].path
-    }
-    try {
-      const storageRef = ref(storage, local);
-      const URL = await getDownloadURL(storageRef);
-      setImage(URL);
-      console.log("image set");
-  
-    }
-    catch(e){
-      console.log(e);
-    }
-
-  }
-
-  else{
-
-  console.log("load image")
+const loadImage = async (path, note, message) => {
+  console.log("loadImage()", path, note, "MESSAGE:", message)
   setPath(path)
+  setImeta(note)
+  console.log("setting", message)
+  setData(message)
+  console.log("set", metaData)
   try {
     const storageRef = ref(storage, path);
     const URL = await getDownloadURL(storageRef);
     setImage(URL);
     console.log("image set");
-
   }
   catch(e){
     console.log(e);
   }
 }
-}
 
 useEffect(()=> {
-  //replace with loadImage(current)
   const fetchImage = async () => {
     try {
-      //starter dummy
-      const storageRef = ref(storage, "items/starters/starterB.png");
+      const storageRef = ref(storage, "items/starters/starterA.png");
       const URL = await getDownloadURL(storageRef);
       setImage(URL);
       console.log("done");
@@ -96,6 +60,7 @@ useEffect(()=> {
       const clientSnap = await getDoc(clientUserDocRefMain);
       setInventory(clientSnap.data().inventory);
       console.log(countries);
+      setPath(countries[0].path)
     }
     catch(e)
     {
@@ -103,10 +68,14 @@ useEffect(()=> {
     }
   }
   fetchImage();
-  //set displayImage to default starter
-
-  //make ref to starterA
 },[])
+useEffect(() => {
+  if (countries.length > 0) {
+    setData(countries[0].message)
+    setImeta(countries[0].note);
+    setPath(countries[0].path);
+  }
+}, [countries]);
 
 
   const talkButton = async () => {
@@ -128,6 +97,7 @@ useEffect(()=> {
           },
 
 ]}>
+
 <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
 
   <Text style={[styles.primaryRed, styles.size2]}>[name]</Text>
@@ -135,29 +105,59 @@ useEffect(()=> {
   <Text style = {[styles.size5, styles.primaryRed]}>fetched once</Text>
   
   </View>
-<View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20}, styles.secondaryBGoffBlack]}>
-  <View style = {{flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600'}]}>item metadata</Text><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'400'}]}>dropdown triggers fetch</Text></View>
+<View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 10}, styles.secondaryBGoffBlack]}>
+  <View style = {{flex:1, flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600', textAlign: 'center'}]}>"{itemMeta}"</Text>
+  <Text>{metaData.author} {metaData.date.toString()}</Text>
+
+
+  </View>
   {/* have a default image for no selection
   dont allow people to click play with no selection
   solved. */}
+  <View style = {{flex:1, marginBottom: 20}}> 
+
+  {/* https://github.com/hoaphantn7604/react-native-element-dropdown?tab=readme-ov-file */}
   <Dropdown
-      
-      placeholder="view item"
-      options={countries}
-      optionLabel={'name'}
-      optionValue={'path'}
-      selectedValue={curPath}
-      onValueChange={(value) => loadImage(value)}
-      primaryColor={'green'}
-      
-    />
+        style={zx.dropdown}
+        placeholderStyle={zx.placeholderStyle}
+        selectedTextStyle={zx.texstyle}
+        inputSearchStyle={zx.inputSearchStyle}
+        iconStyle={zx.iconStyle}
+        data={countries}
+        search
+        containerStyle={zx.contstyle}
+        
+        maxHeight={300}
+        labelField="name"
+        activeColor='rgba(204, 41, 54, 1)'
+        itemContainerStyle={zx.item}
+        itemTextStyle={zx.itemtxt}
+        valueField="path"
+        placeholder="Select item"
+        searchPlaceholder="Search..."
+        value={curPath}
+        onChange={item => {
+          loadImage(item.path, item.note, item.message);
+          console.log("change");
+        }}
+        renderLeftIcon={() => (
+          <AntDesign style={zx.icon} color="black" name="Safety" size={20} />
+        )}
+       
+      />
+
+    </View>
+
+
+
 
 </View>
   <LoopAnimation
   onPress={() => console.log("Sorry")}
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
 /></View>
-<View style = {[{flex:0.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>          
+<View style = {[{flex:1.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>      
+    
 <Modal  animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -171,17 +171,16 @@ useEffect(()=> {
           </View>
         </View>
       </Modal>
+
       <FlashButton pressFunc = {talkButton} text={"Play"} ></FlashButton>
       </View>
-<View style={[{flex:1}, styles.primaryBGoffBlack, {alignItems: 'center', justifyContent: 'center', alignContent: 'center'}]}><Text style ={[styles.primaryRed, styles.size4]}>fetch note </Text></View>
-<View style={[{flex:1}, {backgroundColor: "#1c1c1c", borderBottomLeftRadius: 50, borderBottomRightRadius: 50} ]}><Text style ={[styles.primaryRed, styles.size4]}>test. </Text>
+<View style={[{flex:1}, styles.primaryBGoffBlack, {alignItems: 'center', justifyContent: 'center', alignContent: 'center'}]}><Text style ={[styles.primaryRed, styles.size4]}>... </Text></View>
+<View style={[{flex:1}, {backgroundColor: "#1c1c1c", borderBottomLeftRadius: 50, borderBottomRightRadius: 50} ]}><Text style ={[styles.primaryRed, styles.size4]}> ... </Text>
 </View>
-        <View style={[{flex:0.25}, styles.primaryBGBlack]}> 
+        <View style={[{flex:0.5}, styles.primaryBGBlack]}> 
         <View style={[{flexDirection:'row'}, { justifyContent: 'center', alignItems: 'center'}]}>
         <IconButton onPress={()=> console.log("Sorry")}></IconButton>
-        <IconButton onPress={()=> console.log("Sorry")}></IconButton>
-        <IconButton onPress={()=> console.log("Sorry")}></IconButton>
-        <IconButton onPress={()=> console.log("Sorry")}></IconButton>
+      
    </View></View></View>
     )
 }
@@ -198,3 +197,53 @@ const tStyle = StyleSheet.create({
     },
   });
   
+  const zx = StyleSheet.create({
+    selectedStyle: {
+      borderRadius: 12,
+    },
+    dropdown: {
+      backgroundColor: 'rgba(204, 41, 54, .75)',
+      borderRadius : 15,
+      margin: 16,
+      height: 30,
+      
+    },
+    item:{
+      borderRadius : 0,
+      padding:5
+    },
+    itemtxt:{
+      fontWeight:'600'
+    },
+    contstyle: {
+      backgroundColor: 'rgba(204, 41, 54, .75)',
+      borderRadius : 15,
+      margin: 16,
+      borderColor: 'rgba(204, 41, 54, .45)',
+      borderWidth: 5
+
+      
+    },
+    texstyle: {
+      textAlign: 'center',
+      color:'white',
+      fontWeight: '600'
+    },
+    icon: {
+      paddingRight: 0
+    },
+    placeholderStyle: {
+      fontSize: 16,
+    },
+    selectedTextStyle: {
+      fontSize: 16,
+    },
+    iconStyle: {
+      width: 20,
+      height: 20,
+    },
+    inputSearchStyle: {
+      height: 40,
+      fontSize: 16,
+    },
+  });
