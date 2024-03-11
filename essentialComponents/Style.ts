@@ -199,6 +199,10 @@ rightText:{
     primaryRed:{
     color: 'rgba(204, 41, 54, 1)',
     },
+
+    bold: {fontWeight: 'bold'},
+    italic: {fontStyle: 'italic'},
+    underline: {textDecorationLine: 'underline'},
 /** Text Weights */
 superHeavy:{
 

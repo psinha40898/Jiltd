@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Text, Button, StyleSheet, View, Image, Modal, Alert} from 'react-native';
+import {Text, StyleSheet, View, Image, Modal, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../essentialComponents/Style';
-import FlashButton from '../essentialComponents/FlashButton';
+import PlayButton from '../essentialComponents/playButton';
 import IconButton from '../essentialComponents/Icon';
 import LoopAnimation from '../essentialComponents/LoopAnimation';
 import { matchMake } from './matchMake';
@@ -14,30 +14,36 @@ import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import SelectDropdown from 'react-native-select-dropdown'
 
-// syntax
-// <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />
 interface MetaData {
   author: string;
-  date: Timestamp; // Assuming it's a Firestore Timestamp object
+  date: Timestamp | null; // Assuming it's a Firestore Timestamp object
   note: string;
 }
 const Test = () => {
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemMeta, setImeta] = useState("");
-  const [metaData, setData] = useState<MetaData>({ author: '', date: Timestamp.now(), note: '' });
+  const [clientName, setName] = useState("");
+  const [metaData, setData] = useState<MetaData>({ author: '', date: null, note: '' });
   const [displayImage, setImage] = useState(null);
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [countries, setInventory] = useState([]);
 
+/**
+ * _____ 
+ * updates the displayed image to the selected one
+ * updates the displayed message to the one associated with the selected item
+ * @param path path of image on cloud
+ * @param note deprecated
+ * @param message message metadata that is attached to item
+ */
 const loadImage = async (path, note, message) => {
   console.log("loadImage()", path, note, "MESSAGE:", message)
   setPath(path)
   setImeta(note)
   console.log("setting", message)
   setData(message)
-  console.log("set", metaData)
   try {
     const storageRef = ref(storage, path);
     const URL = await getDownloadURL(storageRef);
@@ -48,18 +54,24 @@ const loadImage = async (path, note, message) => {
     console.log(e);
   }
 }
-
+/** Init useEffect 
+ * TODO: Needs to be configured to load the first item of the user's inventory, whatever it is
+ * or
+ *  Load a default image until countries changes (loading image), then countries loads and the next useEffect is called
+ */
 useEffect(()=> {
   const fetchImage = async () => {
     try {
-      const storageRef = ref(storage, "items/starters/starterA.png");
+      const storageRef = ref(storage, "items/spinner-of-dots.png");
       const URL = await getDownloadURL(storageRef);
       setImage(URL);
       console.log("done");
       const clientUserDocRefMain = doc(db,'users', userID);
       const clientSnap = await getDoc(clientUserDocRefMain);
       setInventory(clientSnap.data().inventory);
+      setName(clientSnap.data().displayName);
       console.log(countries);
+      console.log(clientName);
       setPath(countries[0].path)
     }
     catch(e)
@@ -69,96 +81,99 @@ useEffect(()=> {
   }
   fetchImage();
 },[])
+
+/** Updates states when inventory is loaded. Add setImage here 
+ *  Updates selected item
+ *  Updates the displayed message to the right one
+ *  This should also update the image to the selected one
+*/
 useEffect(() => {
-  if (countries.length > 0) {
+  const readInvent = async () => {if (countries.length > 0) {
     setData(countries[0].message)
     setImeta(countries[0].note);
     setPath(countries[0].path);
+    const storageRef = ref(storage, countries[0].path);
+    const URL = await getDownloadURL(storageRef);
+    setImage(URL);
   }
+}
+readInvent();
 }, [countries]);
 
-
-  const talkButton = async () => {
-    console.log("THIS IS THE USER ID", userID);
-    setModalVisible(true);
-    await matchMake(userID, navigation);
-    setModalVisible(false);
+/** Enters the user into matchmaking queue */
+const talkButton = async () => {
+  console.log("THIS IS THE USER ID", userID);
+  setModalVisible(true);
+  await matchMake(userID, navigation);
+  setModalVisible(false);
   };
 
-  //**onSelect will set activeimg to doc*/
-  //The dropdown changes the activeimg value of the doc
-  //The options from the dropdown are dependent on the user's inventory
-  //
-  
-    return(
-<View style={[ tStyle.container,
-          {
-            flexDirection: 'column',
-          },
 
-]}>
+  return(
+<View style={[ tStyle.container, {flexDirection: 'column',},]}>
 
-<View style={[{flex:1, flexDirection: 'column', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
 
-  <Text style={[styles.primaryRed, styles.size2]}>[name]</Text>
-  <Text style = {[styles.size4, styles.primaryRed]}>player metadata</Text>
-  <Text style = {[styles.size5, styles.primaryRed]}>fetched once</Text>
-  
+
+  <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
+  <Text style={[styles.primaryRed, styles.size4]}>hi.</Text>
+    {clientName !== '' ?
+    (<Text style={[styles.primaryRed, styles.size3]}>{clientName}</Text>)
+    : null
+    }
   </View>
-<View style={[{flex:1, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 10}, styles.secondaryBGoffBlack]}>
-  <View style = {{flex:1, flexDirection: 'column'}}><View style = {{flex:1}}><Text style ={[styles.size4, styles.primaryRed, {fontWeight:'600', textAlign: 'center'}]}>"{itemMeta}"</Text>
-  <Text>{metaData.author} {metaData.date.toString()}</Text>
 
+<View style={[{flex:1.5, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20}, styles.secondaryBGoffBlack]}>
+  <View style = {{flex:1, flexDirection: 'column'}}>
+  <View style = {{flex:1, justifyContent: 'center', padding: 5}}>
+ 
+  <Text style={[styles.size4, styles.primaryRed, {fontWeight:'600', textAlign: 'center'}]}>
+    {metaData.note}
+    </Text>
 
-  </View>
-  {/* have a default image for no selection
-  dont allow people to click play with no selection
-  solved. */}
-  <View style = {{flex:1, marginBottom: 20}}> 
-
-  {/* https://github.com/hoaphantn7604/react-native-element-dropdown?tab=readme-ov-file */}
+  {metaData.date ? (  
+  <Text style={[styles.italic, styles.primaryRed, {marginLeft: 15, fontSize: 12}]}>
+    {metaData.author} {metaData.date.toDate().toLocaleDateString()}
+  </Text>) 
+  : null
+  }
   <Dropdown
         style={zx.dropdown}
-        placeholderStyle={zx.placeholderStyle}
+        placeholderStyle={zx.pstyle}
         selectedTextStyle={zx.texstyle}
         inputSearchStyle={zx.inputSearchStyle}
         iconStyle={zx.iconStyle}
         data={countries}
         search
         containerStyle={zx.contstyle}
-        
+       
+        iconColor='rgba(204,41,54,0)'
         maxHeight={300}
         labelField="name"
         activeColor='rgba(204, 41, 54, 1)'
         itemContainerStyle={zx.item}
         itemTextStyle={zx.itemtxt}
+        
         valueField="path"
-        placeholder="Select item"
+        placeholder="loading..."
         searchPlaceholder="Search..."
         value={curPath}
         onChange={item => {
           loadImage(item.path, item.note, item.message);
           console.log("change");
         }}
-        renderLeftIcon={() => (
-          <AntDesign style={zx.icon} color="black" name="Safety" size={20} />
-        )}
+  
        
       />
-
-    </View>
-
-
-
-
+</View>
 </View>
   <LoopAnimation
   onPress={() => console.log("Sorry")}
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
-/></View>
+/>
+</View>
+
 <View style = {[{flex:1.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>      
-    
-<Modal  animationType="slide"
+  <Modal  animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -171,17 +186,22 @@ useEffect(() => {
           </View>
         </View>
       </Modal>
+    <PlayButton onPress={talkButton}></PlayButton>
+  </View>
 
-      <FlashButton pressFunc = {talkButton} text={"Play"} ></FlashButton>
-      </View>
-<View style={[{flex:1}, styles.primaryBGoffBlack, {alignItems: 'center', justifyContent: 'center', alignContent: 'center'}]}><Text style ={[styles.primaryRed, styles.size4]}>... </Text></View>
-<View style={[{flex:1}, {backgroundColor: "#1c1c1c", borderBottomLeftRadius: 50, borderBottomRightRadius: 50} ]}><Text style ={[styles.primaryRed, styles.size4]}> ... </Text>
+<View style={[{flex:1}, {alignItems: 'center', backgroundColor: "#1c1c1c", justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50} ]}>
+  <Text style ={[ styles.size4, {color: '#75e4b3', fontWeight: '900'}]}>0</Text>
 </View>
-        <View style={[{flex:0.5}, styles.primaryBGBlack]}> 
+
+<View style={[{flex:0.5}, styles.primaryBGBlack]}> 
         <View style={[{flexDirection:'row'}, { justifyContent: 'center', alignItems: 'center'}]}>
-        <IconButton onPress={()=> console.log("Sorry")}></IconButton>
-      
-   </View></View></View>
+          <IconButton onPress={()=> console.log("Sorry")}></IconButton>
+        </View>
+</View>
+
+
+
+</View>
     )
 }
 
@@ -203,21 +223,22 @@ const tStyle = StyleSheet.create({
     },
     dropdown: {
       backgroundColor: 'rgba(204, 41, 54, .75)',
-      borderRadius : 15,
+      borderRadius : 5,
       margin: 16,
       height: 30,
       
     },
     item:{
       borderRadius : 0,
-      padding:5
+      padding:5,
+     
     },
     itemtxt:{
       fontWeight:'600'
     },
     contstyle: {
       backgroundColor: 'rgba(204, 41, 54, .75)',
-      borderRadius : 15,
+      borderRadius : 5,
       margin: 16,
       borderColor: 'rgba(204, 41, 54, .45)',
       borderWidth: 5
@@ -228,6 +249,12 @@ const tStyle = StyleSheet.create({
       textAlign: 'center',
       color:'white',
       fontWeight: '600'
+    },
+    pstyle: {
+      textAlign: 'center',
+      color:'white',
+      fontWeight: '600',
+      fontSize: 8
     },
     icon: {
       paddingRight: 0

@@ -51,11 +51,11 @@ const styles = StyleSheet.create(
     paddingHorizontal: 10,
     paddingVertical: 12.5,
     borderRadius: 5,
-    marginTop: 20
 },
 buttonText: {
     color: 'white',
     fontWeight: '900',
+    fontSize: 12
 
 },
 }
