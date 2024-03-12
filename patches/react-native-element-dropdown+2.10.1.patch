@@ -1,0 +1,47 @@
+diff --git a/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx b/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx
+index 07bf17b..c26bcca 100644
+--- a/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx
++++ b/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx
+@@ -423,6 +423,7 @@ const DropdownComponent: <T>(
+                 itemContainerStyle,
+                 selected && {
+                   backgroundColor: activeColor,
++                  
+                 },
+               ])}
+             >
+@@ -432,6 +433,9 @@ const DropdownComponent: <T>(
+                 <View style={styles.item}>
+                   <Text
+                     style={StyleSheet.flatten([
++                      selected && {
++                        textDecorationLine: 'underline'
++                      },
+                       styles.textItem,
+                       itemTextStyle,
+                       font(),
+@@ -488,7 +492,7 @@ const DropdownComponent: <T>(
+                 }
+                 onSearch(e);
+               }}
+-              placeholderTextColor="gray"
++              placeholderTextColor="black"
+               iconStyle={[{ tintColor: iconColor }, iconStyle]}
+             />
+           );
+diff --git a/node_modules/react-native-element-dropdown/src/components/Dropdown/styles.ts b/node_modules/react-native-element-dropdown/src/components/Dropdown/styles.ts
+index 751c62a..59bfafa 100644
+--- a/node_modules/react-native-element-dropdown/src/components/Dropdown/styles.ts
++++ b/node_modules/react-native-element-dropdown/src/components/Dropdown/styles.ts
+@@ -54,8 +54,9 @@ export const styles = StyleSheet.create({
+     height: 20,
+   },
+   input: {
+-    borderWidth: 0.5,
+-    borderColor: '#DDDDDD',
++    borderWidth: 2,
++    borderRadius: 2,
++    borderColor: 'black',
+     paddingHorizontal: 8,
+     marginBottom: 8,
+     margin: 6,
