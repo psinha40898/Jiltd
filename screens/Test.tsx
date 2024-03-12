@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View, Image, Modal, Alert} from 'react-native';
+import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -23,12 +23,12 @@ const Test = () => {
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemMeta, setImeta] = useState("");
-  const [clientName, setName] = useState("");
+  const [clientName, setName] = useState("welcome");
   const [metaData, setData] = useState<MetaData>({ author: '', date: null, note: '' });
   const [displayImage, setImage] = useState(null);
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [countries, setInventory] = useState([]);
+  const [inventory, setInventory] = useState([]);
 
 /**
  * _____ 
@@ -38,7 +38,7 @@ const Test = () => {
  * @param note deprecated
  * @param message message metadata that is attached to item
  */
-const loadImage = async (path, note, message) => {
+const updateDisplay = async (path, note, message) => {
   console.log("loadImage()", path, note, "MESSAGE:", message)
   setPath(path)
   setImeta(note)
@@ -60,7 +60,7 @@ const loadImage = async (path, note, message) => {
  *  Load a default image until countries changes (loading image), then countries loads and the next useEffect is called
  */
 useEffect(()=> {
-  const fetchImage = async () => {
+  const init = async () => {
     try {
       const storageRef = ref(storage, "items/spinner-of-dots.png");
       const URL = await getDownloadURL(storageRef);
@@ -70,35 +70,36 @@ useEffect(()=> {
       const clientSnap = await getDoc(clientUserDocRefMain);
       setInventory(clientSnap.data().inventory);
       setName(clientSnap.data().displayName);
-      console.log(countries);
+      console.log(inventory);
       console.log(clientName);
-      setPath(countries[0].path)
+      setPath(inventory[0].path)
     }
     catch(e)
     {
       console.log(e);
     }
   }
-  fetchImage();
+  init();
 },[])
 
 /** Updates states when inventory is loaded. Add setImage here 
  *  Updates selected item
- *  Updates the displayed message to the right one
- *  This should also update the image to the selected one
+ *  Updates the displayed message to the default one
+ *  This should also update the image to the default one
 */
 useEffect(() => {
-  const readInvent = async () => {if (countries.length > 0) {
-    setData(countries[0].message)
-    setImeta(countries[0].note);
-    setPath(countries[0].path);
-    const storageRef = ref(storage, countries[0].path);
+  const displayDefaults = async () => {
+    if (inventory.length > 0) {
+    setData(inventory[0].message)
+    setImeta(inventory[0].note);
+    setPath(inventory[0].path);
+    const storageRef = ref(storage, inventory[0].path);
     const URL = await getDownloadURL(storageRef);
     setImage(URL);
   }
 }
-readInvent();
-}, [countries]);
+displayDefaults();
+}, [inventory]);
 
 /** Enters the user into matchmaking queue */
 const talkButton = async () => {
@@ -110,12 +111,15 @@ const talkButton = async () => {
 
 
   return(
+    <ImageBackground source ={require('../images/bg.jpg')}
+resizeMode='cover'
+style={{flex:1}}
+>
 <View style={[ tStyle.container, {flexDirection: 'column',},]}>
 
 
-
   <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
-  <Text style={[styles.primaryRed, styles.size4]}>hi.</Text>
+  
     {clientName !== '' ?
     (<Text style={[styles.primaryRed, styles.size3]}>{clientName}</Text>)
     : null
@@ -131,7 +135,7 @@ const talkButton = async () => {
     </Text>
 
   {metaData.date ? (  
-  <Text style={[styles.italic, styles.primaryRed, {marginLeft: 15, fontSize: 12}]}>
+  <Text style={[styles.italic, styles.primaryRed, {marginLeft: 15, fontSize: 10, fontWeight: '500'}]}>
     {metaData.author} {metaData.date.toDate().toLocaleDateString()}
   </Text>) 
   : null
@@ -142,7 +146,7 @@ const talkButton = async () => {
         selectedTextStyle={zx.texstyle}
         inputSearchStyle={zx.inputSearchStyle}
         iconStyle={zx.iconStyle}
-        data={countries}
+        data={inventory}
         search
         containerStyle={zx.contstyle}
        
@@ -155,11 +159,10 @@ const talkButton = async () => {
         
         valueField="path"
         placeholder="loading..."
-        searchPlaceholder="Search..."
+        searchPlaceholder="search..."
         value={curPath}
         onChange={item => {
-          loadImage(item.path, item.note, item.message);
-          console.log("change");
+          updateDisplay(item.path, item.note, item.message);
         }}
   
        
@@ -182,14 +185,18 @@ const talkButton = async () => {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Searching...</Text>
+          <Text style={[styles.modalText, styles.italic]}>You are in the queue to find a match. Thank you for trying Jiltd.</Text>
+          <Text style={styles.modalText2}>Do not deal with personal information.</Text>
+          <Text style={styles.modalText2}>Be respectful.</Text>
+          {/* <Text style={styles.modalText2}>Try your best to help.</Text> */}
+
           </View>
         </View>
       </Modal>
     <PlayButton onPress={talkButton}></PlayButton>
   </View>
 
-<View style={[{flex:1}, {alignItems: 'center', backgroundColor: "#1c1c1c", justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50} ]}>
+<View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}, styles.primaryBGoffBlack ]}>
   <Text style ={[ styles.size4, {color: '#75e4b3', fontWeight: '900'}]}>0</Text>
 </View>
 
@@ -202,6 +209,7 @@ const talkButton = async () => {
 
 
 </View>
+</ImageBackground>
     )
 }
 
@@ -209,7 +217,8 @@ export default Test;
 const tStyle = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "black"
+      backgroundColor: 'rgba(0,0,0,0.65)',
+     
     },
     fab: {
       right: 0,
@@ -247,7 +256,7 @@ const tStyle = StyleSheet.create({
     },
     texstyle: {
       textAlign: 'center',
-      color:'white',
+      color:'black',
       fontWeight: '600'
     },
     pstyle: {
@@ -272,5 +281,7 @@ const tStyle = StyleSheet.create({
     inputSearchStyle: {
       height: 40,
       fontSize: 16,
+ 
+      fontWeight: '600',
     },
   });

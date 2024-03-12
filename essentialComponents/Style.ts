@@ -95,26 +95,36 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
+        marginTop: 0,
       },
       modalView: {
         margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
+        backgroundColor: 'rgba(204, 41, 54, .8)',
+        borderRadius: 5,
+        padding: 25,
+        borderWidth: 1,
+        
         shadowColor: '#000',
         shadowOffset: {
-          width: 0,
-          height: 2,
+          width: 4,
+          height: 4,
         },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.85,
         shadowRadius: 4,
-        elevation: 5,
+        elevation: 12,
       },
       modalText: {
         marginBottom: 15,
+        fontSize: 12,
         textAlign: 'center',
+        color: 'white',
+        fontWeight: '400'
+      },
+      modalText2: {
+        marginBottom: 15,
+        textAlign: 'left',
+        color: 'white',
+        fontWeight: '600'
       },
 
 
@@ -228,7 +238,7 @@ frail:{}
         backgroundColor: 'rgba(7, 7, 7, 1)'
     },
     primaryBGoffBlack:{
-        backgroundColor: '#1c1c1c'
+        backgroundColor: 'rgba(28, 28, 28, .925)'
     },
     primaryBGRed:{
         backgroundColor: 'rgba(204, 41, 54, 1)',

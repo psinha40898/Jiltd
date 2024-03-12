@@ -7,10 +7,11 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation, useRoute  } from '@react-navigation/native';
 import { Text, View, Image, Button, StyleSheet, KeyboardAvoidingView, SafeAreaView, TouchableOpacity, Platform, Alert, Modal, Pressable,} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import {db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
+import {Timestamp, db,doc, signOut, setDoc, auth, storage, ref, uploadBytes, getDownloadURL, getDocs, collection, runTransaction} from '../firebase'; 
 import CustomKeyboardWrapper from '../conditionalComponents/CustomKeyboardWrapper';
 import ChatroomComponent from '../essentialComponents/ChatroomComponent';
 import ImageCloudUpload from '../essentialComponents/ImageCloudUpload';
+import { Time } from 'react-native-gifted-chat';
 
 
 
@@ -31,7 +32,7 @@ const HomeScreen = () => {
 
   }
   const configButton = async () => {
-    await setDoc(clientUserDocRefMain, {email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [{count:1, name: "starterA", path: "items/starters/starterA.png"}]}, {merge: true})
+    await setDoc(clientUserDocRefMain, {email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [{count:1, name: "starterA", path: "items/starters/starterA.png", message: {note:"This can hold a valuable memory", author:"", date:Timestamp.now()}}]}, {merge: true})
   }
   
   const handleLogout= (e) =>{
