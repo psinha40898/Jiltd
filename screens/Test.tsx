@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground, Animated} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../essentialComponents/Style';
@@ -23,12 +24,35 @@ const Test = () => {
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemMeta, setImeta] = useState("");
+  const [theme, setTheme] = useState("rgba(216, 151, 158, 1)");
   const [clientName, setName] = useState("welcome");
   const [metaData, setData] = useState<MetaData>({ author: '', date: null, note: '' });
   const [displayImage, setImage] = useState(null);
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [inventory, setInventory] = useState([]);
+
+
+  const [flashValue] = useState(new Animated.Value(0));
+
+  const startFlashAnimation = () => {
+    console.log("test");
+    Animated.sequence([
+      Animated.timing(flashValue, {
+        toValue: 0,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.timing(flashValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+
+
 
 /**
  * _____ 
@@ -38,12 +62,14 @@ const Test = () => {
  * @param note deprecated
  * @param message message metadata that is attached to item
  */
-const updateDisplay = async (path, note, message) => {
+const updateDisplay = async (path, note, message, color) => {
   console.log("loadImage()", path, note, "MESSAGE:", message)
   setPath(path)
   setImeta(note)
+  startFlashAnimation();
   console.log("setting", message)
   setData(message)
+  setTheme(color)
   try {
     const storageRef = ref(storage, path);
     const URL = await getDownloadURL(storageRef);
@@ -100,6 +126,10 @@ useEffect(() => {
 }
 displayDefaults();
 }, [inventory]);
+useEffect(() => {
+  // Start flash animation when component mounts
+  startFlashAnimation();
+}, []);
 
 /** Enters the user into matchmaking queue */
 const talkButton = async () => {
@@ -111,37 +141,51 @@ const talkButton = async () => {
 
 
   return(
+<Animated.View
+        style={[
+          zx.overlay,
+          {flex:1,
+            opacity: flashValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1],
+            }),
+          },
+        ]}
+      >
     <ImageBackground source ={require('../images/bg.jpg')}
+    
 resizeMode='cover'
 style={{flex:1}}
 >
+
 <View style={[ tStyle.container, {flexDirection: 'column',},]}>
 
 
-  <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', alignItems: 'center', marginTop: 5}, styles.primaryBGoffBlack]}>
-  
-    {clientName !== '' ?
-    (<Text style={[styles.primaryRed, styles.size3]}>{clientName}</Text>)
+  <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', marginTop: 5}, styles.primaryBGoffBlack]}>
+
+  <MaterialIcons name="home-filled" size={64} color={theme} />
+    {/* {clientName !== '' ?
+    (<Text style={[styles.size3, {fontWeight: '600', color: theme}]}>{clientName}</Text>)
     : null
-    }
+    } */}
   </View>
 
-<View style={[{flex:1.5, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20}, styles.secondaryBGoffBlack]}>
+<View style={[{flex:1.5, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20, borderRadius: 8}, styles.secondaryBGoffBlack]}>
   <View style = {{flex:1, flexDirection: 'column'}}>
   <View style = {{flex:1, justifyContent: 'center', padding: 5}}>
  
-  <Text style={[styles.size4, styles.primaryRed, {fontWeight:'600', textAlign: 'center'}]}>
+  <Text style={[styles.size4, {color: theme ,fontWeight:'600', textAlign: 'center'}]}>
     {metaData.note}
     </Text>
 
   {metaData.date ? (  
-  <Text style={[styles.italic, styles.primaryRed, {marginLeft: 15, fontSize: 10, fontWeight: '500'}]}>
+  <Text style={[styles.italic,{color: 'rgba(216, 151, 158, 1)', marginLeft: 15, fontSize: 10, fontWeight: '500'}]}>
     {metaData.author} {metaData.date.toDate().toLocaleDateString()}
   </Text>) 
   : null
   }
   <Dropdown
-        style={zx.dropdown}
+        style={[zx.dropdown, {backgroundColor: theme}]}
         placeholderStyle={zx.pstyle}
         selectedTextStyle={zx.texstyle}
         inputSearchStyle={zx.inputSearchStyle}
@@ -150,7 +194,7 @@ style={{flex:1}}
         search
         containerStyle={zx.contstyle}
        
-        iconColor='rgba(204,41,54,0)'
+        iconColor='rgba(0,0,0,1)'
         maxHeight={300}
         labelField="name"
         activeColor='rgba(204, 41, 54, 1)'
@@ -162,7 +206,7 @@ style={{flex:1}}
         searchPlaceholder="search..."
         value={curPath}
         onChange={item => {
-          updateDisplay(item.path, item.note, item.message);
+          updateDisplay(item.path, item.note, item.message, item.theme);
         }}
   
        
@@ -193,7 +237,7 @@ style={{flex:1}}
           </View>
         </View>
       </Modal>
-    <PlayButton onPress={talkButton}></PlayButton>
+    <PlayButton onPress={talkButton} theme={theme}></PlayButton>
   </View>
 
 <View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}, styles.primaryBGoffBlack ]}>
@@ -209,7 +253,10 @@ style={{flex:1}}
 
 
 </View>
+
 </ImageBackground>
+</Animated.View>
+
     )
 }
 
@@ -217,7 +264,7 @@ export default Test;
 const tStyle = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.65)',
+      backgroundColor: 'rgba(0, 15, 8, .85)',
      
     },
     fab: {
@@ -231,15 +278,17 @@ const tStyle = StyleSheet.create({
       borderRadius: 12,
     },
     dropdown: {
-      backgroundColor: 'rgba(204, 41, 54, .75)',
       borderRadius : 5,
       margin: 16,
       height: 30,
+      width: '50%'
       
     },
+    overlay:{backgroundColor: '#fff'}
+    ,
     item:{
       borderRadius : 0,
-      padding:5,
+      padding:0,
      
     },
     itemtxt:{

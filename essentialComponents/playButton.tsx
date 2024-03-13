@@ -3,7 +3,7 @@ import { TouchableOpacity, Animated, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-const playButton = ({ onPress }) => {
+const playButton = ({ onPress, theme }) => {
   const animatedValue1 = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = (animatedValue) => {
@@ -36,7 +36,7 @@ const playButton = ({ onPress }) => {
         activeOpacity={0.7}
       >
         <Animated.View style={[styles.iconButton, animatedStyle1]}>
-        <MaterialCommunityIcons name="cards-playing-heart" size={124}  color="rgba(204, 41, 54, .85)"/>
+        <MaterialCommunityIcons name="cards-playing-heart" size={124}  color={theme}/>
         </Animated.View>
       </TouchableOpacity>
     </View>
