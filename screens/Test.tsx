@@ -40,12 +40,12 @@ const Test = () => {
     Animated.sequence([
       Animated.timing(flashValue, {
         toValue: 0,
-        duration: 50,
+        duration: 225,
         useNativeDriver: true,
       }),
       Animated.timing(flashValue, {
         toValue: 1,
-        duration: 1000,
+        duration: 225,
         useNativeDriver: true,
       }),
     ]).start();
@@ -141,17 +141,7 @@ const talkButton = async () => {
 
 
   return(
-<Animated.View
-        style={[
-          zx.overlay,
-          {flex:1,
-            opacity: flashValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1],
-            }),
-          },
-        ]}
-      >
+
     <ImageBackground source ={require('../images/bg.jpg')}
     
 resizeMode='cover'
@@ -162,8 +152,20 @@ style={{flex:1}}
 
 
   <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', marginTop: 5}, styles.primaryBGoffBlack]}>
-
-  <MaterialIcons name="home-filled" size={64} color={theme} />
+  <Animated.View
+        style={[
+          zx.overlay,
+          {
+            opacity: flashValue.interpolate({
+              inputRange: [0, 0.25, 0.5, 0.75, 1],
+              outputRange: [0, 0.25, 0.5, 0.75, 1],
+            }),
+          },
+        ]}
+      >
+ <MaterialIcons name="home-filled" size={64} color={theme} />
+  </Animated.View>
+ 
     {/* {clientName !== '' ?
     (<Text style={[styles.size3, {fontWeight: '600', color: theme}]}>{clientName}</Text>)
     : null
@@ -173,10 +175,21 @@ style={{flex:1}}
 <View style={[{flex:1.5, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20, borderRadius: 8}, styles.secondaryBGoffBlack]}>
   <View style = {{flex:1, flexDirection: 'column'}}>
   <View style = {{flex:1, justifyContent: 'center', padding: 5}}>
- 
+  <Animated.View
+        style={[
+          zx.overlay,
+          {
+            opacity: flashValue.interpolate({
+              inputRange: [0, 0.25, 0.5, 0.75, 1],
+              outputRange: [0, 0.25, 0.5, 0.75, 1],
+            }),
+          },
+        ]}
+      >
   <Text style={[styles.size4, {color: theme ,fontWeight:'600', textAlign: 'center'}]}>
     {metaData.note}
     </Text>
+    
 
   {metaData.date ? (  
   <Text style={[styles.italic,{color: 'rgba(216, 151, 158, 1)', marginLeft: 15, fontSize: 10, fontWeight: '500'}]}>
@@ -184,6 +197,7 @@ style={{flex:1}}
   </Text>) 
   : null
   }
+  
   <Dropdown
         style={[zx.dropdown, {backgroundColor: theme}]}
         placeholderStyle={zx.pstyle}
@@ -191,8 +205,7 @@ style={{flex:1}}
         inputSearchStyle={zx.inputSearchStyle}
         iconStyle={zx.iconStyle}
         data={inventory}
-        search
-        containerStyle={zx.contstyle}
+        containerStyle={[zx.contstyle, {backgroundColor: theme, borderColor: theme}]}
        
         iconColor='rgba(0,0,0,1)'
         maxHeight={300}
@@ -211,12 +224,25 @@ style={{flex:1}}
   
        
       />
+      </Animated.View>
 </View>
 </View>
+<Animated.View
+        style={[
+          zx.overlay,
+          {
+            opacity: flashValue.interpolate({
+              inputRange: [0, 0.25, 0.5, 0.75, 1],
+              outputRange: [0, 0.25, 0.5, 0.75, 1],
+            }),
+          },
+        ]}
+      >
   <LoopAnimation
   onPress={() => console.log("Sorry")}
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
 />
+</Animated.View>
 </View>
 
 <View style = {[{flex:1.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>      
@@ -237,7 +263,19 @@ style={{flex:1}}
           </View>
         </View>
       </Modal>
+      <Animated.View
+        style={[
+          zx.overlay,
+          {
+            opacity: flashValue.interpolate({
+              inputRange: [0, 0.5, 1],
+              outputRange: [0, .75, 1],
+            }),
+          },
+        ]}
+      >
     <PlayButton onPress={talkButton} theme={theme}></PlayButton>
+    </Animated.View>
   </View>
 
 <View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}, styles.primaryBGoffBlack ]}>
@@ -255,7 +293,7 @@ style={{flex:1}}
 </View>
 
 </ImageBackground>
-</Animated.View>
+
 
     )
 }
@@ -284,7 +322,7 @@ const tStyle = StyleSheet.create({
       width: '50%'
       
     },
-    overlay:{backgroundColor: '#fff'}
+    overlay:{backgroundColor: 'rgba(0, 15, 8, 0)'}
     ,
     item:{
       borderRadius : 0,
@@ -295,10 +333,8 @@ const tStyle = StyleSheet.create({
       fontWeight:'600'
     },
     contstyle: {
-      backgroundColor: 'rgba(204, 41, 54, .75)',
       borderRadius : 5,
       margin: 16,
-      borderColor: 'rgba(204, 41, 54, .45)',
       borderWidth: 5
 
       
