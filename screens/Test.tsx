@@ -14,6 +14,8 @@ import { auth, ref, storage, getDownloadURL, doc, getDoc, db, Timestamp} from '.
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import SelectDropdown from 'react-native-select-dropdown'
+import { Entypo } from '@expo/vector-icons';
+import AnimateIcon from '../essentialComponents/AnimateIcon';
 
 interface MetaData {
   author: string;
@@ -31,6 +33,8 @@ const Test = () => {
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [inventory, setInventory] = useState([]);
+  var pointer = useRef(0);
+  console.log(pointer, "render")
 
 
   const [flashValue] = useState(new Animated.Value(0));
@@ -50,6 +54,7 @@ const Test = () => {
       }),
     ]).start();
   };
+
 
 
 
@@ -139,22 +144,46 @@ const talkButton = async () => {
   setModalVisible(false);
   };
 
+  const incrementPointer = () => {
+    if (pointer.current === inventory.length - 1){
+      console.log("no dice", pointer);
+      pointer.current = 0
+      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+      return;
+    }
+    console.log("yes dice", pointer)
+    pointer.current = pointer.current + 1
+    console.log(pointer)
+    updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+    return;
+  }
 
+  const decrementPointer = () => {
+    if (pointer.current === 0){
+      console.log("Can't decrement", pointer);
+      pointer.current = 0
+      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+      return;}
+      console.log("yes dice", pointer)
+      pointer.current = pointer.current - 1
+      console.log(pointer)
+      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+      return;
+
+  }
   return(
 
-    <ImageBackground source ={require('../images/bg.jpg')}
-    
-resizeMode='cover'
-style={{flex:1}}
->
+ 
 
 <View style={[ tStyle.container, {flexDirection: 'column',},]}>
 
 
-  <View style={[{flex:1, flexDirection: 'column', justifyContent:'center', marginTop: 5}, styles.primaryBGoffBlack]}>
+  <View style={[{flex:1, flexDirection: 'row'}, styles.primaryBGoffBlack]}>
+
+ 
   <Animated.View
         style={[
-          zx.overlay,
+          zx.overlay, {flex:1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'},
           {
             opacity: flashValue.interpolate({
               inputRange: [0, 0.25, 0.5, 0.75, 1],
@@ -163,8 +192,28 @@ style={{flex:1}}
           },
         ]}
       >
+ 
  <MaterialIcons name="home-filled" size={64} color={theme} />
+
+
+
+  
+  
+ 
+ <View style = {{flexDirection: 'column'}}>
+ <Text style= {[styles.bold,styles.size4, {color:theme}]}>Jiltd</Text>
+ <Text style= {[styles.bold,styles.size5, {color:theme}]}>Talk to people</Text>
+
+  
+ </View>
+    
+     
+
+
   </Animated.View>
+  
+
+  
  
     {/* {clientName !== '' ?
     (<Text style={[styles.size3, {fontWeight: '600', color: theme}]}>{clientName}</Text>)
@@ -172,12 +221,17 @@ style={{flex:1}}
     } */}
   </View>
 
-<View style={[{flex:1.5, flexDirection: 'row', justifyContent:'center', alignContent: 'center', alignItems: 'center', margin: 20, borderRadius: 8}, styles.secondaryBGoffBlack]}>
-  <View style = {{flex:1, flexDirection: 'column'}}>
-  <View style = {{flex:1, justifyContent: 'center', padding: 5}}>
+<View style={[{flex:1.5, flexDirection: 'column', borderRadius: 8, margin: 15, backgroundColor: '#2B2B2B', alignItems: 'center', alignContent: 'center'}]}>
+
+  <View style = {[{flex:1, flexDirection: 'column', alignItems: 'center', alignContent: 'center'}]}>
+  <LoopAnimation
+  onPress={() => console.log("Sorry")}
+  imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
+/>
+
   <Animated.View
         style={[
-          zx.overlay,
+          zx.overlay,{},
           {
             opacity: flashValue.interpolate({
               inputRange: [0, 0.25, 0.5, 0.75, 1],
@@ -186,10 +240,15 @@ style={{flex:1}}
           },
         ]}
       >
-  <Text style={[styles.size4, {color: theme ,fontWeight:'600', textAlign: 'center'}]}>
+        <View> 
+          
+        <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'600', textAlign: 'center'}]}>
     {metaData.note}
     </Text>
     
+          
+           </View>
+
 
   {metaData.date ? (  
   <Text style={[styles.italic,{color: 'rgba(216, 151, 158, 1)', marginLeft: 15, fontSize: 10, fontWeight: '500'}]}>
@@ -197,7 +256,8 @@ style={{flex:1}}
   </Text>) 
   : null
   }
-  
+
+{/*   
   <Dropdown
         style={[zx.dropdown, {backgroundColor: theme}]}
         placeholderStyle={zx.pstyle}
@@ -223,26 +283,28 @@ style={{flex:1}}
         }}
   
        
-      />
+      /> */}
+
+    
       </Animated.View>
-</View>
-</View>
-<Animated.View
-        style={[
-          zx.overlay,
-          {
-            opacity: flashValue.interpolate({
-              inputRange: [0, 0.25, 0.5, 0.75, 1],
-              outputRange: [0, 0.25, 0.5, 0.75, 1],
-            }),
-          },
-        ]}
-      >
-  <LoopAnimation
-  onPress={() => console.log("Sorry")}
-  imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
-/>
-</Animated.View>
+
+  
+  
+  </View>
+
+
+  <View style = {[{flex:1, flexDirection: 'row', alignItems:'center', marginTop: '20%'}]}>
+
+<AnimateIcon onPress={decrementPointer} iconComponent={<Entypo name="arrow-bold-left" size={16} color={theme} />}></AnimateIcon>
+<AnimateIcon onPress={incrementPointer} iconComponent={<Entypo name="arrow-bold-right" size={16} color={theme} />}></AnimateIcon>
+
+
+  
+  
+  </View>
+
+
+       
 </View>
 
 <View style = {[{flex:1.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>      
@@ -254,7 +316,7 @@ style={{flex:1}}
           setModalVisible(!modalVisible)
         }}>
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={[styles.modalView, {backgroundColor: theme}]}>
           <Text style={[styles.modalText, styles.italic]}>You are in the queue to find a match. Thank you for trying Jiltd.</Text>
           <Text style={styles.modalText2}>Do not deal with personal information.</Text>
           <Text style={styles.modalText2}>Be respectful.</Text>
@@ -279,7 +341,7 @@ style={{flex:1}}
   </View>
 
 <View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}, styles.primaryBGoffBlack ]}>
-  <Text style ={[ styles.size4, {color: '#75e4b3', fontWeight: '900'}]}>0</Text>
+
 </View>
 
 <View style={[{flex:0.5}, styles.primaryBGBlack]}> 
@@ -292,7 +354,7 @@ style={{flex:1}}
 
 </View>
 
-</ImageBackground>
+
 
 
     )
@@ -302,7 +364,7 @@ export default Test;
 const tStyle = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'rgba(0, 15, 8, .85)',
+      backgroundColor: '#1A1A1A'
      
     },
     fab: {
