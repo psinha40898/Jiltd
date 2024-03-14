@@ -44,12 +44,12 @@ const Test = () => {
     Animated.sequence([
       Animated.timing(flashValue, {
         toValue: 0,
-        duration: 225,
+        duration: 300,
         useNativeDriver: true,
       }),
       Animated.timing(flashValue, {
         toValue: 1,
-        duration: 225,
+        duration: 300,
         useNativeDriver: true,
       }),
     ]).start();
@@ -202,7 +202,7 @@ const talkButton = async () => {
  
  <View style = {{flexDirection: 'column'}}>
  <Text style= {[styles.bold,styles.size4, {color:theme}]}>Jiltd</Text>
- <Text style= {[styles.bold,styles.size5, {color:theme}]}>Talk to people</Text>
+ <Text style= {[styles.bold,styles.size5, {color:theme}]}>Press Play</Text>
 
   
  </View>
@@ -221,13 +221,25 @@ const talkButton = async () => {
     } */}
   </View>
 
-<View style={[{flex:1.5, flexDirection: 'column', borderRadius: 8, margin: 15, backgroundColor: '#2B2B2B', alignItems: 'center', alignContent: 'center'}]}>
+<View style={[{flex:1.5, flexDirection: 'column', borderRadius: 8, borderColor: theme, borderWidth: 1, margin: 15, backgroundColor: '#2B2B2B', alignItems: 'center', alignContent: 'center'}]}>
 
   <View style = {[{flex:1, flexDirection: 'column', alignItems: 'center', alignContent: 'center'}]}>
+  <Animated.View
+        style={[
+          zx.overlay,{},
+          {
+            opacity: flashValue.interpolate({
+              inputRange: [0, 0.25, 0.5, 0.75, 1],
+              outputRange: [0, 0.25, 0.5, 0.75, 1],
+            }),
+          },
+        ]}
+      >
   <LoopAnimation
   onPress={() => console.log("Sorry")}
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
 />
+</Animated.View>
 
   <Animated.View
         style={[
@@ -336,7 +348,11 @@ const talkButton = async () => {
           },
         ]}
       >
+
     <PlayButton onPress={talkButton} theme={theme}></PlayButton>
+
+
+   
     </Animated.View>
   </View>
 
@@ -346,7 +362,7 @@ const talkButton = async () => {
 
 <View style={[{flex:0.5}, styles.primaryBGBlack]}> 
         <View style={[{flexDirection:'row'}, { justifyContent: 'center', alignItems: 'center'}]}>
-          <IconButton onPress={()=> console.log("Sorry")}></IconButton>
+          <IconButton onPress={()=> console.log("Sorry")} color={theme}></IconButton>
         </View>
 </View>
 

@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { TouchableOpacity, Animated, View } from 'react-native';
+import { TouchableOpacity, Animated, View, Text } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import styles from './Style';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 const playButton = ({ onPress, theme }) => {
   const animatedValue1 = useRef(new Animated.Value(1)).current;
@@ -34,19 +35,23 @@ const playButton = ({ onPress, theme }) => {
         onPressIn={() => handlePressIn(animatedValue1)}
         onPressOut={() => handlePressOut(animatedValue1)}
         activeOpacity={0.7}
-      >
-        <Animated.View style={[styles.iconButton, animatedStyle1]}>
-        <MaterialCommunityIcons name="cards-playing-heart" size={124}  color={theme}/>
+      > 
+      
+        <Animated.View style={[animatedStyle1]}>
+          <View style = {{flexDirection: "row"}} > 
+          <View style = {{marginTop: 10}}><MaterialCommunityIcons name="cards-playing-heart" size={64}  color={theme}/></View>
+          
+          <Text style={[styles.size2, styles.bold, {color:theme, marginTop: 0}]}>Play</Text>
+          
+      
+            </View>
+  
         </Animated.View>
       </TouchableOpacity>
     </View>
   );
 };
 
-const styles = {
-  iconButton: {
-    // Adjust styling as needed
-  },
-};
+
 
 export default playButton;

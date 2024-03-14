@@ -3,7 +3,7 @@ import { TouchableOpacity, Animated, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const IconButton = ({ onPress }) => {
+const IconButton = ({ onPress, color }) => {
   const animatedValue1 = useRef(new Animated.Value(1)).current;
   const animatedValue2 = useRef(new Animated.Value(1)).current;
 
@@ -40,7 +40,7 @@ const IconButton = ({ onPress }) => {
         activeOpacity={0.7}
       >
         <Animated.View style={[styles.iconButton, animatedStyle1]}>
-        <MaterialIcons name="home-filled" size={24} color="rgba(204, 41, 54, .85)" />
+        <MaterialIcons name="home-filled" size={32} color={color} />
         </Animated.View>
       </TouchableOpacity>
 
@@ -51,7 +51,7 @@ const IconButton = ({ onPress }) => {
         activeOpacity={0.7}
       >
         <Animated.View style={[styles.iconButton, animatedStyle2]}>
-        <MaterialIcons name="people" size={24} color="rgba(204, 41, 54, .85)" />
+        <MaterialIcons name="people" size={32} color={color} />
         </Animated.View>
       </TouchableOpacity>
     </View>
