@@ -3,6 +3,8 @@ import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground, Animated} 
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../essentialComponents/Style';
@@ -144,6 +146,15 @@ const talkButton = async () => {
   await matchMake(userID, navigation);
   setModalVisible(false);
   };
+const exportButton = async () => {
+  /** I need to write an export function
+   * It should send an email to the user's email
+   * Include the quote
+   * Include the sender
+   * Include the date
+   * Include the picture
+   */
+}
 
   const incrementPointer = () => {
     if (pointer.current === inventory.length - 1){
@@ -243,7 +254,7 @@ const talkButton = async () => {
       >
         <View style = {{alignSelf:'center'}}>
         <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(30,30,30,0.5)', padding:25, width: 100, height: 100, borderWidth: 6, 
-        borderColor: 'rgba(72, 72, 72, 1)', top: -50, borderRadius: 60,  }} />
+        borderColor: 'rgba(72, 72, 72, 1)', top: -75, borderRadius: 60,  }} />
 
 
         
@@ -304,12 +315,13 @@ const talkButton = async () => {
           
            </View>
 
-           <View style = {[ {width:'25%', alignSelf: 'center', padding:10, borderRadius: 15, backgroundColor: 'rgba(28, 28, 28, .925)',
+           <View style = {[ {flexDirection:'row',width:'25%', alignSelf: 'center', padding:10, borderRadius: 15, backgroundColor: 'rgba(28, 28, 28, .925)',
         shadowColor: "#000",
         
         elevation: 4,
       
       }]}>
+        <MaterialCommunityIcons name="export-variant" size={18} color={theme} />
          <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'center'}]}>Export</Text>
         
          </View>
