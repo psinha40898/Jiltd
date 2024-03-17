@@ -37,13 +37,21 @@ const playButton = ({ onPress, theme }) => {
         activeOpacity={0.7}
       > 
       
-        <Animated.View style={[animatedStyle1]}>
-          <View style = {{flexDirection: "row"}} > 
-          <View style = {{marginTop: 10}}><MaterialCommunityIcons name="cards-playing-heart" size={64}  color={theme}/></View>
-          
-          <Text style={[styles.size2, styles.bold, {color:theme, marginTop: 0}]}>Play</Text>
-          
-      
+        <Animated.View style={[animatedStyle1, { padding: 10, backgroundColor: 'rgba(72, 72, 72, 1),', shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 2,
+},
+shadowOpacity: 0.53,
+shadowRadius: 2.62,
+
+elevation: 4, borderRadius: 20, borderWidth: 1}]}>
+          <View style = {{flexDirection: "row", alignItems: 'center'}} > 
+
+          <View style = {{marginTop: 5}}>
+            <MaterialCommunityIcons name="cards-playing-heart" size={128}  color={theme}/>
+          </View>
+       
             </View>
   
         </Animated.View>

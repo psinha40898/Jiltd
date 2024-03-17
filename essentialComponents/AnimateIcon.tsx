@@ -27,14 +27,14 @@ const AnimateIcon = ({ onPress, iconComponent  }) => {
   };
 
   return (
-    <View style = {{flexDirection :"row"}}>
+    <View style = {{}}>
       <TouchableOpacity
         onPress={onPress}
         onPressIn={() => handlePressIn(animatedValue1)}
         onPressOut={() => handlePressOut(animatedValue1)}
         activeOpacity={0.7}
       >
-        <Animated.View style={[styles.iconButton, animatedStyle1]}>
+        <Animated.View style={[{}, animatedStyle1]}>
         {iconComponent}
         </Animated.View>
       </TouchableOpacity>
@@ -44,6 +44,7 @@ const AnimateIcon = ({ onPress, iconComponent  }) => {
 
 const styles = {
   iconButton: {
+    alignSelf: 'flex-end'
     // Adjust styling as needed
   },
 };

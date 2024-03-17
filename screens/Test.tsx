@@ -2,6 +2,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground, Animated} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import styles from '../essentialComponents/Style';
@@ -44,12 +45,12 @@ const Test = () => {
     Animated.sequence([
       Animated.timing(flashValue, {
         toValue: 0,
-        duration: 300,
+        duration: 30,
         useNativeDriver: true,
       }),
       Animated.timing(flashValue, {
         toValue: 1,
-        duration: 300,
+        duration: 30,
         useNativeDriver: true,
       }),
     ]).start();
@@ -180,10 +181,11 @@ const talkButton = async () => {
 
   <View style={[{flex:1, flexDirection: 'row'}, styles.primaryBGoffBlack]}>
 
+
  
   <Animated.View
         style={[
-          zx.overlay, {flex:1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'},
+          zx.overlay, {flex:1, flexDirection: 'row', alignItems: 'center', marginTop: 30},
           {
             opacity: flashValue.interpolate({
               inputRange: [0, 0.25, 0.5, 0.75, 1],
@@ -221,9 +223,13 @@ const talkButton = async () => {
     } */}
   </View>
 
-<View style={[{flex:1.5, flexDirection: 'column', borderRadius: 8, borderColor: theme, borderWidth: 1, margin: 15, backgroundColor: '#2B2B2B', alignItems: 'center', alignContent: 'center'}]}>
 
-  <View style = {[{flex:1, flexDirection: 'column', alignItems: 'center', alignContent: 'center'}]}>
+
+
+
+<View style={[{flex:3, flexDirection: 'column', backgroundColor: 'rgba(72, 72, 72, 1)',borderTopColor: 'rgba(28, 28, 28, .925)', borderTopWidth: 50, padding: 10}]}>
+  
+  <View style = {[{flex:1.25, flexDirection: 'column',padding:10 }]}>
   <Animated.View
         style={[
           zx.overlay,{},
@@ -235,39 +241,82 @@ const talkButton = async () => {
           },
         ]}
       >
-  <LoopAnimation
+        <View style = {{alignSelf:'center'}}>
+        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(30,30,30,0.5)', padding:25, width: 100, height: 100, borderWidth: 6, 
+        borderColor: 'rgba(72, 72, 72, 1)', top: -50, borderRadius: 60,  }} />
+
+
+        
+        </View>
+
+
+
+
+  {/* <LoopAnimation
   onPress={() => console.log("Sorry")}
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
-/>
+/> */}
 </Animated.View>
+<View style = {{flexDirection: 'row', borderWidth:0, alignSelf: 'center', padding: 10}}>
+
+<AnimateIcon onPress={decrementPointer} iconComponent={<Entypo name="arrow-bold-left" size={32} color={theme} />}></AnimateIcon>
+<AnimateIcon onPress={incrementPointer} iconComponent={<Entypo name="arrow-bold-right" size={32} color={theme} />}></AnimateIcon> 
+
+</View>
+
+
+
 
   <Animated.View
         style={[
-          zx.overlay,{},
+          zx.overlay,{padding:10},
           {
             opacity: flashValue.interpolate({
               inputRange: [0, 0.25, 0.5, 0.75, 1],
               outputRange: [0, 0.25, 0.5, 0.75, 1],
             }),
+           
           },
         ]}
       >
-        <View> 
-          
-        <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'600', textAlign: 'center'}]}>
-    {metaData.note}
-    </Text>
-    
-          
-           </View>
+        
+        <View style = {[ {width:'75%', alignSelf: 'center', padding:10, borderRadius: 20, backgroundColor: 'rgba(28, 28, 28, .925)',
+        shadowColor: "#000", 
+        
+        elevation: 4,
+      
+      }]}> 
+      
+        <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'left'}]}> Saved Message </Text>
+        <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'400', textAlign: 'center',}, styles.italic]}>{metaData.note}</Text>
 
+        {metaData.date ? (
+            <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'left'}]}> From </Text>
+        ): null}
 
-  {metaData.date ? (  
-  <Text style={[styles.italic,{color: 'rgba(216, 151, 158, 1)', marginLeft: 15, fontSize: 10, fontWeight: '500'}]}>
-    {metaData.author} {metaData.date.toDate().toLocaleDateString()}
+        {metaData.date ? (  
+          
+  <Text style={[styles.size4,{color: 'rgba(216, 151, 158, 1)', textAlign: 'center', fontWeight: '400'}]}>
+    {metaData.author} on {metaData.date.toDate().toLocaleDateString()}
   </Text>) 
   : null
   }
+          
+           </View>
+
+           <View style = {[ {width:'25%', alignSelf: 'center', padding:10, borderRadius: 15, backgroundColor: 'rgba(28, 28, 28, .925)',
+        shadowColor: "#000",
+        
+        elevation: 4,
+      
+      }]}>
+         <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'center'}]}>Export</Text>
+        
+         </View>
+
+    
+           </Animated.View>
+
 
 {/*   
   <Dropdown
@@ -297,23 +346,14 @@ const talkButton = async () => {
        
       /> */}
 
-    
-      </Animated.View>
-
-  
-  
-  </View>
-
-
-  <View style = {[{flex:1, flexDirection: 'row', alignItems:'center', marginTop: '20%'}]}>
-
-<AnimateIcon onPress={decrementPointer} iconComponent={<Entypo name="arrow-bold-left" size={16} color={theme} />}></AnimateIcon>
-<AnimateIcon onPress={incrementPointer} iconComponent={<Entypo name="arrow-bold-right" size={16} color={theme} />}></AnimateIcon>
 
 
   
   
   </View>
+
+
+
 
 
        
@@ -356,7 +396,7 @@ const talkButton = async () => {
     </Animated.View>
   </View>
 
-<View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}, styles.primaryBGoffBlack ]}>
+<View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center',backgroundColor: 'rgba(72, 72, 72, 0.8)', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}]}>
 
 </View>
 
