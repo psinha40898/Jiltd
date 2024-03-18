@@ -49,7 +49,7 @@ elevation: 4, borderRadius: 20, borderWidth: 1}]}>
           <View style = {{flexDirection: "row", alignItems: 'center'}} > 
 
           <View style = {{marginTop: 5}}>
-            <MaterialCommunityIcons name="cards-playing-heart" size={128}  color={theme}/>
+            <MaterialCommunityIcons name="cards-playing-heart" size={24}  color={theme}/>
           </View>
        
             </View>

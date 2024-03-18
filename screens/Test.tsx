@@ -26,6 +26,7 @@ interface MetaData {
   note: string;
 }
 const Test = () => {
+
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemMeta, setImeta] = useState("");
@@ -37,8 +38,46 @@ const Test = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inventory, setInventory] = useState([]);
   var pointer = useRef(0);
-  console.log(pointer, "render")
+ 
 
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null)
+  const [touchEndY, setTouchEndY] = useState(null)
+
+  const minSwipeDistance = 100;
+
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.nativeEvent.touches[0].pageX);
+
+    setTouchEndY(null);
+    setTouchStartY(e.nativeEvent.touches[0].pageY);
+  }
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.nativeEvent.touches[0].pageX);
+    setTouchEndY(e.nativeEvent.touches[0].pageY);
+  }
+
+  const onTouchEnd = () => {
+    const distanceX = touchStart - touchEnd
+    const distanceY = touchStart - touchEndY
+    const isLeftSwipe = distanceX > minSwipeDistance
+    const isRightSwipe = distanceX < -minSwipeDistance
+    
+    if (isRightSwipe && Math.abs(distanceX) > distanceY) {
+      console.log("r")
+      decrementPointer()
+      // add your conditional logic here
+    } 
+    if (isLeftSwipe && distanceX > distanceY) {
+      console.log("l"      )
+      incrementPointer()
+      // add your conditional logic here
+    }
+  }
 
   const [flashValue] = useState(new Animated.Value(0));
 
@@ -47,12 +86,12 @@ const Test = () => {
     Animated.sequence([
       Animated.timing(flashValue, {
         toValue: 0,
-        duration: 30,
+        duration: 150,
         useNativeDriver: true,
       }),
       Animated.timing(flashValue, {
         toValue: 1,
-        duration: 30,
+        duration: 150,
         useNativeDriver: true,
       }),
     ]).start();
@@ -190,23 +229,13 @@ const exportButton = async () => {
 <View style={[ tStyle.container, {flexDirection: 'column',},]}>
 
 
-  <View style={[{flex:1, flexDirection: 'row'}, styles.primaryBGoffBlack]}>
+  <View style={[{flex:1, flexDirection: 'row', backgroundColor: 'rgba(52,52,60,255)'},]}>
 
 
  
-  <Animated.View
-        style={[
-          zx.overlay, {flex:1, flexDirection: 'row', alignItems: 'center', marginTop: 30},
-          {
-            opacity: flashValue.interpolate({
-              inputRange: [0, 0.25, 0.5, 0.75, 1],
-              outputRange: [0, 0.25, 0.5, 0.75, 1],
-            }),
-          },
-        ]}
-      >
+<View style = {{flex:1, flexDirection: 'row', alignItems: 'center', marginTop: 30}}>
  
- <MaterialIcons name="home-filled" size={64} color={theme} />
+ <MaterialIcons name="home-filled" size={64} color={'rgba(253,254,253,255)'} />
 
 
 
@@ -214,8 +243,8 @@ const exportButton = async () => {
   
  
  <View style = {{flexDirection: 'column'}}>
- <Text style= {[styles.bold,styles.size4, {color:theme}]}>Jiltd</Text>
- <Text style= {[styles.bold,styles.size5, {color:theme}]}>Press Play</Text>
+ <Text style= {[styles.bold,styles.size4, {color:'rgba(253,254,253,255)'}]}>Jiltd</Text>
+ <Text style= {[styles.bold,styles.size5, {color:'rgba(253,254,253,255)'}]}>Press Play</Text>
 
   
  </View>
@@ -223,7 +252,7 @@ const exportButton = async () => {
      
 
 
-  </Animated.View>
+  </View>
   
 
   
@@ -238,7 +267,7 @@ const exportButton = async () => {
 
 
 
-<View style={[{flex:3, flexDirection: 'column', backgroundColor: 'rgba(72, 72, 72, 1)',borderTopColor: 'rgba(28, 28, 28, .925)', borderTopWidth: 50, padding: 10}]}>
+<View style={[{flex:4, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: 'rgba(52,52,60,255)', borderTopWidth: 50, padding: 10}]}>
   
   <View style = {[{flex:1.25, flexDirection: 'column',padding:10 }]}>
   <Animated.View
@@ -252,9 +281,9 @@ const exportButton = async () => {
           },
         ]}
       >
-        <View style = {{alignSelf:'center'}}>
-        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(30,30,30,0.5)', padding:25, width: 100, height: 100, borderWidth: 6, 
-        borderColor: 'rgba(72, 72, 72, 1)', top: -75, borderRadius: 60,  }} />
+        <View style = {{alignSelf: 'flex-start'}}>
+        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(30,30,30,1)', padding:25, width: 100, height: 100, borderWidth: 6, 
+        borderColor: 'rgba(28,29,35,255)', top: -75, borderRadius: 60,  }} />
 
 
         
@@ -268,63 +297,53 @@ const exportButton = async () => {
   imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
 /> */}
 </Animated.View>
-<View style = {{flexDirection: 'row', borderWidth:0, alignSelf: 'center', padding: 10}}>
-
-<AnimateIcon onPress={decrementPointer} iconComponent={<Entypo name="arrow-bold-left" size={32} color={theme} />}></AnimateIcon>
-<AnimateIcon onPress={incrementPointer} iconComponent={<Entypo name="arrow-bold-right" size={32} color={theme} />}></AnimateIcon> 
-
-</View>
 
 
 
-
+ {//Future swipeable!
+}
   <Animated.View
-        style={[
-          zx.overlay,{padding:10},
-          {
-            opacity: flashValue.interpolate({
-              inputRange: [0, 0.25, 0.5, 0.75, 1],
-              outputRange: [0, 0.25, 0.5, 0.75, 1],
-            }),
-           
-          },
-        ]}
-      >
+        style={[zx.overlay,{padding:0,},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1],outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
         
-        <View style = {[ {width:'75%', alignSelf: 'center', padding:10, borderRadius: 20, backgroundColor: 'rgba(28, 28, 28, .925)',
-        shadowColor: "#000", 
-        
-        elevation: 4,
+        <View style = {[ { alignSelf: 'center', padding:20, borderRadius: 10, backgroundColor: 'rgba(38,39,47,255)',
+        shadowColor: "#000", elevation: 4, width: '100%'}]} 
+        onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
+        > 
       
-      }]}> 
-      
-        <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'left'}]}> Saved Message </Text>
-        <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'400', textAlign: 'center',}, styles.italic]}>{metaData.note}</Text>
+        <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> Saved Message </Text>
+        <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(211,212,216,255)' ,fontWeight:'400', textAlign: 'center',}, styles.italic]}>{metaData.note}</Text>
 
         {metaData.date ? (
-            <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'left'}]}> From </Text>
+            <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> From </Text>
         ): null}
 
         {metaData.date ? (  
           
-  <Text style={[styles.size4,{color: 'rgba(216, 151, 158, 1)', textAlign: 'center', fontWeight: '400'}]}>
+  <Text style={[styles.size4,{color: 'rgba(211,212,216,255)', textAlign: 'center', fontWeight: '400'}]}>
     {metaData.author} on {metaData.date.toDate().toLocaleDateString()}
   </Text>) 
   : null
   }
-          
-           </View>
 
-           <View style = {[ {flexDirection:'row',width:'25%', alignSelf: 'center', padding:10, borderRadius: 15, backgroundColor: 'rgba(28, 28, 28, .925)',
-        shadowColor: "#000",
-        
-        elevation: 4,
-      
+
+<View style = {{}} > 
+
+
+
+<View style = {[ {flexDirection:'row', alignSelf: 'center', paddingTop: 10, paddingBottom: 10, paddingHorizontal: 30, borderRadius: 20, backgroundColor: 'rgba(56,58,67,255)', shadowColor: "#000", margin: 10, elevation: 4,
       }]}>
-        <MaterialCommunityIcons name="export-variant" size={18} color={theme} />
-         <Text style={[styles.size4, {flexWrap: 'wrap', color: theme ,fontWeight:'700', textAlign: 'center'}]}>Export</Text>
+        <MaterialCommunityIcons name="export-variant" size={22} color='rgba(198,200,206,255)' />
+         
+         <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(198,200,206,255)',fontWeight:'700', textAlign: 'center'}]}> Export</Text>
         
          </View>
+
+
+    
+</View>
+</View>
+
+
 
     
            </Animated.View>
@@ -401,10 +420,16 @@ const exportButton = async () => {
         ]}
       >
 
-    <PlayButton onPress={talkButton} theme={theme}></PlayButton>
+    <PlayButton onPress={talkButton} theme={'rgba(253,254,253,255)'}></PlayButton>
 
 
-   
+    <View style = {{flexDirection: 'row', borderWidth:0, alignSelf: 'center', padding: 10}}>
+
+<AnimateIcon onPress={decrementPointer} iconComponent={<Entypo name="arrow-bold-left" size={32} color={theme} />}></AnimateIcon>
+<AnimateIcon onPress={incrementPointer} iconComponent={<Entypo name="arrow-bold-right" size={32} color={theme} />}></AnimateIcon> 
+
+</View>
+
     </Animated.View>
   </View>
 
