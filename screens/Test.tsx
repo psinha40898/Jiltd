@@ -63,7 +63,7 @@ const Test = () => {
 
   const onTouchEnd = () => {
     const distanceX = touchStart - touchEnd
-    const distanceY = touchStart - touchEndY
+    const distanceY = touchStartY - touchEndY
     const isLeftSwipe = distanceX > minSwipeDistance
     const isRightSwipe = distanceX < -minSwipeDistance
     
@@ -246,10 +246,6 @@ const exportButton = async () => {
     } */}
   </View>
 
-
-
-
-
 <View style={[{flex:5, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: theme, borderTopWidth: 50, padding: 10,}]}>
   {//start}
 }
@@ -275,11 +271,6 @@ const exportButton = async () => {
 
         
         </View>
-
-  {/* <LoopAnimation
-  onPress={() => console.log("Sorry")}
-  imageComponent={<Image source={{uri:displayImage}} style={{ width: 150, height: 150 }} />}
-/> */}
 </Animated.View>
 
 
@@ -317,45 +308,10 @@ const exportButton = async () => {
 
     
 </View>
-</View></Animated.View>
-
-
-
-
-{/*   
-  <Dropdown
-        style={[zx.dropdown, {backgroundColor: theme}]}
-        placeholderStyle={zx.pstyle}
-        selectedTextStyle={zx.texstyle}
-        inputSearchStyle={zx.inputSearchStyle}
-        iconStyle={zx.iconStyle}
-        data={inventory}
-        containerStyle={[zx.contstyle, {backgroundColor: theme, borderColor: theme}]}
-       
-        iconColor='rgba(0,0,0,1)'
-        maxHeight={300}
-        labelField="name"
-        activeColor='rgba(204, 41, 54, 1)'
-        itemContainerStyle={zx.item}
-        itemTextStyle={zx.itemtxt}
-        
-        valueField="path"
-        placeholder="loading..."
-        searchPlaceholder="search..."
-        value={curPath}
-        onChange={item => {
-          updateDisplay(item.path, item.note, item.message, item.theme);
-        }}
-  
-       
-      /> */}
-
-
-
-  
-  
+</View></Animated.View>  
   </View>    
-  
+  {//end
+}
 </View>
 
 
@@ -375,11 +331,6 @@ const exportButton = async () => {
         </View>
       </Modal>
       {/**Start inner block */}
-
-
-
-
-
     <View style = {{}} > 
       <AnimateIcon onPress={talkButton} iconComponent={
           <View style = {[ {flexDirection:'row', alignSelf: 'center', paddingTop: 10, paddingBottom: 10, paddingHorizontal: 30, borderRadius: 20, backgroundColor: 'rgba(56,58,67,255)', shadowColor: "#000", margin: 10, elevation: 4,}]}>
@@ -387,13 +338,6 @@ const exportButton = async () => {
       </View>}>
       </AnimateIcon> 
     </View>
-  
-
-      
-    
-      
-
-
 </View>
 
 
@@ -401,9 +345,7 @@ const exportButton = async () => {
         <View style={[{flexDirection:'row'}, { justifyContent: 'center', alignItems: 'center'}]}>
           <IconButton onPress={()=> console.log("Sorry")} color={theme}></IconButton>
         </View>
-</View>
-
-
+  </View>
 
 </View>
 
@@ -427,61 +369,6 @@ const tStyle = StyleSheet.create({
   });
   
   const zx = StyleSheet.create({
-    selectedStyle: {
-      borderRadius: 12,
-    },
-    dropdown: {
-      borderRadius : 5,
-      margin: 16,
-      height: 30,
-      width: '50%'
-      
-    },
     overlay:{backgroundColor: 'rgba(0, 15, 8, 0)'}
     ,
-    item:{
-      borderRadius : 0,
-      padding:0,
-     
-    },
-    itemtxt:{
-      fontWeight:'600'
-    },
-    contstyle: {
-      borderRadius : 5,
-      margin: 16,
-      borderWidth: 5
-
-      
-    },
-    texstyle: {
-      textAlign: 'center',
-      color:'black',
-      fontWeight: '600'
-    },
-    pstyle: {
-      textAlign: 'center',
-      color:'white',
-      fontWeight: '600',
-      fontSize: 8
-    },
-    icon: {
-      paddingRight: 0
-    },
-    placeholderStyle: {
-      fontSize: 16,
-    },
-    selectedTextStyle: {
-      fontSize: 16,
-    },
-    iconStyle: {
-      width: 20,
-      height: 20,
-    },
-    inputSearchStyle: {
-      height: 40,
-      fontSize: 16,
- 
-      fontWeight: '600',
-    },
   });
