@@ -228,35 +228,18 @@ const exportButton = async () => {
 
 <View style={[ tStyle.container, {flexDirection: 'column',},]}>
 
+  <View style={[{flex:1.5, flexDirection: 'row', backgroundColor: theme, borderWidth: 0},]}>
 
-  <View style={[{flex:1, flexDirection: 'row', backgroundColor: 'rgba(52,52,60,255)'},]}>
-
-
- 
-<View style = {{flex:1, flexDirection: 'row', alignItems: 'center', marginTop: 30}}>
- 
- <MaterialIcons name="home-filled" size={64} color={'rgba(253,254,253,255)'} />
-
-
-
-  
-  
- 
- <View style = {{flexDirection: 'column'}}>
- <Text style= {[styles.bold,styles.size4, {color:'rgba(253,254,253,255)'}]}>Jiltd</Text>
- <Text style= {[styles.bold,styles.size5, {color:'rgba(253,254,253,255)'}]}>Press Play</Text>
-
-  
+  <View style={{ flex: 1, borderWidth: 0, flexDirection: 'row', marginTop: 30, justifyContent: 'flex-end', margin: 30 }}>
+ <View style = {{marginTop: 10}}>
+ <MaterialIcons name="home-filled" size={24} color={'rgba(253,254,253,255)'} />
  </View>
-    
-     
-
-
+  <View style={{ flexDirection: 'column' }}>
+      
+    <Text style={[styles.bold, styles.size3, { color: 'rgba(253,254,253,255)' }]}>Jiltd</Text>
+    <Text style={[styles.bold, styles.size4, { color: 'rgba(253,254,253,255)' }]}>Welcome, displayName</Text>
   </View>
-  
-
-  
- 
+</View>
     {/* {clientName !== '' ?
     (<Text style={[styles.size3, {fontWeight: '600', color: theme}]}>{clientName}</Text>)
     : null
@@ -267,30 +250,31 @@ const exportButton = async () => {
 
 
 
-<View style={[{flex:4, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: 'rgba(52,52,60,255)', borderTopWidth: 50, padding: 10}]}>
-  
-  <View style = {[{flex:1.25, flexDirection: 'column',padding:10 }]}>
-  <Animated.View
-        style={[
-          zx.overlay,{},
-          {
-            opacity: flashValue.interpolate({
-              inputRange: [0, 0.25, 0.5, 0.75, 1],
-              outputRange: [0, 0.25, 0.5, 0.75, 1],
-            }),
-          },
-        ]}
-      >
+<View style={[{flex:5, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: theme, borderTopWidth: 50, padding: 10,}]}>
+  {//start}
+}
+  <View style = {[{flex:1.5, flexDirection: 'column',padding:10}]}>
+
+  <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+    <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
+    <AnimateIcon iconComponent={ <Entypo name="arrow-bold-left" size={24} color="rgba(227,229,232,255)" />} onPress={decrementPointer}></AnimateIcon>
+      <AnimateIcon iconComponent={ <Entypo name="arrow-bold-right" size={24} color="rgba(227,229,232,255)" />} onPress={incrementPointer}></AnimateIcon>
+   
+      
+    </View>
+  </View>
+
+
+
+
+  <Animated.View style={[zx.overlay,{},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1], outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
         <View style = {{alignSelf: 'flex-start'}}>
-        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(30,30,30,1)', padding:25, width: 100, height: 100, borderWidth: 6, 
+        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(28,29,35,.25)', padding:25, width: 100, height: 100, borderWidth: 8, 
         borderColor: 'rgba(28,29,35,255)', top: -75, borderRadius: 60,  }} />
 
 
         
         </View>
-
-
-
 
   {/* <LoopAnimation
   onPress={() => console.log("Sorry")}
@@ -302,34 +286,26 @@ const exportButton = async () => {
 
  {//Future swipeable!
 }
+
   <Animated.View
         style={[zx.overlay,{padding:0,},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1],outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
-        
-        <View style = {[ { alignSelf: 'center', padding:20, borderRadius: 10, backgroundColor: 'rgba(38,39,47,255)',
-        shadowColor: "#000", elevation: 4, width: '100%'}]} 
-        onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
-        > 
-      
+        <Text style={[styles.size3, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> name </Text>
+        <View style = {[ { alignSelf: 'center', padding:20, borderRadius: 10, backgroundColor: 'rgba(38,39,47,255)', shadowColor: "#000", elevation: 4, width: '100%'}]} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}> 
         <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> Saved Message </Text>
         <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(211,212,216,255)' ,fontWeight:'400', textAlign: 'center',}, styles.italic]}>{metaData.note}</Text>
 
         {metaData.date ? (
-            <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> From </Text>
+          <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> From </Text>
         ): null}
 
         {metaData.date ? (  
-          
-  <Text style={[styles.size4,{color: 'rgba(211,212,216,255)', textAlign: 'center', fontWeight: '400'}]}>
-    {metaData.author} on {metaData.date.toDate().toLocaleDateString()}
-  </Text>) 
-  : null
-  }
-
-
+        <Text style={[styles.size4,{color: 'rgba(211,212,216,255)', textAlign: 'center', fontWeight: '400'}]}>
+        {metaData.author} on {metaData.date.toDate().toLocaleDateString()}
+      </Text>) : null }
 <View style = {{}} > 
 
 
-
+<AnimateIcon onPress={()=>(console.log("exporting.."))} iconComponent={
 <View style = {[ {flexDirection:'row', alignSelf: 'center', paddingTop: 10, paddingBottom: 10, paddingHorizontal: 30, borderRadius: 20, backgroundColor: 'rgba(56,58,67,255)', shadowColor: "#000", margin: 10, elevation: 4,
       }]}>
         <MaterialCommunityIcons name="export-variant" size={22} color='rgba(198,200,206,255)' />
@@ -337,16 +313,13 @@ const exportButton = async () => {
          <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(198,200,206,255)',fontWeight:'700', textAlign: 'center'}]}> Export</Text>
         
          </View>
-
+}></AnimateIcon> 
 
     
 </View>
-</View>
+</View></Animated.View>
 
 
-
-    
-           </Animated.View>
 
 
 {/*   
@@ -381,63 +354,50 @@ const exportButton = async () => {
 
   
   
-  </View>
-
-
-
-
-
-       
+  </View>    
+  
 </View>
 
-<View style = {[{flex:1.5, alignItems: 'center', justifyContent: 'center', alignContent: 'center'}, styles.primaryBGoffBlack]}>      
-  <Modal  animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
+
+
+<View style={[{flex:2, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)', padding: 10}]}>    
+  <Modal animationType="slide" transparent={true} visible={modalVisible}
+      onRequestClose={() => {
           Alert.alert('Modal has been closed.')
-          setModalVisible(!modalVisible)
-        }}>
+          setModalVisible(!modalVisible)}}>
         <View style={styles.centeredView}>
           <View style={[styles.modalView, {backgroundColor: theme}]}>
           <Text style={[styles.modalText, styles.italic]}>You are in the queue to find a match. Thank you for trying Jiltd.</Text>
           <Text style={styles.modalText2}>Do not deal with personal information.</Text>
           <Text style={styles.modalText2}>Be respectful.</Text>
           {/* <Text style={styles.modalText2}>Try your best to help.</Text> */}
-
-          </View>
+        </View>
         </View>
       </Modal>
-      <Animated.View
-        style={[
-          zx.overlay,
-          {
-            opacity: flashValue.interpolate({
-              inputRange: [0, 0.5, 1],
-              outputRange: [0, .75, 1],
-            }),
-          },
-        ]}
-      >
-
-    <PlayButton onPress={talkButton} theme={'rgba(253,254,253,255)'}></PlayButton>
+      {/**Start inner block */}
 
 
-    <View style = {{flexDirection: 'row', borderWidth:0, alignSelf: 'center', padding: 10}}>
 
-<AnimateIcon onPress={decrementPointer} iconComponent={<Entypo name="arrow-bold-left" size={32} color={theme} />}></AnimateIcon>
-<AnimateIcon onPress={incrementPointer} iconComponent={<Entypo name="arrow-bold-right" size={32} color={theme} />}></AnimateIcon> 
 
-</View>
 
-    </Animated.View>
-  </View>
+    <View style = {{}} > 
+      <AnimateIcon onPress={talkButton} iconComponent={
+          <View style = {[ {flexDirection:'row', alignSelf: 'center', paddingTop: 10, paddingBottom: 10, paddingHorizontal: 30, borderRadius: 20, backgroundColor: 'rgba(56,58,67,255)', shadowColor: "#000", margin: 10, elevation: 4,}]}>
+      <MaterialCommunityIcons name="cards-playing-diamond" size={64} color = 'rgba(227,229,232,255)'  />
+      </View>}>
+      </AnimateIcon> 
+    </View>
+  
 
-<View style={[{flex:1}, {alignItems: 'center', justifyContent: 'center',backgroundColor: 'rgba(72, 72, 72, 0.8)', borderBottomLeftRadius: 50, borderBottomRightRadius: 50}]}>
+      
+    
+      
+
 
 </View>
 
-<View style={[{flex:0.5}, styles.primaryBGBlack]}> 
+
+<View style={[{flex:0.75}, styles.primaryBGBlack]}> 
         <View style={[{flexDirection:'row'}, { justifyContent: 'center', alignItems: 'center'}]}>
           <IconButton onPress={()=> console.log("Sorry")} color={theme}></IconButton>
         </View>
