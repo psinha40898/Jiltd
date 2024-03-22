@@ -8,6 +8,7 @@ import MatchScreen from './screens/MatchScreen';
 import UserProfile from './screens/UserProfile';
 import RatingScreen from './screens/RatingScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import SecondRegister from './screens/SecondRegister';
 import TestMatch from './screens/TestMatch';
 import HomePage from './screens/HomePage';
 import Cmen from './screens/Cmen';
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   RatingScreen: {ratee: string}
   HomePage: undefined;
   RegisterScreen: undefined;
+  SecondRegister: {name: string};
   TestMatch: undefined;
   Cmen: undefined;
 };
@@ -46,6 +48,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false}} name="HomePage" component={HomePage} />
         <Stack.Screen options={{ headerShown: false}} name="RatingScreen" component={RatingScreen} />
         <Stack.Screen options={{ headerShown: false}} name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen options={{ headerShown: false}} name="SecondRegister" component={SecondRegister} />
         <Stack.Screen options={{ headerShown: false}} name="TestMatch" component={TestMatch} />
         <Stack.Screen options={{ headerShown: false}} name="Cmen" component={Cmen} />
       </Stack.Navigator>

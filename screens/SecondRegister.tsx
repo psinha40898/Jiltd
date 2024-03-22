@@ -1,21 +1,24 @@
-import { signInWithEmailAndPassword,createUserWithEmailAndPassword, auth, doc, db, setDoc, getDoc, ref, getDownloadURL, storage, Timestamp} from "../firebase"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, auth, doc, db, setDoc, getDoc, ref, getDownloadURL, storage, Timestamp} from "../firebase"
 import FlashButton from "../essentialComponents/FlashButton";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styles from "../essentialComponents/Style";
 import { useState, useEffect} from "react";
-import { useNavigation, useRoute  } from '@react-navigation/native';
+import { ParamListBase, RouteProp, useNavigation, useRoute  } from '@react-navigation/native';
 import { View, TextInput, Text, Image } from "react-native";
 import AnimateIcon from "../essentialComponents/AnimateIcon";
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+type MatchScreenRouteProp = RouteProp<RootStackParamList, "SecondRegister">
+interface Props{
+  route?: MatchScreenRouteProp;
+}
 
-
-const RegisterScreen = () => {
-    const [email, setEmail] = useState('')
+const SecondRegister: React.FC<Props> = (props) => {
+    const dName = props.route.params.name;
+    const clientUserID = auth.currentUser.uid;
+    const clientUserDocRefMain = doc(db,'users',clientUserID);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const [active, setActive] = useState('')
-    const [password, setPassword] = useState('')
-    const [displayName, setDName] = useState('')
     const [starterA, setA] = useState(null);
     const [starterB, setB] = useState(null);
     const [starterC, setC] = useState(null);
@@ -27,6 +30,33 @@ const RegisterScreen = () => {
         navigation.navigate("Login")
     
       }
+    const finishButton = async () => {
+        var starter = {}
+        if (dName === ''){
+            console.log("DEBUG ERROR NICK EMPTY")
+            return;
+        }
+        if (active === 'A') {
+            starter = objectA
+        }
+        else if (active === 'B')
+        {
+            starter = objectB
+        }
+        else if (active === 'C')
+        {
+            starter = objectC
+        }
+        try {
+            console.log("registered with default stats")
+            await setDoc(clientUserDocRefMain, {displayName: dName, email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [starter], new: true, official: true}, {merge: true})
+            console.log("Success");
+            navigation.navigate("HomePage")
+        } catch (error) {
+            alert(error.message);
+        }
+
+    }
     useEffect(() => {
         // This function will be executed whenever the 'active' state changes
         console.log("Active changed:", active);
@@ -55,52 +85,33 @@ const RegisterScreen = () => {
         init();
       },[])
 
-    const JiltedRegister = (email, password) => {
-        return new Promise((resolve, reject) => {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(userCredential => {
-                    const userID = userCredential.user.uid;
-                    const clientUserDocRef = doc(db, 'users', userID);
-                    resolve([userID, clientUserDocRef]);
-                })
-                .catch(error => reject(error));
-        });
-    }
+    
     
     const handleRegister = async (email, password, nick) => {
         console.log("Being calledHR")
         //let active = "a"
-        // var starter = {}
-        // if (nick === ''){
-        //     console.log("DEBUG ERROR NICK EMPTY")
-        //     return;
-        // }
-        // if (active === 'A') {
-        //     starter = objectA
-        // }
-        // else if (active === 'B')
-        // {
-        //     starter = objectB
-        // }
-        // else if (active === 'C')
-        // {
-        //     starter = objectC
-        // }
+        var starter = {}
+        if (nick === ''){
+            console.log("DEBUG ERROR NICK EMPTY")
+            return;
+        }
+        if (active === 'A') {
+            starter = objectA
+        }
+        else if (active === 'B')
+        {
+            starter = objectB
+        }
+        else if (active === 'C')
+        {
+            starter = objectC
+        }
         try {
-            //fix
-            const userCreds = await JiltedRegister(email, password);
-            //fix
+            
             console.log("registered with default stats")
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    console.log("SIGNED IN!!!")
-                })
-                .catch((error)=>{
-                    console.log(error.message);
-                })
-            navigation.navigate("SecondRegister", { name: nick})
-            //navigate to secondregister
-            //await setDoc(userCreds[1], {displayName: nick, email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [starter], new: true}, {merge: true})
+            console.log(nick)
+            await setDoc(clientUserDocRefMain, {displayName: nick, email: auth.currentUser.email, jilt: true, rating: 0, matchedID: "None", inventory: [starter], new: true}, {merge: true})
+            console.log("SUCCESS")
         } catch (error) {
             alert(error.message);
         }
@@ -120,31 +131,8 @@ const RegisterScreen = () => {
 
         <View style ={{flex:0.25, padding: 10, justifyContent: 'center', borderWidth: 0, marginTop: 20}}><Text style ={[ styles.size2, { fontWeight: '700', textAlign: 'left', color: 'rgba(227,229,232,255)'}]}>Jiltd</Text></View>
         <View style = {{flex:1, borderWidth: 0, width : '100%', alignSelf: 'center', padding: 20}}>  
-        <TextInput
-            placeholder = "email"
-            placeholderTextColor = "white"
-            value = {email}
-            onChangeText ={text => setEmail(text)}
-            style={styles.input}
-        />
-        <TextInput
-            placeholder = "password"
-            placeholderTextColor = "white"
-            value = {password}
-            onChangeText ={text => setPassword(text)}
-            style={styles.input}
-            secureTextEntry
-        />  
-
-<TextInput
-            placeholder = "displayName"
-            placeholderTextColor = "white"
-            value = {displayName}
-            onChangeText ={text => setDName(text)}
-            style={styles.input}
-            
-        />  
-        {/* <View style = {{marginTop: 10}}><Text style ={[ styles.size3, { fontWeight: '700', textAlign: 'left', color: 'rgba(227,229,232,255)'}]}>pick one.</Text></View>
+ 
+        <View style = {{marginTop: 10}}><Text style ={[ styles.size3, { fontWeight: '700', textAlign: 'left', color: 'rgba(227,229,232,255)'}]}>pick one.</Text></View>
        
         <View style = {{borderWidth: 0, flexDirection: 'row', flex:1, justifyContent: 'center', padding: 20, marginTop: 10}}>
 
@@ -158,14 +146,15 @@ const RegisterScreen = () => {
         borderColor: '#e3e5e8', borderRadius: 10,  }} />}></AnimateIcon>
 
         </View>
-      */}
+     
         
         </View>
-        <View style = {{flex:1, margin: 20, marginTop: 0}}><FlashButton pressFunc={()=>handleRegister(email, password, displayName) } text={"Next"} ></FlashButton>
+        <View style = {{flex:1, margin: 20, marginTop: 40}}>
+        <FlashButton pressFunc={finishButton} text={"Finish"} ></FlashButton>
         <FlashButton pressFunc={backButton} text={"Back"} ></FlashButton>
         </View>
               
     </KeyboardAwareScrollView>)
-}
-export default RegisterScreen
+};
+export default SecondRegister
 

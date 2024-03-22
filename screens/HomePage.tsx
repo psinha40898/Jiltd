@@ -119,6 +119,7 @@ const updateDisplay = async (path, note, message, color) => {
   console.log("setting", message)
   setData(message)
   setTheme(color)
+  
   try {
     const storageRef = ref(storage, path);
     const URL = await getDownloadURL(storageRef);
@@ -148,6 +149,8 @@ useEffect(()=> {
       console.log(inventory);
       console.log(clientName);
       setPath(inventory[0].path)
+      setTheme(inventory[0].theme)
+      console.log(inventory[0].theme)
     }
     catch(e)
     {
@@ -168,6 +171,7 @@ useEffect(() => {
     setData(inventory[0].message)
     setImeta(inventory[0].note);
     setPath(inventory[0].path);
+    setTheme(inventory[0].theme);
     const storageRef = ref(storage, inventory[0].path);
     const URL = await getDownloadURL(storageRef);
     setImage(URL);
@@ -248,10 +252,10 @@ const exportButton = async () => {
     } */}
   </View>
 
-<View style={[{flex:5, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: theme, borderTopWidth: 50, padding: 10,}]}>
+<View style={[{flex:6, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: theme, borderTopWidth: 50, padding: 10,}]}>
   {//start}
 }
-  <View style = {[{flex:1.5, flexDirection: 'column',padding:10}]}>
+  <View style = {[{flex:2, flexDirection: 'column',padding:10}]}>
 
   <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
     <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
@@ -267,8 +271,8 @@ const exportButton = async () => {
 
   <Animated.View style={[zx.overlay,{},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1], outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
         <View style = {{alignSelf: 'flex-start'}}>
-        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(28,29,35,.25)', padding:25, width: 100, height: 100, borderWidth: 8, 
-        borderColor: 'rgba(28,29,35,255)', top: -100, borderRadius: 60,  }} />
+        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(28,29,35,1)', padding:25, width: 100, height: 100, borderWidth: 8, 
+        borderColor: 'rgba(28,29,35,255)', top: -125, borderRadius: 60,  }} />
 
 
         
@@ -282,7 +286,7 @@ const exportButton = async () => {
 
   <Animated.View
         style={[zx.overlay,{padding:0,},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1],outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
-        <Text style={[styles.size3, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> {metaData.name} </Text>
+        <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> {metaData.name} </Text>
         <View style = {[ { alignSelf: 'center', padding:20, borderRadius: 10, backgroundColor: 'rgba(38,39,47,255)', shadowColor: "#000", elevation: 4, width: '100%'}]} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}> 
         
         <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> Saved Message </Text>
