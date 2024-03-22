@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', // Vertically center-align the children
     },
     input: {
-        backgroundColor: 'rgba(204, 41, 54, .75)',
+        backgroundColor: 'rgba(49,50,59,255)',
         color: 'rgba(232, 180, 188, 1)',
         fontWeight: '100',
         paddingHorizontal: 20,
@@ -245,6 +245,27 @@ frail:{}
     },
     secondaryBGoffBlack:{
         backgroundColor: 'rgba(28, 28, 28, .65)'
-    }
+    },
+      half: {
+        width: '100%',
+        height: '50%',
+        position: 'absolute',
+      },
+      redHalf: {
+        backgroundColor: 'red',
+        top: 0,
+      },
+      blueHalf: {
+        backgroundColor: 'blue',
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      text: {
+        color: 'white',
+        fontSize: 18,
+      },
     })
+
+
     export default styles

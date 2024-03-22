@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableHighlight, Animated ,StyleSheet, Text,} from 'react-native';
+import { View, TouchableHighlight, Animated ,StyleSheet, Text,} from 'react-native';
 /**
  * FlashButton.tsx
  * React.Animation
@@ -35,7 +35,8 @@ return(
   underlayColor="transparent"
 >
   <Animated.View style={[styles.button, animatedStyle]}>
-    <Text style={styles.buttonText}>{[text]}</Text>
+    <View style = {{alignContent: 'center'}}><Text style={styles.buttonText}>{[text]}</Text></View>
+    
   </Animated.View>
 </TouchableHighlight>
 )
@@ -47,15 +48,18 @@ const styles = StyleSheet.create(
     width: '100%',
     height: 50,
     alignItems: 'center',
-    backgroundColor: 'rgba(204, 41, 54, .85)',
-    paddingHorizontal: 10,
-    paddingVertical: 12.5,
-    borderRadius: 5,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(58,65,139,255)',
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 4,
+    marginTop: 20
 },
 buttonText: {
-    color: 'white',
-    fontWeight: '900',
-    fontSize: 12
+    color: 'rgba(227,229,232,0.75)',
+    fontWeight: '400',
+    fontSize: 12,
+    textAlign: 'center'
 
 },
 }

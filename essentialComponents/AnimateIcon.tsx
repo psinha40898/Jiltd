@@ -27,7 +27,7 @@ const AnimateIcon = ({ onPress, iconComponent  }) => {
   };
 
   return (
-    <View style = {{}}>
+    <View style = {{margin:20}}>
       <TouchableOpacity
         onPress={onPress}
         onPressIn={() => handlePressIn(animatedValue1)}

@@ -15,7 +15,7 @@ import { Time } from 'react-native-gifted-chat';
 
 
 
-const HomeScreen = () => {
+const AdminPanel = () => {
   const [user2id, setUser2] = useState("");
   const [modalVisible, setModalVisible] = useState(false);;
   const [matchedID_state, setMatch] = useState("None");
@@ -45,7 +45,7 @@ const HomeScreen = () => {
 }
 
 const testScreen = () => {
-  navigation.navigate("Test");
+  navigation.navigate("HomePage");
 }
 const testMatch = () => {
   navigation.navigate("TestMatch");
@@ -108,5 +108,5 @@ const cMentest = () => {
     </SafeAreaView>
   );
 };
-export default HomeScreen
+export default AdminPanel
 

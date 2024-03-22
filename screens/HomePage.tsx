@@ -24,15 +24,17 @@ interface MetaData {
   author: string;
   date: Timestamp | null; // Assuming it's a Firestore Timestamp object
   note: string;
+  name :string;
+  tooltip: string;
 }
-const Test = () => {
+const HomePage = () => {
 
   const userID = auth.currentUser.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemMeta, setImeta] = useState("");
   const [theme, setTheme] = useState("rgba(216, 151, 158, 1)");
   const [clientName, setName] = useState("welcome");
-  const [metaData, setData] = useState<MetaData>({ author: '', date: null, note: '' });
+  const [metaData, setData] = useState<MetaData>({ author: '', date: null, note: '', tooltip: '', name: ''});
   const [displayImage, setImage] = useState(null);
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -266,7 +268,7 @@ const exportButton = async () => {
   <Animated.View style={[zx.overlay,{},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1], outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
         <View style = {{alignSelf: 'flex-start'}}>
         <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(28,29,35,.25)', padding:25, width: 100, height: 100, borderWidth: 8, 
-        borderColor: 'rgba(28,29,35,255)', top: -75, borderRadius: 60,  }} />
+        borderColor: 'rgba(28,29,35,255)', top: -100, borderRadius: 60,  }} />
 
 
         
@@ -280,8 +282,9 @@ const exportButton = async () => {
 
   <Animated.View
         style={[zx.overlay,{padding:0,},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1],outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
-        <Text style={[styles.size3, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> name </Text>
+        <Text style={[styles.size3, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> {metaData.name} </Text>
         <View style = {[ { alignSelf: 'center', padding:20, borderRadius: 10, backgroundColor: 'rgba(38,39,47,255)', shadowColor: "#000", elevation: 4, width: '100%'}]} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}> 
+        
         <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> Saved Message </Text>
         <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(211,212,216,255)' ,fontWeight:'400', textAlign: 'center',}, styles.italic]}>{metaData.note}</Text>
 
@@ -293,6 +296,8 @@ const exportButton = async () => {
         <Text style={[styles.size4,{color: 'rgba(211,212,216,255)', textAlign: 'center', fontWeight: '400'}]}>
         {metaData.author} on {metaData.date.toDate().toLocaleDateString()}
       </Text>) : null }
+      <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(227,229,232,255)' ,fontWeight:'700', textAlign: 'left'}]}> Tooltip </Text>
+      <Text style={[styles.size4, {flexWrap: 'wrap', color: 'rgba(211,212,216,255)' ,fontWeight:'400', textAlign: 'center',}, styles.italic]}>{metaData.tooltip}</Text>
 <View style = {{}} > 
 
 
@@ -355,7 +360,7 @@ const exportButton = async () => {
     )
 }
 
-export default Test;
+export default HomePage;
 const tStyle = StyleSheet.create({
     container: {
       flex: 1,

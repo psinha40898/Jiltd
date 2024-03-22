@@ -9,7 +9,7 @@ import UserProfile from './screens/UserProfile';
 import RatingScreen from './screens/RatingScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import TestMatch from './screens/TestMatch';
-import Test from './screens/Test';
+import HomePage from './screens/HomePage';
 import Cmen from './screens/Cmen';
 import { Auth } from 'firebase/auth'; // modulize this later
 import AdminPanel from './screens/AdminPanel';
@@ -21,7 +21,7 @@ export type RootStackParamList = {
   MatchScreen: {match: string; self: string;}
   ProfileScreen: {param: Auth}
   RatingScreen: {ratee: string}
-  Test: undefined;
+  HomePage: undefined;
   RegisterScreen: undefined;
   TestMatch: undefined;
   Cmen: undefined;
@@ -43,7 +43,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false}} name="Home" component={AdminPanel} />
         <Stack.Screen options={{ headerShown: false}} name="MatchScreen" component={MatchScreen} />
         <Stack.Screen options={{ headerShown: false}} name="ProfileScreen" component={UserProfile} />
-        <Stack.Screen options={{ headerShown: false}} name="Test" component={Test} />
+        <Stack.Screen options={{ headerShown: false}} name="HomePage" component={HomePage} />
         <Stack.Screen options={{ headerShown: false}} name="RatingScreen" component={RatingScreen} />
         <Stack.Screen options={{ headerShown: false}} name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false}} name="TestMatch" component={TestMatch} />
