@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: 'rgba(49,50,59,255)',
-        color: 'rgba(232, 180, 188, 1)',
+        color: 'rgba(120,123,135,255)',
         fontWeight: '100',
         paddingHorizontal: 20,
         paddingVertical: 15,

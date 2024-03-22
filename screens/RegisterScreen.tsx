@@ -4,10 +4,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import styles from "../essentialComponents/Style";
 import { useState, useEffect} from "react";
 import { useNavigation, useRoute  } from '@react-navigation/native';
-import { View, TextInput, Text, Image } from "react-native";
+import { View, TextInput, Text, Image, TouchableOpacity } from "react-native";
 import AnimateIcon from "../essentialComponents/AnimateIcon";
 import type { RootStackParamList } from '../App';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AntDesign } from '@expo/vector-icons';
 
 
 const RegisterScreen = () => {
@@ -117,8 +118,12 @@ const RegisterScreen = () => {
     
     
     return (        <KeyboardAwareScrollView style = {{flex:1, flexDirection:'column', backgroundColor: 'rgba(28,29,35,255)'}}>
+        
 
-        <View style ={{flex:0.25, padding: 10, justifyContent: 'center', borderWidth: 0, marginTop: 20}}><Text style ={[ styles.size2, { fontWeight: '700', textAlign: 'left', color: 'rgba(227,229,232,255)'}]}>Jiltd</Text></View>
+        <View style ={{flex:0.30, marginTop: 20, padding: 5, justifyContent: 'center', borderWidth: 0}}>
+            
+        <TouchableOpacity style ={{marginTop:20}}onPress={backButton}><AntDesign name="arrowleft" size={32} color="white" /></TouchableOpacity>
+        <Text style ={[ styles.size2, { fontWeight: '700', textAlign: 'left', color: 'rgba(227,229,232,255)'}]}>Jiltd</Text></View>
         <View style = {{flex:1, borderWidth: 0, width : '100%', alignSelf: 'center', padding: 20}}>  
         <TextInput
             placeholder = "email"
@@ -162,7 +167,7 @@ const RegisterScreen = () => {
         
         </View>
         <View style = {{flex:1, margin: 20, marginTop: 0}}><FlashButton pressFunc={()=>handleRegister(email, password, displayName) } text={"Next"} ></FlashButton>
-        <FlashButton pressFunc={backButton} text={"Back"} ></FlashButton>
+        
         </View>
               
     </KeyboardAwareScrollView>)
