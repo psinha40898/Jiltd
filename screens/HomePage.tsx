@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef, TouchEvent} from 'react';
-import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground, Animated} from 'react-native';
+import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground, Animated, GestureResponderEvent} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,7 +12,7 @@ import PlayButton from '../essentialComponents/playButton';
 import IconButton from '../essentialComponents/Icon';
 import LoopAnimation from '../essentialComponents/LoopAnimation';
 import { matchMake } from './matchMake';
-import { auth, ref, storage, getDownloadURL, doc, getDoc, db, Timestamp} from '../firebase';
+import { auth, db, ref, storage, getDownloadURL, doc, getDoc, Timestamp} from '../firebase';
 // import Dropdown from 'react-native-input-select';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -27,6 +27,15 @@ interface MetaData {
   note: string;
   name :string;
   tooltip: string;
+  
+}
+interface InventoryItem {
+  count: number;
+  message: MetaData;
+  name: string;
+  path: string;
+  theme: string;
+  // Add other properties as needed
 }
 const HomePage = () => {
 
@@ -36,10 +45,11 @@ const HomePage = () => {
   const [theme, setTheme] = useState("rgba(216, 151, 158, 1)");
   const [clientName, setName] = useState("welcome");
   const [metaData, setData] = useState<MetaData>({ author: '', date: null, note: '', tooltip: '', name: ''});
-  const [displayImage, setImage] = useState(null);
+  // const [displayImage, setImage] = useState(null);
+  const [displayImage, setImage] = useState<string | undefined>(undefined);
   const [curPath, setPath] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [inventory, setInventory] = useState([]);
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
   var pointer = useRef(0);
  
 
@@ -56,7 +66,7 @@ const HomePage = () => {
   const minSwipeDistance = 100;
 
 
-  const onTouchStart = (e: TouchEvent) => {
+  const onTouchStart = (e: GestureResponderEvent) => {
     setTouchEnd(null);
     setTouchStart(e.nativeEvent.touches[0].pageX);
 
@@ -64,7 +74,7 @@ const HomePage = () => {
     setTouchStartY(e.nativeEvent.touches[0].pageY);
   }
 
-  const onTouchMove = (e: TouchEvent) => {
+  const onTouchMove = (e: GestureResponderEvent) => {
     setTouchEnd(e.nativeEvent.touches[0].pageX);
     setTouchEndY(e.nativeEvent.touches[0].pageY);
   }
@@ -72,8 +82,8 @@ const HomePage = () => {
   const onTouchEnd = () => {
     // const distanceX = touchStart !== null && touchEnd !== null ? touchStart - touchEnd : 0;
 
-    const distanceX = touchStart - touchEnd
-    const distanceY = touchStartY - touchEndY
+    const distanceX = touchStart !== null && touchEnd !== null ? - touchStart - touchEnd : 0;
+    const distanceY = touchStartY !== null && touchEndY !== null ? - touchStartY - touchEndY : 0;
     const isLeftSwipe = distanceX > minSwipeDistance
     const isRightSwipe = distanceX < -minSwipeDistance
     
@@ -119,7 +129,7 @@ const HomePage = () => {
  * @param note deprecated
  * @param message message metadata that is attached to item
  */
-const updateDisplay = async (path, note, message, color) => {
+const updateDisplay = async (path: string, note: string, message: MetaData, color: string) => {
   console.log("loadImage()", path, note, "MESSAGE:", message)
   setPath(path)
   setImeta(note)
@@ -146,19 +156,34 @@ const updateDisplay = async (path, note, message, color) => {
 useEffect(()=> {
   const init = async () => {
     try {
+      //Set active image to placeholder!
       const storageRef = ref(storage, "items/spinner-of-dots.png");
       const URL = await getDownloadURL(storageRef);
       setImage(URL);
       console.log("done");
-      const clientUserDocRefMain = doc(db,'users', userID);
-      const clientSnap = await getDoc(clientUserDocRefMain);
-      setInventory(clientSnap.data().inventory);
-      setName(clientSnap.data().displayName);
-      console.log(inventory);
-      console.log(clientName);
-      setPath(inventory[0].path)
-      setTheme(inventory[0].theme)
-      console.log(inventory[0].theme)
+
+      //Retrieve inventory
+      if (userID)
+      {
+
+        const clientUserDocRefMain = doc(db, 'users', userID);
+        const clientSnap = await getDoc(clientUserDocRefMain);
+        const inventoryData = clientSnap?.data()?.inventory;
+        setInventory(inventoryData);
+        setName(inventoryData.displayName);
+        console.log(inventory);
+        console.log(clientName);
+        setPath(inventory[0].path)
+        setTheme(inventory[0].theme)
+        console.log(inventory[0].theme)
+        
+
+      }
+      else
+      {
+        console.log("Null userID?")
+      }
+
     }
     catch(e)
     {
@@ -177,7 +202,7 @@ useEffect(() => {
   const displayDefaults = async () => {
     if (inventory.length > 0) {
     setData(inventory[0].message)
-    setImeta(inventory[0].note);
+    setImeta(inventory[0].message.note);
     setPath(inventory[0].path);
     setTheme(inventory[0].theme);
     const storageRef = ref(storage, inventory[0].path);
@@ -194,11 +219,19 @@ useEffect(() => {
 
 /** Enters the user into matchmaking queue */
 const talkButton = async () => {
-  console.log("THIS IS THE USER ID", userID);
-  setModalVisible(true);
-  await matchMake(userID, navigation);
-  setModalVisible(false);
-  };
+  if (userID) {
+    console.log("THIS IS THE USER ID", userID);
+    setModalVisible(true);
+    await matchMake(userID, navigation);
+    setModalVisible(false);
+
+  }
+  else{
+    console.log("Null?");
+  }
+
+};
+
 const exportButton = async () => {
   /** I need to write an export function
    * It should send an email to the user's email
@@ -213,13 +246,13 @@ const exportButton = async () => {
     if (pointer.current === inventory.length - 1){
       console.log("no dice", pointer);
       pointer.current = 0
-      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].message.note, inventory[pointer.current].message, inventory[pointer.current].theme)
       return;
     }
     console.log("yes dice", pointer)
     pointer.current = pointer.current + 1
     console.log(pointer)
-    updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+    updateDisplay(inventory[pointer.current].path, inventory[pointer.current].message.note, inventory[pointer.current].message, inventory[pointer.current].theme)
     return;
   }
 
@@ -227,12 +260,12 @@ const exportButton = async () => {
     if (pointer.current === 0){
       console.log("Can't decrement", pointer);
       pointer.current = 0
-      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].message.note, inventory[pointer.current].message, inventory[pointer.current].theme)
       return;}
       console.log("yes dice", pointer)
       pointer.current = pointer.current - 1
       console.log(pointer)
-      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].note, inventory[pointer.current].message, inventory[pointer.current].theme)
+      updateDisplay(inventory[pointer.current].path, inventory[pointer.current].message.note, inventory[pointer.current].message, inventory[pointer.current].theme)
       return;
 
   }

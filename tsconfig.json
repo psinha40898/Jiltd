@@ -1,7 +1,16 @@
 {
   "compilerOptions": {
-    "jsx" :"react-native",
-    "strict": true
+    "jsx" : "react-native",
+    "strict": true,
+    "skipLibCheck": true
   },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+
   "extends": "expo/tsconfig.base"
 }
