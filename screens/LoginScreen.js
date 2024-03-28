@@ -10,7 +10,7 @@ import IconButton from '../essentialComponents/Icon';
 import { Icon } from 'react-native-paper';
 
 const LoginScreen = () => {
-    
+
 
     /*
     Data required to process registration and login to application

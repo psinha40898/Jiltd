@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, TouchEvent} from 'react';
 import {Text, StyleSheet, View, Image, Modal, Alert, ImageBackground, Animated} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -19,6 +19,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import SelectDropdown from 'react-native-select-dropdown'
 import { Entypo } from '@expo/vector-icons';
 import AnimateIcon from '../essentialComponents/AnimateIcon';
+//https://www.typescriptlang.org/tsconfig#strict
 
 interface MetaData {
   author: string;
@@ -29,7 +30,7 @@ interface MetaData {
 }
 const HomePage = () => {
 
-  const userID = auth.currentUser.uid;
+  const userID = auth.currentUser?.uid;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [itemMeta, setImeta] = useState("");
   const [theme, setTheme] = useState("rgba(216, 151, 158, 1)");
@@ -42,15 +43,20 @@ const HomePage = () => {
   var pointer = useRef(0);
  
 
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
-  const [touchStartY, setTouchStartY] = useState(null)
-  const [touchEndY, setTouchEndY] = useState(null)
 
+  // const [touchEnd, setTouchEnd] = useState(null);
+  // const [touchEndY, setTouchEndY] = useState(null)
+
+  const [touchStart, setTouchStart] = React.useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = React.useState<number | null>(null);
+
+
+  const [touchEnd, setTouchEnd] = React.useState<number | null>(null);
+  const [touchEndY, setTouchEndY] = React.useState<number | null>(null);
   const minSwipeDistance = 100;
 
 
-  const onTouchStart = (e) => {
+  const onTouchStart = (e: TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.nativeEvent.touches[0].pageX);
 
@@ -58,12 +64,14 @@ const HomePage = () => {
     setTouchStartY(e.nativeEvent.touches[0].pageY);
   }
 
-  const onTouchMove = (e) => {
+  const onTouchMove = (e: TouchEvent) => {
     setTouchEnd(e.nativeEvent.touches[0].pageX);
     setTouchEndY(e.nativeEvent.touches[0].pageY);
   }
 
   const onTouchEnd = () => {
+    // const distanceX = touchStart !== null && touchEnd !== null ? touchStart - touchEnd : 0;
+
     const distanceX = touchStart - touchEnd
     const distanceY = touchStartY - touchEndY
     const isLeftSwipe = distanceX > minSwipeDistance
@@ -255,29 +263,38 @@ const exportButton = async () => {
 <View style={[{flex:6, flexDirection: 'column', backgroundColor: 'rgba(28,29,35,255)',borderTopColor: theme, borderTopWidth: 50, padding: 10,}]}>
   {//start}
 }
-  <View style = {[{flex:2, flexDirection: 'column',padding:10}]}>
+  <View style = {[{flex:2, flexDirection: 'column',padding:10,}]}>
 
-  <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-    <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
-    <AnimateIcon iconComponent={ <Entypo name="arrow-bold-left" size={24} color="rgba(227,229,232,255)" />} onPress={decrementPointer}></AnimateIcon>
-      <AnimateIcon iconComponent={ <Entypo name="arrow-bold-right" size={24} color="rgba(227,229,232,255)" />} onPress={incrementPointer}></AnimateIcon>
-   
-      
-    </View>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+  <View>
+    <Animated.View style={[zx.overlay, { opacity: flashValue.interpolate({ inputRange: [0, 0.25, 0.5, 0.75, 1], outputRange: [0, 0.25, 0.5, 0.75, 1] }) }]}>
+      <View style={{ }}>
+        <Image
+          source={{ uri: displayImage }}
+          resizeMode='contain'
+          style={{
+            backgroundColor: 'rgba(28,29,35,1)',
+            padding: 25,
+            width: 100,
+            height: 100,
+            borderWidth: 8,
+            borderColor: 'rgba(28,29,35,255)',
+            borderRadius: 60,
+            top: -75
+          }}
+        />
+      </View>
+    </Animated.View>
   </View>
 
+  <View style={{ flexDirection: 'row' }}>
+    <AnimateIcon iconComponent={<Entypo name="arrow-bold-left" size={24} color="rgba(227,229,232,255)" />} onPress={decrementPointer} />
+    <AnimateIcon iconComponent={<Entypo name="arrow-bold-right" size={24} color="rgba(227,229,232,255)" />} onPress={incrementPointer} />
+  </View>
+</View>
 
 
 
-  <Animated.View style={[zx.overlay,{},{opacity: flashValue.interpolate({inputRange: [0, 0.25, 0.5, 0.75, 1], outputRange: [0, 0.25, 0.5, 0.75, 1],}),},]}>
-        <View style = {{alignSelf: 'flex-start'}}>
-        <Image source={{uri:displayImage}} resizeMode ='contain' style={{ backgroundColor:'rgba(28,29,35,1)', padding:25, width: 100, height: 100, borderWidth: 8, 
-        borderColor: 'rgba(28,29,35,255)', top: -125, borderRadius: 60,  }} />
-
-
-        
-        </View>
-</Animated.View>
 
 
 

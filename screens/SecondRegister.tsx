@@ -24,8 +24,8 @@ const SecondRegister: React.FC<Props> = (props) => {
     const [starterB, setB] = useState(null);
     const [starterC, setC] = useState(null);
     //fetch these objects from db later
-    var objectA = {name: "lost blue pup", count:1, message:{date: Timestamp.now(), author: "Created", name:"lost blue pup", note: "You may never get another.", tooltip: "You think you chose the cutest one."}, path: "items/starters/blueDog.webp", theme: 'rgba(71,196,222,255)'}
-    var objectB = {name: "invincible purple rabbit", count:1, message:{date: Timestamp.now(), author: "Created", name:"invincible purple rabbit", note: "You may never get another.", tooltip: "The invincibility is self proclaimed."}, path: "items/starters/purpleRabbit.webp", theme: 'rgba(204,10,251,255)'}
+    var objectA = {name: "lost blue pup", count:1, message:{date: Timestamp.now(), author: "Created", name:"lost blue pup", note: "You may never get another.", tooltip: "You think you chose the cutest one."}, path: "items/starters/blueDog.webp", theme: 'rgba(121, 119, 235, 0.8)'}
+    var objectB = {name: "invincible purple rabbit", count:1, message:{date: Timestamp.now(), author: "Created", name:"invincible purple rabbit", note: "You may never get another.", tooltip: "The invincibility is self proclaimed."}, path: "items/starters/purpleRabbit.webp", theme: 'rgba(206, 99, 205, 0.8)'}
     var objectC = {name: "great dragon", count:1, message:{date: Timestamp.now(), author: "Created", name:"great dragon", note: "You may never get another.", tooltip: "Wow!"}, path: "items/starters/yellowDragon.webp", theme: 'rgba(196,104,23,255)'}
     const backButton = async () => {
         navigation.navigate("RegisterScreen");

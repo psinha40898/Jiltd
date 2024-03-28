@@ -16,6 +16,9 @@ navigation: NativeStackNavigationProp<RootStackParamList>
   while (inQueue){
     let delta = Date.now() - start;
     if (delta > 12000){
+      console.log("Leave it now")
+      await deleteDoc(clientUserDocRef);
+      //delete doc
       break;
     }
     if (!clientUserDocSnap.exists()){
@@ -100,6 +103,7 @@ navigation: NativeStackNavigationProp<RootStackParamList>
         //have a field in chatroom doc
         //increment it
         //in the chatroom, remove people from queue if the value is equal to 2.
+        console.log("inQueue = false")
         inQueue = false;
       }
       
